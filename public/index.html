@@ -21,7 +21,6 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        // Brand Palette: Indigo Focus
                         brand: {
                             50: '#eef2ff',
                             100: '#e0e7ff',
@@ -34,14 +33,13 @@
                             800: '#3730a3',
                             900: '#312e81',
                         },
-                        // Semantic Colors for Oncology Status
                         clinical: {
-                            progression: '#be123c', // Rose 700
-                            progressionBg: '#fff1f2', // Rose 50
-                            stable: '#1d4ed8',      // Blue 700
-                            stableBg: '#eff6ff',    // Blue 50
-                            response: '#15803d',    // Green 700
-                            responseBg: '#f0fdf4',  // Green 50
+                            progression: '#be123c',
+                            progressionBg: '#fff1f2',
+                            stable: '#1d4ed8',
+                            stableBg: '#eff6ff',
+                            response: '#15803d',
+                            responseBg: '#f0fdf4',
                         }
                     },
                     boxShadow: {
@@ -56,155 +54,71 @@
     </script>
 
     <style>
-        /* Base Settings */
         body {
             background-color: #f8fafc;
             color: #0f172a;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-
-        /* Custom Scrollbar Implementation */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-            border: 2px solid #f8fafc; /* Creates padding effect */
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Badge Components */
-        .badge-base {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        /* Timeline Visuals */
-        .timeline-spine {
-            position: absolute;
-            left: 23px;
-            top: 40px;
-            bottom: -20px;
-            width: 2px;
-            background: linear-gradient(to bottom, #e2e8f0 0%, #e2e8f0 90%, transparent 100%);
-            z-index: 0;
-        }
-        
-        .timeline-node-container {
-            position: absolute;
-            left: 16px;
-            top: 0px;
-            z-index: 10;
-            transition: transform 0.2s ease;
-        }
-
-        /* Card Interactions */
-        .interactive-card {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #e2e8f0;
-        }
-        .interactive-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-            border-color: #cbd5e1;
-        }
-
-        /* PDF Generation Hidden Container */
-        /* This container is used to render the full report off-screen before capturing */
-        #pdf-generator-container {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            width: 1200px;
-            background: white;
-            z-index: -100;
-            pointer-events: none;
-        }
-
-        /* Animation Keyframes */
-        @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .animate-enter {
-            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; border: 2px solid #f8fafc; }
+        .badge-base { display:inline-flex; align-items:center; justify-content:center; padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; line-height:1; white-space:nowrap; }
+        .timeline-spine { position: absolute; left: 23px; top: 40px; bottom: -20px; width: 2px; background: linear-gradient(to bottom, #e2e8f0 0%, #e2e8f0 90%, transparent 100%); z-index: 0; }
+        .timeline-node-container { position: absolute; left: 16px; top: 0px; z-index: 10; transition: transform 0.2s ease; }
+        .interactive-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border:1px solid #e2e8f0; }
+        .interactive-card:hover { transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025); border-color:#cbd5e1; }
+        #pdf-generator-container { position:absolute; left:-9999px; top:0; width:1100px; background:white; z-index:-100; pointer-events:none; }
+        @keyframes slideUpFade { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0);} }
+        .animate-enter { animation: slideUpFade 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
     </style>
 </head>
 <body class="p-4 lg:p-8 max-w-[1600px] mx-auto min-h-screen flex flex-col pb-32">
 
-    <header class="flex flex-wrap items-center justify-between mb-10 gap-6 sticky top-0 bg-[#f8fafc]/95 backdrop-blur-md z-40 py-4 transition-all" id="main-header">
+    <header class="flex flex-wrap items-center justify-between mb-10 gap-6 sticky top-0 bg-[#f8fafc]/95 backdrop-blur-md z-40 py-4 transition-all" id="main-header" role="banner">
         
         <div class="flex items-center gap-5">
-            <div class="bg-gradient-to-br from-brand-600 to-brand-700 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-500/30 ring-1 ring-white/20">
+            <div class="bg-gradient-to-br from-brand-600 to-brand-700 w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-500/30 ring-1 ring-white/20" aria-hidden="true">
                 <i data-lucide="activity" class="text-white w-8 h-8 stroke-[2.5px]"></i>
             </div>
             <div class="flex flex-col">
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight leading-none">OncoReview <span class="text-brand-600">TAPM</span></h1>
                 <div class="flex items-center gap-2 mt-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em]">System Operational</span>
                 </div>
             </div>
         </div>
         
-        <div class="flex items-center gap-4 bg-white p-2 pr-3 rounded-2xl shadow-card border border-slate-200/60">
+        <div class="flex items-center gap-4 bg-white p-2 pr-3 rounded-2xl shadow-card border border-slate-200/60" role="region" aria-label="Patient selector">
             <div class="px-4 py-1 border-r border-slate-100 flex flex-col min-w-[280px]">
                 <label for="patientSelect" class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Active Patient Context</label>
                 <div class="relative">
-                    <select id="patientSelect" class="w-full bg-transparent text-sm font-bold text-slate-800 outline-none cursor-pointer appearance-none py-1 relative z-10">
-                        </select>
+                    <select id="patientSelect" class="w-full bg-transparent text-sm font-bold text-slate-800 outline-none cursor-pointer appearance-none py-1 relative z-10" aria-label="Select patient"></select>
                     <i data-lucide="chevron-down" class="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-0"></i>
                 </div>
             </div>
 
-            <button id="openNewTabBtn" class="h-10 px-5 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-xl font-bold text-xs flex items-center gap-2 transition-colors border border-brand-100 group">
+            <button id="openNewTabBtn" class="h-10 px-5 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-xl font-bold text-xs flex items-center gap-2 transition-colors border border-brand-100 group" aria-label="Open patient in new tab">
                 <i data-lucide="external-link" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                 <span>Open Tab</span>
             </button>
         </div>
     </header>
 
-    <main class="space-y-8 flex-1 relative">
+    <main class="space-y-8 flex-1 relative" id="app-main">
 
-        <section class="bg-white border border-slate-200 rounded-3xl shadow-card grid grid-cols-12 overflow-hidden animate-enter">
+        <section class="bg-white border border-slate-200 rounded-3xl grid grid-cols-12 overflow-hidden animate-enter" aria-labelledby="patient-heading">
             
-            <div id="topSummary" class="col-span-12 md:col-span-8 p-8 md:border-r border-slate-100 relative">
-                <div class="animate-pulse space-y-4">
-                    <div class="h-4 bg-slate-100 rounded w-1/4"></div>
-                    <div class="h-8 bg-slate-100 rounded w-1/2"></div>
-                    <div class="h-4 bg-slate-100 rounded w-3/4"></div>
-                </div>
+            <div id="topSummary" class="col-span-12 md:col-span-8 p-8 md:border-r border-slate-100 relative" role="region" aria-label="Patient summary">
+                <!-- filled dynamically -->
             </div>
             
-            <div class="col-span-12 md:col-span-4 bg-slate-50/50 p-8 flex flex-col justify-between relative">
+            <div class="col-span-12 md:col-span-4 bg-slate-50/50 p-8 flex flex-col justify-between relative" aria-hidden="false">
                 <div class="space-y-6">
                     <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
                         <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Triage Score</span>
-                        <div id="triageBadge">
+                        <div id="triageBadge" aria-live="polite">
                             <span class="badge-base bg-slate-100 text-slate-500">Calculating...</span>
                         </div>
                     </div>
@@ -225,7 +139,7 @@
                     </div>
                 </div>
                 
-                <button id="exportBtn" class="w-full mt-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-200 group">
+                <button id="exportBtn" class="w-full mt-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-200 group" aria-label="Download PDF report">
                     <i data-lucide="file-down" class="w-4 h-4 group-hover:translate-y-0.5 transition-transform"></i>
                     <span>Download Comprehensive Clinical PDF</span>
                 </button>
@@ -234,7 +148,7 @@
 
         <section class="rounded-3xl p-[2px] bg-gradient-to-r from-brand-500 via-purple-500 to-brand-500 shadow-glow animate-enter" style="animation-delay: 100ms;">
             <div class="bg-white rounded-[22px] overflow-hidden">
-                <div class="px-6 py-4 border-b border-brand-50 bg-brand-50/40 flex justify-between items-center">
+                <div class="px-6 py-4 border-b border-brand-50 bg-brand-50/40 flex justify-between items-center" role="region" aria-label="AI clinical perspective header">
                     <div class="flex items-center gap-3">
                         <div class="bg-brand-600 rounded-lg p-1.5 shadow-sm">
                             <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
@@ -244,10 +158,10 @@
                     <span class="badge-base bg-white border border-brand-100 text-brand-600 shadow-sm">Physician Review Required</span>
                 </div>
 
-                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100" id="ai-section" role="region" aria-label="AI insights">
                     <div class="p-6 md:p-8" id="ai-findings-panel">
                         <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Pattern Recognition</h3>
-                        <div id="aiSummaryPoints" class="space-y-4"></div>
+                        <div id="aiSummaryPoints" class="space-y-4" aria-live="polite"></div>
                     </div>
                     
                     <div class="p-6 md:p-8 bg-slate-50/50">
@@ -261,12 +175,12 @@
         </section>
 
         <div class="sticky top-[90px] z-30 bg-[#f8fafc]/95 backdrop-blur pt-4 pb-0 border-b border-slate-200">
-            <div class="flex gap-10 px-4">
-                <button onclick="switchTab('overview')" id="tab-overview" class="group pb-4 text-sm font-bold border-b-[3px] border-brand-600 text-brand-600 transition-colors flex items-center gap-2.5">
+            <div class="flex gap-10 px-4" role="tablist" aria-label="Main tabs">
+                <button onclick="switchTab('overview')" id="tab-overview" role="tab" aria-selected="true" class="group pb-4 text-sm font-bold border-b-[3px] border-brand-600 text-brand-600 transition-colors flex items-center gap-2.5">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 
                     <span>Clinical Overview</span>
                 </button>
-                <button onclick="switchTab('timeline')" id="tab-timeline" class="group pb-4 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300 transition-colors flex items-center gap-2.5">
+                <button onclick="switchTab('timeline')" id="tab-timeline" role="tab" aria-selected="false" class="group pb-4 text-sm font-bold border-b-[3px] border-transparent text-slate-400 hover:text-slate-600 hover:border-slate-300 transition-colors flex items-center gap-2.5">
                     <i data-lucide="calendar-clock" class="w-4 h-4"></i> 
                     <span>Longitudinal Timeline</span>
                 </button>
@@ -277,7 +191,7 @@
             
             <div class="col-span-12 lg:col-span-8 space-y-8">
                 
-                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-card">
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-card" id="overview-treatment" role="region" aria-label="Treatment trajectory">
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-3">
                             <div class="p-2 bg-brand-50 rounded-lg"><i data-lucide="pill" class="w-5 h-5 text-brand-600"></i></div>
@@ -287,7 +201,7 @@
                     <div id="treatmentLines" class="space-y-8"></div>
                 </div>
                 
-                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-card">
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-card" id="overview-labs" role="region" aria-label="Safety and monitoring">
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-3">
                             <div class="p-2 bg-rose-50 rounded-lg"><i data-lucide="microscope" class="w-5 h-5 text-rose-600"></i></div>
@@ -303,7 +217,7 @@
             </div>
 
             <div class="col-span-12 lg:col-span-4 space-y-8">
-                <div class="bg-white border border-slate-200 rounded-3xl p-8 h-full shadow-card flex flex-col relative overflow-hidden">
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 h-full shadow-card flex flex-col relative overflow-hidden" id="overview-molecular" role="region" aria-label="Molecular profile">
                     <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
                         <i data-lucide="dna" class="w-40 h-40"></i>
                     </div>
@@ -323,21 +237,20 @@
             </div>
         </div>
 
-        <div id="panel-timeline" class="hidden pt-6 animate-enter">
+        <div id="panel-timeline" class="hidden pt-6 animate-enter" aria-hidden="true">
             <div class="grid grid-cols-12 gap-8">
                 
-                <div class="col-span-12 lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-0 h-[700px] flex flex-col shadow-card overflow-hidden">
+                <div class="col-span-12 lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-0 h-[700px] flex flex-col shadow-card overflow-hidden" id="timeline-events" role="region" aria-label="Clinical events">
                     <div class="p-6 border-b border-slate-100 bg-slate-50/30">
                          <h3 class="text-lg font-bold text-slate-800 flex items-center gap-3">
                             <div class="p-2 bg-brand-50 rounded-lg"><i data-lucide="history" class="w-5 h-5 text-brand-600"></i></div>
                             Clinical Events
                         </h3>
                     </div>
-                    <div id="timelineContainer" class="relative pl-6 pr-6 py-8 overflow-y-auto flex-1 custom-scrollbar">
-                        </div>
+                    <div id="timelineContainer" class="relative pl-6 pr-6 py-8 overflow-y-auto flex-1 custom-scrollbar" tabindex="0"></div>
                 </div>
 
-                <div class="col-span-12 lg:col-span-7 bg-white border border-slate-200 rounded-3xl p-8 shadow-card flex flex-col">
+                <div class="col-span-12 lg:col-span-7 bg-white border border-slate-200 rounded-3xl p-8 shadow-card flex flex-col" id="timeline-kinetics" role="region" aria-label="Tumor marker kinetics">
                     <div class="flex items-center justify-between mb-8">
                         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-3">
                             <div class="p-2 bg-indigo-50 rounded-lg"><i data-lucide="activity-square" class="w-5 h-5 text-indigo-600"></i></div>
@@ -346,7 +259,7 @@
                         <span class="badge-base bg-indigo-50 text-indigo-600 border border-indigo-100">CEA Tracking</span>
                     </div>
                     <div class="flex-1 w-full min-h-[450px] relative">
-                        <canvas id="biomarkerChart"></canvas>
+                        <canvas id="biomarkerChart" aria-label="CEA levels over time"></canvas>
                     </div>
                 </div>
             </div>
@@ -354,28 +267,28 @@
 
     </main>
 
-    <div id="sidebarBackdrop" onclick="closeAllSidebars()" class="fixed inset-0 bg-slate-900/20 z-[60] hidden backdrop-blur-sm transition-opacity opacity-0"></div>
+    <div id="sidebarBackdrop" onclick="closeAllSidebars()" class="fixed inset-0 bg-slate-900/20 z-[60] hidden backdrop-blur-sm transition-opacity opacity-0" aria-hidden="true"></div>
 
-    <aside id="eventSidebar" class="fixed top-4 right-4 bottom-4 w-[500px] bg-white z-[70] transform translate-x-[120%] transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) border border-slate-200 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+    <aside id="eventSidebar" class="fixed top-4 right-4 bottom-4 w-[500px] bg-white z-[70] transform translate-x-[120%] transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) border border-slate-200 rounded-3xl shadow-2xl flex flex-col overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="sidebarEvent" aria-hidden="true">
         <div class="p-8 border-b border-slate-100 bg-slate-50/50 flex justify-between items-start">
             <div>
                 <div id="sidebarDate" class="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2"></div>
                 <h3 id="sidebarEvent" class="text-2xl font-black text-slate-900 leading-tight"></h3>
             </div>
-            <button onclick="closeAllSidebars()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-100 transition-colors">
+            <button onclick="closeAllSidebars()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-100 transition-colors" aria-label="Close event details">
                 <i data-lucide="x" class="w-5 h-5 text-slate-400"></i>
             </button>
         </div>
         <div id="sidebarContent" class="p-8 overflow-y-auto flex-1 space-y-8 custom-scrollbar"></div>
     </aside>
 
-    <aside id="labSidebar" class="fixed top-4 right-4 bottom-4 w-[600px] bg-white z-[80] transform translate-x-[120%] transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) border border-slate-200 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+    <aside id="labSidebar" class="fixed top-4 right-4 bottom-4 w-[600px] bg-white z-[80] transform translate-x-[120%] transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1) border border-slate-200 rounded-3xl shadow-2xl flex flex-col overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="labSidebarTitle" aria-hidden="true">
         <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50/50 to-white">
             <div>
                 <h3 id="labSidebarTitle" class="text-3xl font-black text-slate-900 tracking-tight"></h3>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Safety Trend Analysis</p>
             </div>
-            <button onclick="closeAllSidebars()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-100 transition-colors">
+            <button onclick="closeAllSidebars()" class="p-2 bg-white border border-slate-200 rounded-full hover:bg-slate-100 transition-colors" aria-label="Close lab details">
                 <i data-lucide="x" class="w-5 h-5 text-slate-400"></i>
             </button>
         </div>
@@ -407,23 +320,40 @@
     </aside>
 
 <script>
-    /**
-     * ====================================================================================
-     * APPLICATION STATE & CONFIGURATION
-     * ====================================================================================
-     */
+    /* ====================================================================================
+       UTILITIES (safe HTML escaping, timeout-fetch helper, sleep)
+       ==================================================================================== */
+    function escapeHtml(unsafe) {
+        if (unsafe === null || unsafe === undefined) return '';
+        return String(unsafe)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
+    async function timeoutFetch(url, opts = {}, ms = 8000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), ms);
+        try {
+            const res = await fetch(url, { ...opts, signal: controller.signal });
+            clearTimeout(id);
+            return res;
+        } catch (err) {
+            clearTimeout(id);
+            throw err;
+        }
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    /* ====================================================================================
+       APP STATE
+       ==================================================================================== */
     let PATIENTS = [];
     let selectedPt = null;
-    let charts = {
-        biomarker: null,
-        sidebar: null
-    };
-
-    /**
-     * FALLBACK_CODES:
-     * Robust dictionary to ensure every patient gets a valid code, even if the
-     * external API is slow or returns no results for the specific diagnosis acronym.
-     */
+    let charts = { biomarker: null, sidebar: null };
     const FALLBACK_CODES = {
         'NSCLC': { code: 'C34.90', desc: 'Malignant neoplasm of unspecified part of unspecified bronchus or lung' },
         'Breast': { code: 'C50.919', desc: 'Malignant neoplasm of unsp site of unspecified female breast' },
@@ -432,26 +362,47 @@
         'Squamous': { code: 'C34.90', desc: 'Malignant neoplasm of lung, Squamous cell' }
     };
 
-    /**
-     * ====================================================================================
-     * INITIALIZATION & DATA LOADING
-     * ====================================================================================
-     */
-    
-    // Main Entry Point
-    async function loadData() {
+    // Mapping of common drugs -> likely lab toxicities / watch signals for AI synthesis
+    const DRUG_TO_TOX = {
+        'Osimertinib': ['AST','ALT','QTc','Diarrhea'],
+        'Alectinib': ['LFTs','CK','CNS progression'],
+        'Crizotinib': ['LFTs','visual disturbances'],
+        'Pembrolizumab': ['TSH','ALT','AST','Colitis','Pneumonitis'],
+        'T-DXd': ['AST','ALT','ILD','LFTs'],
+        'Capecitabine': ['Hb','WBC','Hand-Foot Syndrome'],
+        'FOLFOX': ['Plt','Neuropathy','AST','ALT'],
+        'Encorafenib': ['AST','ALT','Skin/Rash'],
+        'Cetuximab': ['Skin/Rash','Mg'],
+        'Tamoxifen': ['LFTs','DVT'],
+        'Carbo + Pemetrexed': ['Creatinine','Hb','Renal'],
+        'Carboplatin': ['Hb','Plt'],
+        'Pemetrexed': ['Renal','Hb'],
+        'Pembrolizumab q3w': ['TSH','ALT','AST','Immune-related'],
+        'Crizotinib': ['LFTs','Visual'],
+        'Alectinib 600mg BID': ['LFTs','CK'],
+        'Osimertinib 80mg': ['LFTs','Diarrhea'],
+        'Encorafenib + Cetux': ['AST','ALT','Skin/Rash']
+    };
+
+    /* ====================================================================================
+       BOOTSTRAP: load patients.json -> fill selector -> deep-link
+       ==================================================================================== */
+    async function loadData(){
         try {
-            const res = await fetch('/data/patients.json');
-            if (!res.ok) throw new Error("Failed to fetch patient data");
+            const res = await timeoutFetch('/data/patients.json', {}, 8000);
+            if (!res.ok) throw new Error('patients.json fetch failed');
             PATIENTS = await res.json();
-            
             setupSelector();
             handleUrlParams();
-            
-            // Initialize Icons
             lucide.createIcons();
-        } catch (err) { 
-            console.error("Critical Data Error:", err);
+            // Keyboard UX
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllSidebars(); });
+            document.getElementById('openNewTabBtn').onclick = () => {
+                const url = `${window.location.pathname}?patient=${selectedPt.ID}`;
+                window.open(url, '_blank');
+            };
+        } catch (err) {
+            console.error('Critical Data Error:', err);
             document.body.innerHTML = `
                 <div class="min-h-screen flex items-center justify-center bg-slate-50">
                     <div class="text-center p-8 bg-white rounded-xl shadow-lg border border-red-100">
@@ -464,105 +415,147 @@
         }
     }
 
-    // URL Parameter Logic for Deep Linking
-    function handleUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        const ptId = params.get('patient');
-        // Default to first patient if ID is invalid or missing
-        selectedPt = PATIENTS.find(p => p.ID === ptId) || PATIENTS[0];
-        
-        // Sync Dropdown
-        const sel = document.getElementById('patientSelect');
-        if(sel) sel.value = selectedPt.ID;
-        
-        renderDashboard();
-    }
-
-    // Setup Dropdown
     function setupSelector() {
         const sel = document.getElementById('patientSelect');
-        sel.innerHTML = PATIENTS.map(p => 
-            `<option value="${p.ID}">${p.Name} (${p.ID})</option>`
-        ).join('');
-        
+        sel.innerHTML = PATIENTS.map(p => `<option value="${escapeHtml(p.ID)}">${escapeHtml(p.Name)} (${escapeHtml(p.ID)})</option>`).join('');
         sel.onchange = (e) => {
-            const newUrl = `${window.location.pathname}?patient=${e.target.value}`;
+            const newUrl = `${window.location.pathname}?patient=${encodeURIComponent(e.target.value)}`;
             window.history.pushState({path:newUrl},'',newUrl);
             selectedPt = PATIENTS.find(p => p.ID === e.target.value);
             renderDashboard();
         };
     }
 
-    /**
-     * ====================================================================================
-     * CORE RENDERING ENGINE
-     * Orchestrates the UI updates when a patient is selected.
-     * ====================================================================================
-     */
+    function handleUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const ptId = params.get('patient');
+        selectedPt = PATIENTS.find(p => p.ID === ptId) || PATIENTS[0];
+        document.getElementById('patientSelect').value = selectedPt.ID;
+        renderDashboard();
+    }
+
+    /* ====================================================================================
+       RENDERING: orchestrator for patient selection
+       ==================================================================================== */
     function renderDashboard() {
-        // 1. Triage Calculation
+        // Triage
         const triage = calculateTriageScore(selectedPt);
         const triageEl = document.getElementById('triageBadge');
-        triageEl.innerHTML = `
-            <span class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide border ${triage.class}">
-                ${triage.label} (Score: ${triage.score})
-            </span>`;
+        triageEl.innerHTML = `<span class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wide border ${triage.class}">${escapeHtml(triage.label)} (Score: ${triage.score})</span>`;
 
-        // 2. Patient Demographics (Top Summary)
+        // Top summary (use safe textContent / escaped values)
+        const top = document.getElementById('topSummary');
         const historyHtml = (selectedPt.History || []).map(h => `
-             <div class="flex gap-3 items-start p-3 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+            <div class="flex gap-3 items-start p-3 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
                 <div class="min-w-[6px] h-[6px] mt-2 rounded-full bg-brand-400"></div>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">${h}</p>
-             </div>`).join('');
-
-        document.getElementById('topSummary').innerHTML = `
+                <p class="text-xs text-slate-600 font-medium leading-relaxed">${escapeHtml(h)}</p>
+            </div>`).join('');
+        top.innerHTML = `
             <div class="flex items-center gap-3 mb-4">
-                <span class="badge-base bg-slate-900 text-white shadow-sm">Stage ${selectedPt.Stage}</span>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${selectedPt.Age} Years</span>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${selectedPt.Sex}</span>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${selectedPt.PS}</span>
+                <span class="badge-base bg-slate-900 text-white shadow-sm">Stage ${escapeHtml(selectedPt.Stage)}</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${escapeHtml(selectedPt.Age)} Years</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${escapeHtml(selectedPt.Sex)}</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide px-2 border-l border-slate-200">${escapeHtml(selectedPt.PS)}</span>
             </div>
-            <h2 class="text-5xl font-black text-slate-900 tracking-tight mb-2">${selectedPt.Name}</h2>
-            <p class="text-brand-600 font-bold text-lg mb-8 flex items-center gap-2">
-                ${selectedPt.Dx}
-            </p>
-            <div class="grid grid-cols-1 gap-2 bg-slate-50/50 rounded-2xl p-2 border border-slate-100/50">
-                 ${historyHtml}
-            </div>
+            <h2 id="patient-heading" class="text-5xl font-black text-slate-900 tracking-tight mb-2">${escapeHtml(selectedPt.Name)}</h2>
+            <p class="text-brand-600 font-bold text-lg mb-8 flex items-center gap-2">${escapeHtml(selectedPt.Dx)}</p>
+            <div class="grid grid-cols-1 gap-2 bg-slate-50/50 rounded-2xl p-2 border border-slate-100/50">${historyHtml}</div>
         `;
 
-        // 3. AI Insights
+        // AI Insights
         renderAIInsights();
 
-        // 4. Panels
+        // Panels
         renderTreatments();
         renderLabs();
         renderMolecular();
         renderTimeline();
-        
-        // 5. Async Code Fetching
+
+        // Async code fetch (ICD10 + SNOMED)
         fetchCodes();
 
-        // Re-init icons for injected content
         lucide.createIcons();
     }
 
-    /**
-     * ====================================================================================
-     * AI LOGIC
-     * ====================================================================================
-     */
+    /* ====================================================================================
+       AI: deeper syntheses, human-in-the-loop
+       - generateAISummary returns array of plain strings (no HTML)
+       ==================================================================================== */
+    function generateAISummary(pt) {
+        const out = [];
+        const active = pt.Treatments.find(t => t.end === 'Current');
+        if (active) out.push(`Currently receiving ${active.drug} (Line ${active.line}) with response recorded as ${active.resp}.`);
+        else out.push(`No active systemic therapy documented (last line: ${escapeHtml(pt.Line)}).`);
+
+        // Recent progression events
+        const recentPD = pt.Timeline.filter(t => t.status === 'PD' && new Date(t.date) >= new Date(Date.now() - 1000*60*60*24*120)); // 120 days
+        if (recentPD.length) {
+            out.push(`Recent progression observed within the last 120 days (${recentPD.map(r => r.date).join(', ')}). Consider restaging and clinical trial eligibility review.`);
+        }
+
+        // Labs: find rising abnormal labs and highlight
+        const risingAbnormals = (pt.Labs || []).filter(l => l.trend === 'up' && l.status === 'abnormal');
+        if (risingAbnormals.length) {
+            out.push(`Safety signals: rising ${risingAbnormals.map(l => l.name).join(', ')}. These may reflect treatment-related toxicity or disease progression and warrant closer monitoring.`);
+        }
+
+        // Drug-specific synthesis (map active drug to likely toxicities)
+        if (active) {
+            const toks = DRUG_TO_TOX[active.drug] || DRUG_TO_TOX[Object.keys(DRUG_TO_TOX).find(k => active.drug.includes(k))] || [];
+            if (toks.length) {
+                // check for any labs matching toks
+                const labNames = (pt.Labs || []).map(l => l.name);
+                const matched = toks.filter(t => labNames.includes(t) || t.toLowerCase().includes('lft') && (labNames.includes('AST')||labNames.includes('ALT')));
+                if (matched.length) {
+                    out.push(`${active.drug} is associated with ${matched.join(', ')} abnormalities; current lab trend supports monitoring for this toxicity.`);
+                } else {
+                    out.push(`${active.drug} has known risks including ${toks.slice(0,3).join(', ')} — ensure baseline monitoring is up to date.`);
+                }
+            }
+        }
+
+        // Biomarker and disease pattern synthesis
+        const cea = (pt.Labs || []).find(l => l.name === 'CEA' || l.name === 'CEA (ng/mL)') || (pt.Timeline && pt.Timeline[pt.Timeline.length-1] && pt.Timeline[pt.Timeline.length-1].cea ? {name:'CEA'} : null);
+        if (cea) {
+            // rough trend summary
+            const ceaHistory = pt.Labs?.find(l => l.name==='CEA')?.history || pt.Timeline?.filter(t=>t.cea!==undefined).map(t=>t.cea) || [];
+            if (ceaHistory.length >= 2) {
+                const first = ceaHistory[0], last = ceaHistory[ceaHistory.length-1];
+                if (last > first*1.3) out.push(`Tumor marker CEA rising (from ${first} → ${last}); correlates with radiographic progression in this dataset and may indicate disease activity.`);
+                else if (last < first*0.7) out.push(`CEA decreasing (from ${first} → ${last}) consistent with radiologic response.`);
+            }
+        }
+
+        // Uncertainty + guardrail
+        out.push(`Uncertainty: AI-derived patterns are suggestive only. Decisions should rely on clinician synthesis of imaging, histology, and patient goals.`);
+
+        return out;
+    }
+
+    function generateNextSteps(pt) {
+        const steps = [];
+        const lastEvent = pt.Timeline[pt.Timeline.length - 1];
+        if (lastEvent?.status === 'PD') {
+            steps.push("Order restaging imaging (CT Chest/Abd/Pelvis ± Brain MRI) to confirm extent of progression.");
+            steps.push("Review mutation panel/NGS results; consider targeted therapy or clinical trial if actionable.");
+            steps.push("Assess symptom burden and discuss goals of care if rapid progression or declining PS.");
+        } else {
+            steps.push("Continue current therapy with routine labs and imaging as scheduled.");
+            steps.push("Consider surveillance imaging in ~3 months or earlier if symptoms change.");
+        }
+        return steps;
+    }
+
     function renderAIInsights() {
-        const summary = generateAISummary(selectedPt);
+        const summaryArr = generateAISummary(selectedPt);
         const findingsContainer = document.getElementById('aiSummaryPoints');
-        
-        findingsContainer.innerHTML = summary.map((p, i) => `
+        findingsContainer.innerHTML = summaryArr.map((s, i) => `
             <div class="flex items-start gap-3 group p-2 rounded-lg transition-colors hover:bg-slate-50">
                 <div class="mt-1 p-1 bg-brand-100 rounded-md">
                     <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-brand-600"></i>
                 </div>
                 <div class="flex-1">
-                    <p class="text-sm font-medium text-slate-700 leading-relaxed">${p}</p>
+                    <p class="text-sm font-medium text-slate-700 leading-relaxed">${escapeHtml(s)}</p>
                     <div class="flex gap-3 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <button onclick="verifyInsight(this)" class="text-[10px] text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1">
                             <i data-lucide="check" class="w-3 h-3"></i> Confirm
@@ -574,297 +567,224 @@
                 </div>
             </div>
         `).join('');
-
         const steps = generateNextSteps(selectedPt);
-        document.getElementById('aiStepsList').innerHTML = steps.map(s => `
-            <li class="flex items-start gap-3 text-slate-600 p-2">
-                <i data-lucide="arrow-right-circle" class="w-4 h-4 mt-0.5 text-brand-400 shrink-0"></i>
-                <span class="text-sm font-medium">${s}</span>
-            </li>
-        `).join('');
-    }
-
-    // Actions for AI Human-in-the-Loop
-    window.verifyInsight = (btn) => {
-        const container = btn.closest('div.flex-1');
-        const actionRow = btn.parentElement;
-        actionRow.innerHTML = `<span class="badge-base bg-emerald-50 text-emerald-600 border border-emerald-100"><i data-lucide="check-circle-2" class="w-3 h-3 mr-1"></i> Verified by Physician</span>`;
-        actionRow.classList.remove('opacity-0', 'group-hover:opacity-100'); // Make permanent
-        actionRow.classList.add('opacity-100');
+        document.getElementById('aiStepsList').innerHTML = steps.map(s => `<li class="flex items-start gap-3 text-slate-600 p-2"><i data-lucide="arrow-right-circle" class="w-4 h-4 mt-0.5 text-brand-400 shrink-0"></i><span class="text-sm font-medium">${escapeHtml(s)}</span></li>`).join('');
         lucide.createIcons();
     }
 
+    window.verifyInsight = (btn) => {
+        const row = btn.closest('div.flex-1');
+        const actionRow = btn.parentElement;
+        actionRow.innerHTML = `<span class="badge-base bg-emerald-50 text-emerald-600 border border-emerald-100"><i data-lucide="check-circle-2" class="w-3 h-3 mr-1"></i> Verified by Physician</span>`;
+        lucide.createIcons();
+    }
     window.dismissInsight = (btn) => {
         const row = btn.closest('.group');
-        row.style.opacity = '0.4';
+        row.style.opacity = '0.35';
         row.style.pointerEvents = 'none';
         row.style.textDecoration = 'line-through';
     }
 
-    /**
-     * ====================================================================================
-     * PANEL: TREATMENTS
-     * ====================================================================================
-     */
+    /* ====================================================================================
+       TREATMENTS RENDER
+       ==================================================================================== */
     function renderTreatments() {
         const container = document.getElementById('treatmentLines');
         container.innerHTML = selectedPt.Treatments.map((t, idx) => {
             const isActive = t.end === 'Current';
-            const isNCCN = !t.extended?.rationale.includes('Compassionate');
-            
+            const rationale = escapeHtml(t.extended?.rationale || '');
+            const dosing = escapeHtml(t.extended?.dosing || '');
+            const toxicity = escapeHtml(t.extended?.toxicity || '');
+            const outcome = escapeHtml(t.extended?.outcome || '');
+            const isNCCN = t.extended?.rationale && !t.extended.rationale.toLowerCase().includes('compassionate');
+
             return `
             <div class="relative pl-8 border-l-[3px] ${isActive ? 'border-brand-500' : 'border-slate-200'} pb-10 last:pb-0">
                 <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-[4px] ${isActive ? 'border-brand-500 bg-white shadow-[0_0_0_4px_rgba(99,102,241,0.2)]' : 'border-slate-300 bg-slate-50'} z-10 transition-colors"></div>
                 
-                <div class="interactive-card bg-white rounded-2xl p-6 cursor-pointer group" onclick="toggleTreatment(${idx})">
+                <div class="interactive-card bg-white rounded-2xl p-6 cursor-pointer group" onclick="toggleTreatment(${idx})" role="button" aria-expanded="false">
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <div class="flex items-center gap-3 mb-2">
                                 <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Line ${t.line}</span>
                                 ${isNCCN ? '<span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3"></i> NCCN GUIDELINE</span>' : ''}
                             </div>
-                            <h4 class="text-xl font-black text-slate-900">${t.drug}</h4>
+                            <h4 class="text-xl font-black text-slate-900">${escapeHtml(t.drug)}</h4>
                         </div>
-                        <span class="badge-base ${getStatusColor(t.resp)} scale-110 origin-right">${t.resp}</span>
+                        <span class="badge-base ${getStatusColor(t.resp)} scale-110 origin-right">${escapeHtml(t.resp)}</span>
                     </div>
                     
                     <div class="flex items-center gap-6 text-xs text-slate-500 font-bold uppercase tracking-wide">
-                        <span class="flex items-center gap-2"><i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-400"></i> ${t.start} — ${t.end}</span>
+                        <span class="flex items-center gap-2"><i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-400"></i> ${escapeHtml(t.start)} — ${escapeHtml(t.end)}</span>
                         <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                        <span>Duration: ${getDuration(t.start, t.end)}</span>
+                        <span>Duration: ${escapeHtml(getDuration(t.start,t.end))}</span>
                         <i data-lucide="chevron-down" class="ml-auto w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors"></i>
                     </div>
                     
                     <div id="tx-detail-${idx}" class="hidden mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6 animate-enter">
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">Clinical Rationale</span>
-                            <p class="text-xs text-slate-700 leading-relaxed">${t.extended?.rationale}</p>
+                            <p class="text-xs text-slate-700 leading-relaxed">${rationale}</p>
                         </div>
                         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
                             <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">Outcome & Toxicity</span>
-                            <p class="text-xs text-slate-700 leading-relaxed mb-2"><strong class="text-slate-900">Outcome:</strong> ${t.extended?.outcome}</p>
-                            <p class="text-xs text-slate-700 leading-relaxed"><strong class="text-slate-900">Safety:</strong> ${t.extended?.toxicity}</p>
+                            <p class="text-xs text-slate-700 leading-relaxed mb-2"><strong class="text-slate-900">Outcome:</strong> ${outcome}</p>
+                            <p class="text-xs text-slate-700 leading-relaxed"><strong class="text-slate-900">Safety:</strong> ${toxicity}</p>
                         </div>
                     </div>
                 </div>
             </div>
-        `}).join('');
+            `;
+        }).join('');
+        lucide.createIcons();
     }
 
     function toggleTreatment(idx) {
-        document.getElementById(`tx-detail-${idx}`).classList.toggle('hidden');
+        const el = document.getElementById(`tx-detail-${idx}`);
+        const btnCard = el?.closest('.interactive-card');
+        if (el) {
+            el.classList.toggle('hidden');
+            if (btnCard) btnCard.setAttribute('aria-expanded', !el.classList.contains('hidden'));
+        }
     }
 
-    /**
-     * ====================================================================================
-     * PANEL: LABS & MOLECULAR
-     * ====================================================================================
-     */
+    /* ====================================================================================
+       LABS: accurate open-by-name, sidebar charts, sort abnormal-first
+       ==================================================================================== */
     function renderLabs() {
         const container = document.getElementById('labsGrid');
-        // Sort Labs: Abnormal first
-        const sortedLabs = [...selectedPt.Labs].sort((a,b) => (b.status==='abnormal') - (a.status==='abnormal'));
-        
+        const sortedLabs = [...(selectedPt.Labs || [])].sort((a,b) => (b.status==='abnormal') - (a.status==='abnormal'));
         container.innerHTML = sortedLabs.map(l => {
             const isAbnormal = l.status === 'abnormal';
+            const trendIcon = l.trend === 'up' ? 'trending-up' : l.trend === 'down' ? 'trending-down' : 'minus';
             return `
-            <button onclick="openLabSidebarByName('${l.name}')" class="text-left p-5 rounded-2xl border ${isAbnormal ? 'border-rose-100 bg-rose-50/20' : 'border-slate-100 bg-white'} hover:shadow-md hover:border-brand-200 transition-all group relative overflow-hidden w-full">
-                ${isAbnormal ? '<div class="absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.6)]"></div>' : ''}
-                
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">${l.name}</span>
-                
-                <div class="flex items-baseline gap-2 mb-2">
-                    <span class="text-3xl font-black ${isAbnormal ? 'text-rose-600' : 'text-slate-800'} group-hover:text-brand-600 transition-colors">${l.val}</span>
-                    <span class="text-[10px] font-bold text-slate-400">${l.unit}</span>
-                </div>
-                
-                <div class="flex items-center gap-1.5">
-                    ${l.trend === 'up' ? '<i data-lucide="trending-up" class="w-3.5 h-3.5 text-slate-400"></i>' : 
-                      l.trend === 'down' ? '<i data-lucide="trending-down" class="w-3.5 h-3.5 text-slate-400"></i>' : 
-                      '<i data-lucide="minus" class="w-3.5 h-3.5 text-slate-400"></i>'}
-                    <span class="text-[10px] font-bold text-slate-500 uppercase">${l.trend} Trend</span>
-                </div>
-            </button>
-        `}).join('');
+                <button onclick="openLabSidebarByName('${escapeHtml(l.name)}')" class="text-left p-5 rounded-2xl border ${isAbnormal ? 'border-rose-100 bg-rose-50/20' : 'border-slate-100 bg-white'} hover:shadow-md hover:border-brand-200 transition-all group relative overflow-hidden w-full" aria-label="Open ${escapeHtml(l.name)} details">
+                    ${isAbnormal ? '<div class="absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.6)]"></div>' : ''}
+                    
+                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-2">${escapeHtml(l.name)}</span>
+                    
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="text-3xl font-black ${isAbnormal ? 'text-rose-600' : 'text-slate-800'} group-hover:text-brand-600 transition-colors">${escapeHtml(l.val)}</span>
+                        <span class="text-[10px] font-bold text-slate-400">${escapeHtml(l.unit)}</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-1.5">
+                        <i data-lucide="${trendIcon}" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">${escapeHtml(l.trend)} Trend</span>
+                    </div>
+                </button>
+            `;
+        }).join('');
+        lucide.createIcons();
     }
 
+    async function openLabSidebarByName(labName) {
+        const l = selectedPt.Labs.find(x => x.name === labName);
+        if (!l) return console.error('Lab not found:', labName);
+        document.getElementById('labSidebarTitle').textContent = l.name;
+        document.getElementById('labSidebarValue').textContent = l.val;
+        document.getElementById('labSidebarUnit').textContent = l.unit || '';
+        document.getElementById('labSidebarRange').textContent = l.range || 'N/A';
+        if (l.status === 'abnormal') document.getElementById('labSidebarStatus').innerHTML = `<span class="badge-base bg-rose-100 text-rose-700">Abnormal Result</span>`;
+        else document.getElementById('labSidebarStatus').innerHTML = `<span class="badge-base bg-emerald-100 text-emerald-700">Within Normal Limits</span>`;
+        toggleSidebar('labSidebar', true);
+
+        // Render history chart
+        const ctx = document.getElementById('sidebarLabChart').getContext('2d');
+        if (charts.sidebar) charts.sidebar.destroy();
+        const isAbnormal = l.status === 'abnormal';
+        const color = isAbnormal ? '#f43f5e' : '#10b981';
+        const bgGrad = ctx.createLinearGradient(0,0,0,300);
+        bgGrad.addColorStop(0, isAbnormal ? 'rgba(244,63,94,0.2)' : 'rgba(16,185,129,0.2)');
+        bgGrad.addColorStop(1, 'rgba(255,255,255,0)');
+
+        charts.sidebar = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: (l.history || []).map((_,i) => `T-${(l.history.length - i)}`),
+                datasets: [{ data: l.history || [], borderColor: color, backgroundColor: bgGrad, borderWidth: 3, fill: true, tension: 0.4, pointRadius: 5 }]
+            },
+            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{display:false} } }
+        });
+    }
+
+    /* ====================================================================================
+       MOLECULAR PANEL
+       ==================================================================================== */
     function renderMolecular() {
-        const markers = ['EGFR','ALK','KRAS','PDL1','MSI','HER2','ER','PR'];
+        const markers = ['EGFR','ALK','KRAS','PDL1','MSI','HER2','ER','PR','TMB','PIK3CA','BRAF'];
         const list = document.getElementById('molecularList');
-        
         list.innerHTML = markers.filter(m => selectedPt[m]).map(m => {
             const val = selectedPt[m];
-            // Highlight logic: Anything that isn't "Negative", "MSS" or "WT" gets color
-            const isPositive = !['Negative','MSS','WT'].includes(val);
-            
-            return `
-            <div class="flex justify-between items-center py-3 px-4 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100">
-                <span class="text-xs font-black text-slate-400 uppercase tracking-widest">${m}</span>
-                <span class="text-xs font-bold ${isPositive ? 'text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-100 shadow-sm' : 'text-slate-600'}">${val}</span>
-            </div>`;
+            const isPositive = !['Negative','MSS','WT','0%','0'].includes(val);
+            return `<div class="flex justify-between items-center py-3 px-4 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100"><span class="text-xs font-black text-slate-400 uppercase tracking-widest">${escapeHtml(m)}</span><span class="text-xs font-bold ${isPositive ? 'text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-100 shadow-sm' : 'text-slate-600'}">${escapeHtml(val)}</span></div>`;
         }).join('');
-        
-        document.getElementById('molecularBiology').innerText = selectedPt.Biology || "No actionable genomic data currently available.";
+        document.getElementById('molecularBiology').textContent = selectedPt.Biology || "No actionable genomic data currently available.";
     }
 
-    /**
-     * ====================================================================================
-     * PANEL: TIMELINE & CHART
-     * ====================================================================================
-     */
+    /* ====================================================================================
+       TIMELINE + BIOMARKER CHART
+       ==================================================================================== */
     function renderTimeline() {
         const container = document.getElementById('timelineContainer');
-        container.innerHTML = `<div class="timeline-spine"></div>`; // Reset
-        
-        const events = [...selectedPt.Timeline].sort((a,b) => new Date(a.date) - new Date(b.date));
-        
+        container.innerHTML = `<div class="timeline-spine"></div>`;
+        const events = [...(selectedPt.Timeline || [])].sort((a,b) => new Date(a.date) - new Date(b.date));
         events.forEach(t => {
             const item = document.createElement('div');
             item.className = "pl-12 pb-10 relative group cursor-pointer timeline-item";
             item.onclick = () => openSidebar(t);
-            
-            // Status Color Logic
             let statusColor = 'border-brand-500 bg-white';
-            if(t.status === 'PD') statusColor = 'border-rose-500 bg-rose-50';
-            if(t.status === 'PR') statusColor = 'border-emerald-500 bg-emerald-50';
-            
+            if (t.status === 'PD') statusColor = 'border-rose-500 bg-rose-50';
+            if (t.status === 'PR') statusColor = 'border-emerald-500 bg-emerald-50';
             item.innerHTML = `
-                <div class="timeline-node-container">
-                    <div class="timeline-node w-4 h-4 rounded-full border-[3px] ${statusColor} shadow-sm bg-white"></div>
-                </div>
-                
+                <div class="timeline-node-container"><div class="timeline-node w-4 h-4 rounded-full border-[3px] ${statusColor} shadow-sm bg-white"></div></div>
                 <div class="interactive-card bg-white p-5 rounded-2xl border border-slate-200">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${t.date}</span>
-                        <span class="badge-base ${getStatusColor(t.status)} scale-90 origin-right">${t.status}</span>
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${escapeHtml(t.date)}</span>
+                        <span class="badge-base ${getStatusColor(t.status)} scale-90 origin-right">${escapeHtml(t.status)}</span>
                     </div>
-                    <div class="text-base font-bold text-slate-800 group-hover:text-brand-600 transition-colors mb-1">${t.event}</div>
-                    <div class="text-xs text-slate-500 line-clamp-1">${t.detail}</div>
+                    <div class="text-base font-bold text-slate-800 group-hover:text-brand-600 transition-colors mb-1">${escapeHtml(t.event)}</div>
+                    <div class="text-xs text-slate-500 line-clamp-1">${escapeHtml(t.detail || t.report?.findings || '')}</div>
                 </div>
             `;
             container.appendChild(item);
         });
-        
-        // Render Chart
         renderBiomarkerChart(events);
     }
 
     function renderBiomarkerChart(events) {
         const ctx = document.getElementById('biomarkerChart').getContext('2d');
         const plotData = events.filter(t => t.cea !== undefined);
-        
         if (charts.biomarker) charts.biomarker.destroy();
-        
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(79, 70, 229, 0.15)');
-        gradient.addColorStop(1, 'rgba(79, 70, 229, 0)');
-
+        gradient.addColorStop(0, 'rgba(79,70,229,0.15)');
+        gradient.addColorStop(1, 'rgba(79,70,229,0)');
         charts.biomarker = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: plotData.map(p => p.date),
-                datasets: [{
-                    label: 'CEA (ng/mL)',
-                    data: plotData.map(p => p.cea),
-                    borderColor: '#4f46e5',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#4f46e5',
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    fill: true,
-                    tension: 0.35
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { display: false },
-                    y: { 
-                        beginAtZero: true, 
-                        border: { dash: [6, 6] },
-                        grid: { color: '#f1f5f9' }
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * ====================================================================================
-     * SIDEBAR LOGIC (Lab Fix & Detail Views)
-     * ====================================================================================
-     */
-    
-    // CRITICAL FIX: Find Lab by NAME logic to prevent index mismatch
-    function openLabSidebarByName(labName) {
-        const l = selectedPt.Labs.find(lab => lab.name === labName);
-        if (!l) return console.error("Lab not found:", labName);
-
-        // Populate Sidebar
-        document.getElementById('labSidebarTitle').innerText = l.name;
-        document.getElementById('labSidebarValue').innerText = l.val;
-        document.getElementById('labSidebarUnit').innerText = l.unit;
-        document.getElementById('labSidebarRange').innerText = l.range || 'N/A';
-        
-        const isAbnormal = l.status === 'abnormal';
-        document.getElementById('labSidebarStatus').innerHTML = isAbnormal
-            ? `<span class="badge-base bg-rose-100 text-rose-700">Abnormal Result</span>` 
-            : `<span class="badge-base bg-emerald-100 text-emerald-700">Within Normal Limits</span>`;
-
-        toggleSidebar('labSidebar', true);
-        
-        // Render Chart
-        const ctx = document.getElementById('sidebarLabChart').getContext('2d');
-        if(charts.sidebar) charts.sidebar.destroy();
-        
-        const color = isAbnormal ? '#f43f5e' : '#10b981'; // Rose or Emerald
-        const bgGrad = ctx.createLinearGradient(0,0,0,300);
-        bgGrad.addColorStop(0, isAbnormal ? 'rgba(244, 63, 94, 0.2)' : 'rgba(16, 185, 129, 0.2)');
-        bgGrad.addColorStop(1, 'rgba(255,255,255,0)');
-
-        charts.sidebar = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: l.history.map((_,i) => `Prior ${l.history.length - i}`),
-                datasets: [{ 
-                    data: l.history, 
-                    borderColor: color, 
-                    backgroundColor: bgGrad,
-                    borderWidth: 3,
-                    fill: true, 
-                    tension: 0.4,
-                    pointRadius: 5
-                }]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins: { legend: { display: false } }, 
-                scales: { x: { display: false } } 
-            }
+            type:'line',
+            data: { labels: plotData.map(p=>p.date), datasets:[{ label:'CEA (ng/mL)', data: plotData.map(p=>p.cea), borderColor:'#4f46e5', backgroundColor: gradient, borderWidth:3, pointBackgroundColor:'#fff', pointBorderColor:'#4f46e5', pointRadius:6, fill:true, tension:0.35 }]},
+            options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false} }, scales:{ x:{ display:false }, y:{ beginAtZero:true, border:{ dash:[6,6]}, grid:{ color:'#f1f5f9' } } } }
         });
     }
 
     function openSidebar(data) {
-        document.getElementById('sidebarDate').innerText = data.date;
-        document.getElementById('sidebarEvent').innerText = data.event;
+        document.getElementById('sidebarDate').textContent = data.date;
+        document.getElementById('sidebarEvent').textContent = data.event;
+        const findings = data.report?.findings || data.findings || '';
+        const impression = data.report?.impression || '';
+        const plan = data.report?.plan || '';
         document.getElementById('sidebarContent').innerHTML = `
             <div class="bg-brand-50/50 p-6 rounded-2xl border border-brand-100 mb-6">
                 <h4 class="text-[10px] font-black text-brand-400 uppercase tracking-widest mb-3">Radiology Findings</h4>
-                <p class="text-sm font-medium text-slate-800 leading-7">${data.report?.findings || 'No specific findings reported.'}</p>
+                <p class="text-sm font-medium text-slate-800 leading-7">${escapeHtml(findings)}</p>
             </div>
             <div class="space-y-4">
                 <div class="p-5 border border-slate-100 rounded-2xl bg-white shadow-sm">
                     <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Impression</h4>
-                    <p class="text-xs text-slate-700 leading-relaxed">${data.report?.impression || '—'}</p>
+                    <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(impression)}</p>
                 </div>
                 <div class="p-5 border border-slate-100 rounded-2xl bg-white shadow-sm">
                     <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">Plan</h4>
-                    <p class="text-xs text-slate-700 leading-relaxed">${data.report?.plan || '—'}</p>
+                    <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(plan)}</p>
                 </div>
             </div>`;
         toggleSidebar('eventSidebar', true);
@@ -874,216 +794,192 @@
         const el = document.getElementById(id);
         const bd = document.getElementById('sidebarBackdrop');
         const allSidebars = ['eventSidebar', 'labSidebar'];
-        
         if (show) {
-            // Close others first
-            allSidebars.forEach(sid => {
-                if(sid !== id) document.getElementById(sid).classList.add('translate-x-[120%]');
-            });
-            
+            allSidebars.forEach(sid => { if (sid !== id) document.getElementById(sid).classList.add('translate-x-[120%]'); });
             bd.classList.remove('hidden');
-            // Small timeout for CSS transition
-            setTimeout(() => { 
-                bd.classList.remove('opacity-0'); 
-                el.classList.remove('translate-x-[120%]'); 
-            }, 10);
+            setTimeout(()=>{ bd.classList.remove('opacity-0'); el.classList.remove('translate-x-[120%]'); el.setAttribute('aria-hidden','false'); }, 10);
         } else {
-            el.classList.add('translate-x-[120%]');
-            bd.classList.add('opacity-0');
-            setTimeout(() => { bd.classList.add('hidden'); }, 300);
+            el.classList.add('translate-x-[120%]'); bd.classList.add('opacity-0');
+            setTimeout(()=>{ bd.classList.add('hidden'); el.setAttribute('aria-hidden','true'); }, 300);
         }
     }
-    
-    // Global Close Handler
-    function closeAllSidebars() { 
-        toggleSidebar('eventSidebar', false); 
-        toggleSidebar('labSidebar', false); 
-    }
+    function closeAllSidebars(){ toggleSidebar('eventSidebar', false); toggleSidebar('labSidebar', false); }
 
-    /* ==========================================================================
-   ADVANCED PDF EXPORT ENGINE (Multi-Page & Full Content)
-   ========================================================================== */
-document.getElementById('exportBtn').addEventListener('click', async () => {
-    const btn = document.getElementById('exportBtn');
-    const originalText = btn.innerHTML;
-    
-    btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating Full Report...`;
-    btn.disabled = true;
+    /* ====================================================================================
+       PDF: robust multi-section capture + slicing into A4 pages
+       - captures: header/topSummary, AI section, Overview (treatments + labs + molecular),
+         Timeline (events) and Biomarker chart image
+       ==================================================================================== */
+    document.getElementById('exportBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('exportBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Preparing report...`;
+        lucide.createIcons();
 
-    try {
-        // 1. Capture Chart Data URLs before cloning
-        const biomarkerCanvas = document.getElementById('biomarkerChart');
-        const biomarkerImgData = biomarkerCanvas.toDataURL('image/png');
-        
-        // 2. Create the Hidden Virtual Report Container
-        const container = document.createElement('div');
-        container.id = 'pdf-generator-container';
-        // Force a specific width (1100px) that translates well to A4 dimensions
-        container.style.cssText = "position: absolute; left: -9999px; top: 0; width: 1100px; background: white; z-index: -100; font-family: 'Inter', sans-serif; color: #0f172a;";
-        document.body.appendChild(container);
+        try {
+            // 1) Capture biomarker chart as image (high fidelity)
+            let biomarkerImg = null;
+            try {
+                if (charts.biomarker) biomarkerImg = charts.biomarker.toBase64Image();
+            } catch (e) {
+                console.warn('Biomarker chart capture failed', e);
+                biomarkerImg = null;
+            }
 
-        // 3. Clone and assemble ALL dashboard sections
-        const headerHtml = document.getElementById('topSummary').innerHTML;
-        const triageHtml = document.getElementById('triageBadge').innerHTML;
-        const aiFindingsHtml = document.getElementById('aiSummaryPoints').innerHTML;
-        const aiPlanHtml = document.getElementById('aiStepsList').innerHTML;
-        const treatmentHtml = document.getElementById('treatmentLines').innerHTML;
-        const labsHtml = document.getElementById('labsGrid').innerHTML;
-        const molecularHtml = document.getElementById('molecularList').innerHTML;
-        const molecularBio = document.getElementById('molecularBiology').innerText;
-        const timelineList = document.getElementById('timelineContainer').innerHTML;
+            // 2) Define sections to capture as DOM elements (cloned to hidden container)
+            const sections = [
+                { title: 'Patient Summary', el: document.getElementById('topSummary') },
+                { title: 'AI Insights', el: document.getElementById('ai-section') },
+                { title: 'Overview', el: document.getElementById('overview-treatment') }, // we'll capture treatment and labs separately too
+                { title: 'Overview-Labs', el: document.getElementById('overview-labs') },
+                { title: 'Molecular', el: document.getElementById('overview-molecular') },
+                { title: 'Timeline', el: document.getElementById('timeline-events') },
+                // Biomarker will be embedded as an image on its own page section
+            ];
 
-        // 4. Construct the Full HTML Template
-        container.innerHTML = `
-            <div class="p-12">
-                <div class="flex justify-between items-center border-b-4 border-indigo-600 pb-6 mb-8">
-                    <div>
-                        <h1 class="text-4xl font-black text-slate-900">OncoReview <span class="text-indigo-600">TAPM</span></h1>
-                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Full Clinical Report</p>
-                    </div>
-                    <div class="scale-125 origin-right">${triageHtml}</div>
+            // 3) Prepare offscreen container to render clones (avoids visual reflow)
+            const off = document.createElement('div');
+            off.id = 'pdf-generator-container';
+            off.style.cssText = "position: absolute; left: -9999px; top: 0; width: 1100px; background: white; z-index: -100; font-family: 'Inter', sans-serif; color: #0f172a;";
+            document.body.appendChild(off);
+
+            // Build a header block at top of report containing title & triage (capture once)
+            const triageHtml = document.getElementById('triageBadge').innerHTML;
+            const headerBlock = document.createElement('div');
+            headerBlock.style.padding = '40px';
+            headerBlock.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:4px solid #4f46e5;padding-bottom:18px;margin-bottom:18px;">
+                <div>
+                    <h1 style="font-size:28px;margin:0;font-weight:800">OncoReview TAPM</h1>
+                    <div style="font-size:11px;color:#64748b;margin-top:6px;font-weight:700;letter-spacing:1px">Full Clinical Report</div>
                 </div>
+                <div style="transform:scale(1.05);">${triageHtml}</div>
+            </div>`;
+            off.appendChild(headerBlock);
 
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 mb-8">
-                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Patient Demographics</h3>
-                    ${headerHtml}
-                </div>
+            // 4) For each section: clone node, append to offscreen container, then html2canvas
+            const canvases = [];
+            for (const s of sections) {
+                // clone node deeply
+                const clone = s.el.cloneNode(true);
+                // sanitize text nodes inside clone by escaping any potential innerHTML content
+                // (we used escapeHtml when rendering, but be defensive)
+                clone.querySelectorAll && clone.querySelectorAll('*').forEach(n => {
+                    if (n.childNodes && n.childNodes.length) {
+                        n.childNodes.forEach(cn => {
+                            if (cn.nodeType === Node.TEXT_NODE) {
+                                cn.nodeValue = cn.nodeValue; // already safe
+                            }
+                        });
+                    }
+                });
 
-                <h2 class="text-2xl font-black text-slate-900 mb-6 border-b-2 pb-2">1. Clinical Overview</h2>
-                <div class="grid grid-cols-12 gap-8 mb-12">
-                    <div class="col-span-8 space-y-8">
-                        <div class="border-2 rounded-2xl p-6">
-                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Treatment Trajectory</h3>
-                            ${treatmentHtml}
-                        </div>
-                        <div class="border-2 rounded-2xl p-6">
-                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Safety & Monitoring</h3>
-                            ${labsHtml}
-                        </div>
-                    </div>
-                    <div class="col-span-4">
-                        <div class="border-2 rounded-2xl p-6 bg-slate-50/50">
-                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Molecular Profile</h3>
-                            ${molecularHtml}
-                            <p class="mt-4 text-xs italic text-slate-600">${molecularBio}</p>
-                        </div>
-                    </div>
-                </div>
+                // Wrap section with heading for PDF clarity
+                const wrapper = document.createElement('div');
+                wrapper.style.padding = '28px';
+                wrapper.style.borderBottom = '1px solid #eef2ff';
+                wrapper.innerHTML = `<h2 style="font-size:18px;margin:0 0 12px 0;font-weight:800">${escapeHtml(s.title)}</h2>`;
+                wrapper.appendChild(clone);
+                off.appendChild(wrapper);
 
-                <div style="height: 60px;"></div>
+                // allow layout settle
+                await sleep(70);
 
-                <h2 class="text-2xl font-black text-slate-900 mb-6 border-b-2 pb-2">2. Longitudinal History</h2>
-                <div class="grid grid-cols-12 gap-8">
-                    <div class="col-span-5">
-                        <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Clinical Events</h3>
-                        <div class="border-l-4 border-slate-200 pl-6 space-y-6">
-                            ${timelineList}
-                        </div>
-                    </div>
-                    <div class="col-span-7">
-                        <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Tumor Kinetics (CEA)</h3>
-                        <div class="border-2 rounded-2xl p-6 bg-white shadow-sm">
-                            <img src="${biomarkerImgData}" style="width: 100%; height: auto; display: block;" />
-                        </div>
-                    </div>
-                </div>
+                // capture using html2canvas with moderate scale
+                const canvas = await html2canvas(wrapper, { scale: 1.6, useCORS:true, windowWidth: 1100 });
+                canvases.push({ canvas, title: s.title });
+                // clear wrapper (but keep header)
+                // off.removeChild(wrapper); // keep; we'll remove all later
+            }
 
-                <div class="mt-20 pt-8 border-t border-slate-200 text-center">
-                    <p class="text-xs text-slate-400 font-bold">Generated by OncoReview TAPM System • ${new Date().toLocaleString()}</p>
-                </div>
-            </div>
-        `;
+            // 5) Add biomarker image as its own canvas if available
+            if (biomarkerImg) {
+                const img = new Image();
+                img.src = biomarkerImg;
+                await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+                // Create canvas to hold image in full width 1100px
+                const c = document.createElement('canvas');
+                c.width = 1100;
+                const ratio = img.naturalWidth ? (1100 / img.naturalWidth) : 1;
+                c.height = Math.round((img.naturalHeight || 600) * ratio);
+                const ctx = c.getContext('2d');
+                ctx.fillStyle = '#fff'; ctx.fillRect(0,0,c.width,c.height);
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                canvases.push({ canvas: c, title: 'Tumor Kinetics (CEA)' });
+            }
 
-        // 5. Use html2canvas to capture the full length of the container
-        const canvas = await html2canvas(container, { 
-            scale: 2, 
-            useCORS: true,
-            windowWidth: 1100 
-        });
-        
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        
-        let heightLeft = imgHeight;
-        let position = 0;
+            // 6) Create PDF and add canvases, slicing large canvases into A4-sized pages
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p','mm','a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        // 6. Slice the long image into multiple A4 pages
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdfHeight;
+            let firstPage = true;
+            for (const item of canvases) {
+                const canvas = item.canvas;
+                // convert canvas pixel dimensions to proper slices
+                const canvasW = canvas.width;
+                const canvasH = canvas.height;
+                // compute slice height in pixels that corresponds to one PDF page when scaled to pdfWidth
+                const slicePx = Math.floor(canvasW * (pdfHeight / pdfWidth));
+                // slices
+                let y = 0;
+                while (y < canvasH) {
+                    const h = Math.min(slicePx, canvasH - y);
+                    // make temp canvas for slice
+                    const slice = document.createElement('canvas');
+                    slice.width = canvasW;
+                    slice.height = h;
+                    const ctx = slice.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0,0,slice.width,slice.height);
+                    ctx.drawImage(canvas, 0, y, canvasW, h, 0, 0, canvasW, h);
+                    const imgData = slice.toDataURL('image/png');
 
-        while (heightLeft >= 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
+                    // compute height in mm on PDF scaled to pdfWidth
+                    const imgHeightMm = (h * pdfWidth) / canvasW;
+
+                    if (!firstPage) pdf.addPage();
+                    // add title stripe only at top of first slice for a section
+                    // place image
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeightMm);
+                    firstPage = false;
+                    y += h;
+                }
+            }
+
+            // 7) Save PDF
+            const filename = `${selectedPt.ID}_OncoReview_Report.pdf`;
+            pdf.save(filename);
+
+            // 8) cleanup offscreen
+            off.remove();
+        } catch (err) {
+            console.error('PDF Error:', err);
+            alert('Report generation failed — see console for details.');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
         }
+    });
 
-        pdf.save(`${selectedPt.ID}_Full_Clinical_Report.pdf`);
-
-    } catch (err) {
-        console.error("PDF Error:", err);
-        alert("Report generation failed. Please check the console.");
-    } finally {
-        document.getElementById('pdf-generator-container')?.remove();
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }
-});
-
-    /**
-     * ====================================================================================
-     * UTILITIES & HELPERS
-     * ====================================================================================
-     */
-    
-    // Triage Logic
+    /* ====================================================================================
+       UTILITIES & SMALL HELPERS (triage, status color, duration)
+       ==================================================================================== */
     function calculateTriageScore(pt) {
         let score = 0;
-        if (pt.Stage.includes('IV')) score += 2;
-        if (pt.Timeline.some(t => t.status === 'PD' && new Date(t.date) > new Date('2024-01-01'))) score += 3;
+        if (String(pt.Stage || '').includes('IV')) score += 2;
+        if ((pt.Timeline || []).some(t => t.status === 'PD' && new Date(t.date) > new Date(Date.now() - 1000*60*60*24*180))) score += 3;
         score += (pt.Labs || []).filter(l => l.status === 'abnormal').length;
-        
         if (score >= 5) return { score, label: 'High Priority', class: 'bg-rose-100 text-rose-700 border-rose-200' };
         if (score >= 3) return { score, label: 'Medium Priority', class: 'bg-amber-100 text-amber-700 border-amber-200' };
         return { score, label: 'Routine Review', class: 'bg-slate-100 text-slate-600 border-slate-200' };
     }
 
-    // AI Text Generation
-    function generateAISummary(pt) {
-        const s = [];
-        const active = pt.Treatments.find(t => t.end === 'Current');
-        if (active) s.push(`Patient is currently on <strong>${active.drug}</strong> (Line ${active.line}). Response classification: ${active.resp}.`);
-        else s.push(`No active systemic therapy. Last known line: ${pt.Line}.`);
-        
-        const badLabs = pt.Labs.filter(l => l.trend === 'up' && l.status === 'abnormal');
-        if (badLabs.length) s.push(`<strong>Safety Alert:</strong> Rising toxicity detected in ${badLabs.map(l => l.name).join(', ')}. Monitoring advised.`);
-        
-        return s.length ? s : ["Patient appears clinically stable on current monitoring protocol."];
-    }
-
-    function generateNextSteps(pt) {
-        const s = [];
-        const lastEvent = pt.Timeline[pt.Timeline.length - 1];
-        
-        if (lastEvent.status === 'PD') {
-            s.push("Assess eligibility for next-line clinical trials.");
-            s.push("Order restaging scans (CT Chest/Abd/Pelvis).");
-        } else {
-            s.push("Continue current protocol.");
-            s.push("Schedule routine surveillance in 3 months.");
-        }
-        return s;
-    }
-
     function getStatusColor(s) {
         if(!s) return 'bg-slate-100 text-slate-600';
-        s = s.toLowerCase();
+        s = s.toString().toLowerCase();
         if(s.includes('pd')||s.includes('progression')) return 'bg-rose-100 text-rose-700 border border-rose-200';
         if(s.includes('pr')||s.includes('partial')) return 'bg-emerald-100 text-emerald-700 border border-emerald-200';
         if(s.includes('sd')||s.includes('stable')) return 'bg-brand-50 text-brand-700 border border-brand-200';
@@ -1095,62 +991,66 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
             const s = new Date(start + '-01');
             const e = (end === 'Current') ? new Date() : new Date(end + '-01');
             const diffTime = Math.abs(e - s);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             const months = Math.floor(diffDays / 30);
             return months < 1 ? '<1 mo' : `${months} mos`;
         } catch(e) { return '—'; }
     }
 
-    // Tab Switcher
-    function switchTab(t) {
-        const isOverview = t === 'overview';
-        document.getElementById('panel-overview').classList.toggle('hidden', !isOverview);
-        document.getElementById('panel-timeline').classList.toggle('hidden', isOverview);
-        
-        const tO = document.getElementById('tab-overview');
-        const tT = document.getElementById('tab-timeline');
-        
-        if(isOverview) {
-            tO.classList.add('border-brand-600', 'text-brand-600'); 
-            tO.classList.remove('border-transparent', 'text-slate-400');
-            tT.classList.remove('border-brand-600', 'text-brand-600'); 
-            tT.classList.add('border-transparent', 'text-slate-400');
-        } else {
-            tT.classList.add('border-brand-600', 'text-brand-600'); 
-            tT.classList.remove('border-transparent', 'text-slate-400');
-            tO.classList.remove('border-brand-600', 'text-brand-600'); 
-            tO.classList.add('border-transparent', 'text-slate-400');
-        }
-    }
-
-    // ICD-10 & SNOMED Fetcher
+    /* ====================================================================================
+       CLINICAL CODING (ICD-10 via fallback & NLM API; SNOMED via /api/snomed proxy)
+       ==================================================================================== */
     async function fetchCodes() {
         const icdEl = document.getElementById('icd10-display');
         const snomedEl = document.getElementById('snomed-display');
-        
-        icdEl.innerText = "Searching...";
-        snomedEl.innerText = "Searching...";
-        
-        const term = selectedPt.Dx.split('(')[0].trim();
-        
-        // 1. Try Fallback First (Instant & Reliable)
-        if(FALLBACK_CODES[term]) {
-            icdEl.innerText = `${FALLBACK_CODES[term].code} — ${FALLBACK_CODES[term].desc}`;
+        icdEl.textContent = 'Searching...';
+        snomedEl.textContent = 'Searching...';
+        const term = (selectedPt.Dx || '').split('(')[0].trim();
+
+        // ICD: fallback then NLM clinicaltables
+        if (FALLBACK_CODES[term]) {
+            const f = FALLBACK_CODES[term];
+            icdEl.textContent = `${f.code} — ${f.desc}`;
         } else {
-            // 2. API Backup
             try {
-                const res = await fetch(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${term}&maxList=1`);
-                const data = await res.json();
-                if(data[3][0]) icdEl.innerText = `${data[3][0][0]} — ${data[3][0][1]}`;
-                else icdEl.innerText = "Code lookup failed";
-            } catch(e) { icdEl.innerText = "Service unavailable"; }
+                const res = await timeoutFetch(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(term)}&maxList=1`, {}, 7000);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data[3] && data[3][0]) icdEl.textContent = `${data[3][0][0]} — ${data[3][0][1]}`;
+                    else icdEl.textContent = 'No ICD match';
+                } else icdEl.textContent = 'ICD service error';
+            } catch (err) {
+                console.warn('ICD fetch error', err);
+                icdEl.textContent = 'ICD service unavailable';
+            }
         }
-        
-        // Mock SNOMED for consistency
-        snomedEl.innerText = "363346000 — Malignant neoplastic disease"; 
+
+        // SNOMED using serverless proxy; fallback if failure
+        try {
+            const sres = await timeoutFetch(`/api/snomed?term=${encodeURIComponent(term)}`, {}, 7000);
+            if (sres.ok) {
+                const sjson = await sres.json();
+                // Try common snowstorm shapes
+                const first = (sjson.items && sjson.items[0]) || (sjson.items && sjson.items) || sjson;
+                const code = first?.conceptId || first?.id || first?.code || first?.conceptIdFromSource || first?.concept?.conceptId;
+                const desc = (first?.fsn && first.fsn.term) || first?.pt?.term || first?.term || first?.preferredTerm || first?.fullySpecifiedName || (first?.display && first.display);
+                if (code || desc) snomedEl.textContent = `${code || 'n/a'} — ${desc || 'No desc'}`;
+                else throw new Error('no snomed content');
+            } else throw new Error('snomed proxy failed');
+        } catch (err) {
+            console.warn('SNOMED fetch error', err);
+            // Try fallback dictionary for broad mapping (use first token)
+            const key = Object.keys(FALLBACK_CODES).find(k => term.toLowerCase().includes(k.toLowerCase()));
+            if (key) {
+                const f = FALLBACK_CODES[key];
+                snomedEl.textContent = `${f.code} — ${f.desc}`;
+            } else {
+                snomedEl.textContent = 'SNOMED unavailable';
+            }
+        }
     }
 
-    // Start App
+    // Start
     window.onload = loadData;
 
 </script>
