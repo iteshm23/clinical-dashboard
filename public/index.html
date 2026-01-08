@@ -811,68 +811,68 @@
          Timeline (events) and Biomarker chart image
        ==================================================================================== */
     document.getElementById('exportBtn').addEventListener('click', async () => {
-        const btn = document.getElementById('exportBtn');
-        const originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Preparing report...`;
-        lucide.createIcons();
+    const btn = document.getElementById('exportBtn');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating...`;
+    lucide.createIcons();
 
-        try {
-            // 1) Capture biomarker chart as image (high fidelity)
-            let biomarkerImg = null;
-            try {
-                if (charts.biomarker) biomarkerImg = charts.biomarker.toBase64Image();
-            } catch (e) {
-                console.warn('Biomarker chart capture failed', e);
-                biomarkerImg = null;
-            }
-
-            // 2) Define sections to capture as DOM elements (cloned to hidden container)
-            const sections = [
-                { title: 'Patient Summary', el: document.getElementById('topSummary') },
-                { title: 'AI Insights', el: document.getElementById('ai-section') },
-                { title: 'Overview', el: document.getElementById('overview-treatment') }, // we'll capture treatment and labs separately too
-                { title: 'Overview-Labs', el: document.getElementById('overview-labs') },
-                { title: 'Molecular', el: document.getElementById('overview-molecular') },
-                { title: 'Timeline', el: document.getElementById('timeline-events') },
-                // Biomarker will be embedded as an image on its own page section
-            ];
-
-            // 3) Prepare offscreen container to render clones (avoids visual reflow)
-            const off = document.createElement('div');
-            off.id = 'pdf-generator-container';
-            off.style.cssText = "position: absolute; left: -9999px; top: 0; width: 1100px; background: white; z-index: -100; font-family: 'Inter', sans-serif; color: #0f172a;";
-            document.body.appendChild(off);
-
-            // Build a header block at top of report containing title & triage (capture once)
-            const triageHtml = document.getElementById('triageBadge').innerHTML;
-            const headerBlock = document.createElement('div');
-            headerBlock.style.padding = '40px';
-            headerBlock.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:4px solid #4f46e5;padding-bottom:18px;margin-bottom:18px;">
-                <div>
-                    <h1 style="font-size:28px;margin:0;font-weight:800">OncoReview TAPM</h1>
-                    <div style="font-size:11px;color:#64748b;margin-top:6px;font-weight:700;letter-spacing:1px">Full Clinical Report</div>
+    try {
+        // 1. Convert live chart to image for PDF compatibility
+        const chartImg = document.getElementById('biomarkerChart').toDataURL('image/png');
+        
+        // 2. Build the multi-page offscreen report container
+        const container = document.createElement('div');
+        container.style.cssText = "position:absolute; left:-9999px; width:1000px; background:white; padding:40px; color:#0f172a;";
+        
+        container.innerHTML = `
+            <div style="font-family: 'Inter', sans-serif;">
+                <div style="border-bottom: 4px solid #4f46e5; padding-bottom: 20px; margin-bottom: 30px;">
+                    <h1 style="font-size: 32px; font-weight: 900;">ONCOREVIEW CLINICAL REPORT</h1>
+                    <p style="font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700;">ID: ${selectedPt.ID} | DATE: ${new Date().toLocaleDateString()}</p>
                 </div>
-                <div style="transform:scale(1.05);">${triageHtml}</div>
+                <div style="background: #f8fafc; padding: 25px; border-radius: 16px; margin-bottom: 30px; border: 1px solid #e2e8f0;">
+                    ${document.getElementById('topSummary').innerHTML}
+                </div>
+                <h2 style="font-size: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 20px;">1. Clinical Overview</h2>
+                <div style="margin-bottom: 30px;">${document.getElementById('treatmentLines').innerHTML}</div>
+                <div style="margin-bottom: 40px;">${document.getElementById('labsGrid').innerHTML}</div>
+                
+                <div style="page-break-before: always; height: 1px;"></div>
+                
+                <h2 style="font-size: 20px; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-top: 40px; margin-bottom: 20px;">2. Longitudinal History</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px;">
+                    <div>${document.getElementById('timelineContainer').innerHTML}</div>
+                    <div style="border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px;">
+                        <h4 style="font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 15px;">Tumor Kinetics</h4>
+                        <img src="${chartImg}" style="width: 100%; height: auto;" />
+                    </div>
+                </div>
             </div>`;
-            off.appendChild(headerBlock);
+        
+        document.body.appendChild(container);
 
-            // 4) For each section: clone node, append to offscreen container, then html2canvas
-            const canvases = [];
-            for (const s of sections) {
-                // clone node deeply
-                const clone = s.el.cloneNode(true);
-                // sanitize text nodes inside clone by escaping any potential innerHTML content
-                // (we used escapeHtml when rendering, but be defensive)
-                clone.querySelectorAll && clone.querySelectorAll('*').forEach(n => {
-                    if (n.childNodes && n.childNodes.length) {
-                        n.childNodes.forEach(cn => {
-                            if (cn.nodeType === Node.TEXT_NODE) {
-                                cn.nodeValue = cn.nodeValue; // already safe
-                            }
-                        });
-                    }
-                });
+        // 3. Capture, Save, and Clean up
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf; 
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+        pdf.save(`${selectedPt.ID}_Clinical_Summary.pdf`);
+        
+        container.remove();
+    } catch (e) {
+        console.error("PDF Export Error:", e);
+        alert("PDF failed. Check browser console.");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        lucide.createIcons();
+    }
+});
 
                 // Wrap section with heading for PDF clarity
                 const wrapper = document.createElement('div');
@@ -1051,6 +1051,45 @@
     }
 
     // Start
+
+    function switchTab(t) {
+    const isOverview = (t === 'overview');
+    
+    // 1. Toggle Section Visibility
+    // Ensures the correct data panel is shown and the other is hidden
+    document.getElementById('panel-overview').classList.toggle('hidden', !isOverview);
+    document.getElementById('panel-timeline').classList.toggle('hidden', isOverview);
+    
+    // 2. Accessibility Update
+    // Updates screen readers on which panel is currently active
+    document.getElementById('panel-overview').setAttribute('aria-hidden', !isOverview);
+    document.getElementById('panel-timeline').setAttribute('aria-hidden', isOverview);
+
+    // 3. Update Button Styles (Colors & Borders)
+    const tO = document.getElementById('tab-overview');
+    const tT = document.getElementById('tab-timeline');
+    
+    // These match your Brand Indigo theme
+    const activeStyles = ["border-brand-600", "text-brand-600"];
+    const inactiveStyles = ["border-transparent", "text-slate-400"];
+
+    if (isOverview) {
+        tO.classList.add(...activeStyles); 
+        tO.classList.remove(...inactiveStyles);
+        tT.classList.remove(...activeStyles); 
+        tT.classList.add(...inactiveStyles);
+    } else {
+        tT.classList.add(...activeStyles); 
+        tT.classList.remove(...inactiveStyles);
+        tO.classList.remove(...activeStyles); 
+        tO.classList.add(...inactiveStyles);
+        
+        // 4. Force Timeline Re-render
+        // CRITICAL: Chart.js cannot calculate its size if the tab is hidden. 
+        // This ensures the graph draws perfectly the moment you click
+        renderTimeline(); 
+    }
+}
     window.onload = loadData;
 
 </script>
