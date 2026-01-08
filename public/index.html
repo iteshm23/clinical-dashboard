@@ -1,209 +1,228 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Clinical Dashboard | RISA Labs — Vercel</title>
+  <title>Clinical Dashboard — RISA Labs</title>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Icons + Chart.js -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js for timeline/bio markers -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 
-  <!-- PDF export libs -->
+  <!-- html2canvas + jsPDF for export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #fafbfd; color: #0f172a; }
-    .clinical-card { background: white; border: 1px solid #eef2ff; border-radius: 8px; }
-    .status-badge { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase;}
-    .bg-pd { background-color: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; }
-    .bg-pr { background-color: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
-    .bg-sd { background-color: #eff6ff; color: #1e40af; border: 1px solid #dbeafe; }
-    .bg-cr { background-color: #faf5ff; color: #6b21a8; border: 1px solid #f3e8ff; }
-    .bg-baseline { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: white; border: 2px solid #cbd5e1; }
-    .focus-ring { box-shadow: 0 0 0 4px rgba(79,70,229,0.08); border-radius: 6px; }
-    .compact-grid { gap: 1rem; }
-    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-    .recent-pill { padding: 6px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; font-weight:600; cursor:pointer; border:1px solid #e6eefc; }
-    .recent-pill.active { background:#4f46e5; color:white; border-color:#4f46e5; }
-    /* grid spacing adjustments to reduce gap */
-    .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 18px; align-items: start; }
-    @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
+    :root{
+      --primary: #4f46e5;
+      --muted: #64748b;
+      --card-border: #eef2ff;
+      --page-bg: #fbfdff;
+    }
+    html,body{height:100%;}
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--page-bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Layout tightening: two-column grid: main + narrow side */
+    .main-grid{ display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; }
+    @media (max-width: 1100px){ .main-grid{ grid-template-columns: 1fr; } }
+
+    .card{ background: #fff; border:1px solid var(--card-border); border-radius: 10px; }
+    .shadow-soft{ box-shadow: 0 2px 10px rgba(15,23,42,0.04); }
+
+    .pill { padding: 6px 10px; border-radius:999px; border:1px solid #e6eefc; background:#eef2ff; color:var(--primary); font-weight:600; cursor:pointer; }
+    .pill.active{ background:var(--primary); color:white; border-color:var(--primary); }
+
+    .status-pill { font-weight:700; font-size:11px; padding:3px 8px; border-radius:6px; text-transform:uppercase; }
+    .status-pd{ background:#fff1f2; color:#9f1239; border:1px solid #fecdd3; }
+    .status-pr{ background:#f0fdf4; color:#166534; border:1px solid #dcfce7; }
+    .status-sd{ background:#eff6ff; color:#1e40af; border:1px solid #dbeafe; }
+
+    /* small utilities */
+    .muted { color: var(--muted); }
+    .tiny { font-size:12px; }
+    .xxs { font-size:11px; }
+
+    /* For accessibility focus outlines */
+    .focus-ring:focus { outline: 3px solid rgba(79,70,229,0.12); border-radius:6px; }
   </style>
 </head>
-<body class="p-6 lg:p-8 max-w-[1400px] mx-auto" id="root">
-  <a href="#mainContent" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-indigo-600 focus:text-white focus:p-4 focus:z-50 focus:rounded focus:font-bold">Skip to main content</a>
 
+<body class="p-6 lg:p-10 max-w-[1400px] mx-auto">
   <header class="flex items-center justify-between mb-6">
     <div class="flex items-center gap-4">
-      <div class="text-xs font-bold text-slate-400 uppercase tracking-[0.15em]">Clinical Review Interface</div>
-
+      <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical Review Interface</div>
       <div class="flex items-center gap-3">
         <label for="patientSelect" class="sr-only">Select patient</label>
-        <select id="patientSelect" class="p-2 text-sm font-semibold border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-indigo-200" aria-label="Select patient"></select>
-        <button id="exportBtn" class="px-3 py-2 text-sm font-bold bg-indigo-600 text-white rounded shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-300">Export PDF</button>
+        <select id="patientSelect" class="p-2 border rounded focus:ring-2 focus:ring-indigo-100" aria-label="Patient selector"></select>
+        <button id="exportBtn" class="px-3 py-2 bg-indigo-600 text-white rounded font-semibold shadow-sm hover:bg-indigo-700">Export PDF</button>
       </div>
     </div>
 
-    <div id="openNewTabWrapper" class="flex items-center gap-4">
-      <!-- Replace environment text with "Open in new tab" button -->
-      <button id="openNewTabBtn" class="px-3 py-2 text-sm font-bold border border-slate-200 rounded hover:bg-slate-50 focus:ring-2 focus:ring-indigo-200">Open in new tab</button>
+    <div id="headerRight" class="flex items-center gap-4">
+      <!-- "Open in new tab" replaces the environment label -->
+      <button id="openInNewTabHeader" class="px-3 py-2 border rounded hover:bg-slate-50 focus:ring-2 focus:ring-indigo-100">Open in new tab</button>
     </div>
   </header>
 
-  <main id="mainContent" role="main" class="mb-8">
-    <!-- Key clinical changes (below patient details per request, but initially hidden until patient loaded) -->
-    <div id="keyInsights" class="clinical-card p-4 mb-6 hidden" aria-live="polite"></div>
-
-    <!-- Main content split: left content + right codes panel (tighter) -->
-    <div class="main-grid">
-      <!-- LEFT: patient card + overview/timeline -->
+  <main class="mb-10">
+    <section id="topArea" class="main-grid">
       <div>
-        <!-- Patient summary header -->
-        <section id="patientCard" class="clinical-card p-6 mb-4">
+        <div id="patientCard" class="card p-6 shadow-soft">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Patient</div>
-              <div class="text-lg font-black text-indigo-900" id="patientName">—</div>
-              <div class="text-xs text-slate-500 mt-1" id="patientMeta">—</div>
-              <div class="text-sm font-semibold text-indigo-700 mt-2" id="patientDx">—</div>
+              <div class="text-xxs uppercase text-slate-400 tracking-wide">Patient</div>
+              <div id="patientName" class="text-2xl font-extrabold text-indigo-900 mt-1">—</div>
+              <div id="patientMeta" class="mt-2 text-sm muted">—</div>
+              <div id="patientDx" class="mt-3 font-semibold text-indigo-700">—</div>
             </div>
 
-            <!-- Right compact panel was codes/quick actions earlier but now attached visually -->
-            <div class="w-36">
-              <div id="codesBox" class="p-3 border rounded-md text-sm text-slate-700"></div>
-              <div class="mt-3 p-2 border rounded-md bg-slate-50 text-center">
-                <button id="copyLinkBtn" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-100">Copy link</button>
-                <button id="shareBtn" class="ml-2 px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-100">Share</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Patient tabs (recent patients pills) directly under selector (visual list) -->
-          <div class="mt-4 flex items-center gap-2" id="recentPatientsRow" aria-label="Recently opened patients"></div>
-
-          <!-- Short bullet history (summary), kept small here -->
-          <div id="patientShortHistory" class="text-sm text-slate-600 mt-4"></div>
-        </section>
-
-        <!-- Key clinical insights should be right below details and above tabs (we dynamically show this div) -->
-        <!-- Already added #keyInsights above and will be populated after patient load -->
-
-        <!-- Tabs: only Overview and Timeline -->
-        <div class="clinical-card p-4">
-          <div class="flex items-center gap-2 mb-3">
-            <button id="tab-overview" role="tab" aria-selected="true" class="px-3 py-1 text-sm font-semibold bg-indigo-600 text-white rounded">Overview</button>
-            <button id="tab-timeline" role="tab" aria-selected="false" class="px-3 py-1 text-sm font-semibold border border-slate-200 rounded">Timeline</button>
-          </div>
-
-          <div id="panel-overview" role="tabpanel" class="space-y-6">
-            <section>
-              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Treatment History (By Line)</h4>
-              <div id="treatmentLines" class="space-y-4"></div>
-            </section>
-
-            <section>
-              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Labs & Safety Monitor</h4>
-              <div id="labsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-            </section>
-
-            <section>
-              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Molecular Profile</h4>
-              <div id="molecularList" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
-            </section>
-          </div>
-
-          <div id="panel-timeline" role="tabpanel" hidden>
-            <section>
-              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Longitudinal Disease Course</h4>
-              <div class="grid grid-cols-1 md:grid-cols-10 gap-8">
-                <div id="timelineContainer" class="md:col-span-4 space-y-6 relative" tabindex="0" aria-label="Timeline list"></div>
-                <div class="md:col-span-6 border-l border-slate-50 pl-4">
-                  <canvas id="biomarkerChart" style="height:300px;width:100%;" aria-label="Biomarker trend chart"></canvas>
+            <div style="width:180px">
+              <div id="codesBox" class="p-3 border rounded mb-3 tiny"></div>
+              <div class="p-2 border rounded bg-slate-50">
+                <div class="flex gap-2">
+                  <button id="copyLinkSmall" class="px-3 py-1 text-xs border rounded">Copy link</button>
+                  <button id="shareSmall" class="px-3 py-1 text-xs border rounded">Share</button>
+                  <button id="openInNewTabSmall" class="px-2 py-1 text-xs border rounded">Open in new tab</button>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- recent patient pills (patient tabs) just under the card header -->
+          <div id="recentRow" class="mt-4 flex gap-2 items-center"></div>
+
+          <!-- short bullet history -->
+          <div id="shortHistory" class="mt-4 text-sm muted"></div>
+        </div>
+
+        <!-- KEY INSIGHTS placed below patient card and above tabs -->
+        <div id="keyInsights" class="card p-4 mt-4 hidden">
+          <div class="text-xs font-semibold text-indigo-700 uppercase mb-2">Key Clinical Changes</div>
+          <div id="keyInsightsList" class="text-sm muted"></div>
+        </div>
+
+        <!-- Overview / Timeline tabs -->
+        <div class="card p-4 mt-4">
+          <div class="flex gap-2 mb-4">
+            <button id="btnOverview" class="px-3 py-1 bg-indigo-600 text-white rounded font-semibold">Overview</button>
+            <button id="btnTimeline" class="px-3 py-1 border rounded font-semibold">Timeline</button>
+          </div>
+
+          <div id="panelOverview" class="space-y-6">
+            <!-- Treatments -->
+            <section aria-labelledby="treatmentTitle">
+              <div id="treatmentTitle" class="text-xs font-bold uppercase text-slate-400">Treatment History (By Line)</div>
+              <div id="treatmentList" class="mt-3 space-y-3"></div>
             </section>
+
+            <!-- Labs -->
+            <section aria-labelledby="labsTitle">
+              <div id="labsTitle" class="text-xs font-bold uppercase text-slate-400">Labs & Safety Monitor</div>
+              <div id="labsGrid" class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- Molecular -->
+            <section aria-labelledby="molTitle">
+              <div id="molTitle" class="text-xs font-bold uppercase text-slate-400">Molecular Profile</div>
+              <div id="molGrid" class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+            </section>
+          </div>
+
+          <div id="panelTimeline" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-10 gap-6">
+              <div id="timelineList" class="md:col-span-4 space-y-6"></div>
+              <div class="md:col-span-6 border-l pl-4">
+                <canvas id="trendChart" style="height:320px;width:100%"></canvas>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: Codes / AI-summary / Quick actions — visually attached, narrower than before -->
+      <!-- Right column: Codes + AI summary + Quick actions (attached visually to patient card) -->
       <aside>
-        <div id="rightPanel" class="clinical-card p-4 space-y-4">
-          <div>
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Codes</div>
-            <div id="codesFull" class="text-sm text-slate-700"></div>
-          </div>
+        <div class="card p-4 shadow-soft">
+          <div class="text-xs font-bold uppercase text-slate-400 mb-2">Codes</div>
+          <div id="codesFull" class="text-sm muted mb-4"></div>
 
-          <div>
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">AI-Assisted Clinical Summary</div>
-            <div id="aiSummary" class="text-sm text-slate-700"></div>
-          </div>
+          <div class="text-xs font-bold uppercase text-slate-400 mb-2">AI-Assisted Clinical Summary</div>
+          <div id="aiSummary" class="text-sm muted mb-4"></div>
 
-          <div>
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Quick Actions</div>
-            <div class="flex gap-2">
-              <button id="openNewTabBtnSide" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-50">Open in new tab</button>
-              <button id="copyLinkBtnSide" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-50">Copy link</button>
-            </div>
+          <div class="text-xs font-bold uppercase text-slate-400 mb-2">Quick Actions</div>
+          <div class="flex gap-2">
+            <button id="openNewTabQuick" class="px-3 py-1 border rounded">Open in new tab</button>
+            <button id="copyLink" class="px-3 py-1 border rounded">Copy link</button>
+            <button id="share" class="px-3 py-1 border rounded">Share</button>
           </div>
         </div>
       </aside>
-    </div>
+    </section>
   </main>
 
   <script>
-    /***************
-     * App state
-     ***************/
+    /******************************************************************
+     * Client-side application
+     * Responsibilities:
+     *  - fetch ./data/patients.json
+     *  - render patient list in selector
+     *  - handle ?patient=PT-xxx param and open-in-new-tab
+     *  - render overview + timeline and all sections requested
+     *  - keep patient data separate (no embedding)
+     ******************************************************************/
+
+    // App state
     let patients = [];
-    let selectedPt = null;
-    let charts = [];
-    let biomarkerChart = null;
+    let selectedPatient = null;
+    let chartInstance = null;
 
-    /***************
-     * Utilities
-     ***************/
-    function q(id){ return document.getElementById(id); }
-    function getQueryParam(name) {
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
-    }
-    function setQueryParam(name, value, replace=false) {
-      const url = new URL(window.location.href);
-      url.searchParams.set(name, value);
-      if (replace) history.replaceState({}, '', url.toString());
+    // Helpers
+    const $ = id => document.getElementById(id);
+    const q = sel => document.querySelector(sel);
+    const getParam = name => new URL(location.href).searchParams.get(name);
+    const setParam = (k,v,replace=false) => {
+      const url = new URL(location.href);
+      url.searchParams.set(k, v);
+      if(replace) history.replaceState({}, '', url.toString());
       else history.pushState({}, '', url.toString());
-    }
+    };
+    const saveRecent = id => {
+      if(!id) return;
+      const key = 'recentPatients_v1';
+      let arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr = arr.filter(x=>x!==id);
+      arr.unshift(id);
+      if(arr.length>8) arr = arr.slice(0,8);
+      localStorage.setItem(key, JSON.stringify(arr));
+      renderRecent();
+    };
+    const getRecent = () => JSON.parse(localStorage.getItem('recentPatients_v1')||'[]');
 
-    /***************
-     * Data fetch
-     ***************/
-    async function loadPatientsData() {
+    // Load patient JSON
+    async function loadPatients() {
       try {
-        const resp = await fetch('./data/patients.json');
-        if (!resp.ok) throw new Error('Failed to load patients.json');
-        patients = await resp.json();
-      } catch (e) {
-        console.error(e);
+        const res = await fetch('./data/patients.json', {cache: "no-cache"});
+        if(!res.ok) throw new Error('Failed to load patients.json');
+        patients = await res.json();
+      } catch(err) {
+        console.error('Could not load patient data:', err);
         patients = [];
       }
     }
 
-    /***************
-     * Rendering helpers
-     ***************/
-    function renderPatientSelect() {
-      const sel = q('patientSelect');
+    // Render select
+    function renderSelect() {
+      const sel = $('patientSelect');
       sel.innerHTML = '';
-      patients.forEach(p => {
+      patients.forEach(p=>{
         const opt = document.createElement('option');
         opt.value = p.ID;
         opt.textContent = `${p.ID} — ${p.Name}`;
@@ -211,305 +230,314 @@
       });
     }
 
-    function saveRecentPatient(id) {
-      if (!id) return;
-      const key = 'recentPatients';
-      const raw = localStorage.getItem(key);
-      let arr = raw ? JSON.parse(raw) : [];
-      arr = arr.filter(x => x !== id);
-      arr.unshift(id);
-      if (arr.length > 8) arr = arr.slice(0,8);
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderRecentPatientsRow();
-    }
-
-    function renderRecentPatientsRow() {
-      const wrap = q('recentPatientsRow');
-      wrap.innerHTML = '';
-      const raw = localStorage.getItem('recentPatients');
-      let arr = raw ? JSON.parse(raw) : [];
-      // If array empty, show first patient as a convenience
-      if ((!arr || arr.length === 0) && patients && patients.length) arr = [patients[0].ID];
-      arr.forEach(id => {
+    // Render recent pills row (visual patient tabs)
+    function renderRecent() {
+      const row = $('recentRow');
+      row.innerHTML = '';
+      const recent = getRecent();
+      if(recent.length === 0 && patients.length > 0){
+        recent.push(patients[0].ID);
+        localStorage.setItem('recentPatients_v1', JSON.stringify(recent));
+      }
+      recent.forEach(id=>{
         const btn = document.createElement('button');
-        btn.className = 'recent-pill';
-        if (selectedPt && selectedPt.ID === id) btn.classList.add('active');
-        btn.innerText = id;
+        btn.className = 'pill';
+        btn.textContent = id;
+        if(selectedPatient && selectedPatient.ID === id) btn.classList.add('active');
         btn.onclick = () => {
-          // load patient in current tab
-          q('patientSelect').value = id;
-          loadPatientFromSelect();
+          $('patientSelect').value = id;
+          onPatientChange();
         };
-        wrap.appendChild(btn);
+        row.appendChild(btn);
       });
     }
 
-    function findPatientById(id) {
-      return patients.find(p => p.ID === id) || null;
-    }
+    // Find patient
+    function findPatient(id){ return patients.find(p => p.ID === id) || null; }
 
-    function populatePatientCard(pt) {
-      q('patientName').textContent = `${pt.Name} (${pt.ID})`;
-      q('patientMeta').textContent = `${pt.Age}Y • ${pt.Sex} • ${pt.PS || ''}`;
-      q('patientDx').textContent = `${pt.Dx} • Stage ${pt.Stage || '—'}`;
+    // Populate header/patient card
+    function populateCard(pt) {
+      $('patientName').textContent = `${pt.Name} (${pt.ID})`;
+      $('patientMeta').textContent = `${pt.Age}Y • ${pt.Sex} • ${pt.PS || ''}`;
+      $('patientDx').textContent = `${pt.Dx} • Stage ${pt.Stage || '—'}`;
       // short history bullets
-      const short = (pt.History || []).slice(0,3).map(h => `<li>${h}</li>`).join('');
-      q('patientShortHistory').innerHTML = short ? `<ul class="list-disc pl-5 text-slate-600">${short}</ul>` : '';
+      const hist = pt.History && pt.History.length ? `<ul class="list-disc pl-5">${pt.History.slice(0,4).map(x=>`<li class="muted">${x}</li>`).join('')}</ul>` : '<div class="muted">No short history</div>';
+      $('shortHistory').innerHTML = hist;
       // codes
-      const icdStr = pt.ICD10 || '—';
-      q('codesBox').innerHTML = `<div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">ICD</div><div class="text-sm font-semibold">${icdStr}</div>`;
-      q('codesFull').innerHTML = `<div class="text-sm font-semibold">${icdStr}</div><div class="text-xs text-slate-400 mt-2">SNOMED lookup not available (client build)</div>`;
+      $('codesBox').innerHTML = `<div class="text-xxs uppercase muted">ICD-10</div><div class="font-semibold mt-1">${pt.ICD10 || '—'}</div>`;
+      $('codesFull').innerHTML = `<div class="text-sm font-semibold">${pt.ICD10 || '—'}</div><div class="tiny muted mt-2">${pt.SNOMED || 'SNOMED lookup not configured'}</div>`;
     }
 
+    // Render key insights
     function renderKeyInsights(pt) {
-      const el = q('keyInsights');
-      // generate short insights similar to previous AI section
-      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length - 1] : null;
+      const el = $('keyInsights');
+      const target = $('keyInsightsList');
       const insights = [];
-      if (latestEvent) insights.push(`Current disease status: ${latestEvent.status} (latest: ${latestEvent.date} — ${latestEvent.event}).`);
-      const activeTx = (pt.Treatments || []).find(t => t.end === "Current");
-      if (activeTx) insights.push(`On active therapy: Line ${activeTx.line} — ${activeTx.drug} (response: ${activeTx.resp}).`);
-      const abnormalLabs = (pt.Labs || []).filter(l => l.status === 'abnormal');
-      if (abnormalLabs.length) insights.push(`Abnormal labs: ${abnormalLabs.map(l => l.name + ' (' + l.val + ')').join(', ')}.`);
-      // display in card
-      el.innerHTML = `
-        <div class="text-[10px] font-bold text-indigo-700 uppercase tracking-widest mb-2">Key Clinical Insights</div>
-        <ul class="list-disc pl-5 text-sm text-slate-700">${insights.map(i => `<li>${i}</li>`).join('')}</ul>
-      `;
+
+      // Latest timeline status
+      const latest = (pt.Timeline || []).slice(-1)[0];
+      if(latest) insights.push(`${latest.event} — ${latest.status} (${latest.date}).`);
+
+      // Active therapy
+      const active = (pt.Treatments || []).find(t=>t.end === 'Current' || t.end === 'current');
+      if(active) insights.push(`On active therapy: Line ${active.line} — ${active.drug} (response: ${active.resp || '—'}).`);
+
+      // labs abnormal
+      const abnLabs = (pt.Labs||[]).filter(l=>l.status === 'abnormal');
+      if(abnLabs.length) insights.push(`Abnormal labs: ${abnLabs.map(l=>`${l.name} ${l.val}${l.unit?(' '+l.unit):''}`).join(', ')}.`);
+
+      if(insights.length === 0){ el.classList.add('hidden'); return; }
+
+      target.innerHTML = `<ul class="list-disc pl-5">${insights.map(i=>`<li class="muted">${i}</li>`).join('')}</ul>`;
       el.classList.remove('hidden');
     }
 
-    function renderAISummary(pt) {
-      const el = q('aiSummary');
-      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length - 1] : null;
-      const parts = [];
-      if (latestEvent) parts.push(`<div><strong>Status</strong>: ${latestEvent.status} (${latestEvent.date})</div>`);
-      const activeTx = (pt.Treatments || []).find(t => t.end === "Current");
-      if (activeTx) parts.push(`<div><strong>Therapy</strong>: ${activeTx.drug} (Line ${activeTx.line})</div>`);
-      const abnormalLabs = (pt.Labs || []).filter(l => l.status === 'abnormal');
-      if (abnormalLabs.length) parts.push(`<div><strong>Labs</strong>: ${abnormalLabs.map(l => l.name + ' ' + l.val).join(', ')}</div>`);
-      el.innerHTML = parts.join('');
-    }
-
-    function renderTreatments(pt) {
-      const container = q('treatmentLines');
+    // Treatments render
+    function renderTreatments(pt){
+      const container = $('treatmentList');
       container.innerHTML = '';
       (pt.Treatments || []).forEach(t => {
-        const card = document.createElement('div');
-        card.className = 'p-4 border rounded-md bg-white';
-        card.innerHTML = `
-          <div class="flex items-start justify-between">
+        const div = document.createElement('div');
+        div.className = 'p-4 border rounded';
+        const dur = formatDuration(t.start, t.end);
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
             <div>
-              <div class="text-[10px] text-slate-400 font-bold uppercase">Line ${t.line}</div>
-              <div class="text-sm font-black text-slate-800">${t.drug}</div>
-              <div class="text-xs text-slate-500 mt-1">${t.start} — ${t.end} • ${getDuration(t.start, t.end)}</div>
+              <div class="text-xxs uppercase muted">Line ${t.line}</div>
+              <div class="text-sm font-extrabold mt-1">${t.drug}</div>
+              <div class="muted tiny mt-1">${t.start} — ${t.end} • ${dur}</div>
             </div>
             <div class="text-right">
-              <div class="text-[10px] text-slate-400 font-bold uppercase">Response</div>
-              <div class="text-sm font-semibold">${t.resp}</div>
-              <div class="text-[10px] text-slate-400 mt-1">Outcome</div>
-              <div class="text-sm font-semibold">${t.stop}</div>
+              <div class="tiny muted">Response</div>
+              <div class="font-semibold">${t.resp || '—'}</div>
+              <div class="tiny muted mt-2">Outcome</div>
+              <div class="font-semibold">${t.stop || '—'}</div>
             </div>
           </div>
         `;
-        container.appendChild(card);
+        container.appendChild(div);
       });
     }
 
-    function renderLabs(pt) {
-      const container = q('labsGrid');
-      container.innerHTML = '';
-      (pt.Labs || []).forEach(l => {
+    // Labs render
+    function renderLabs(pt){
+      const container = $('labsGrid'); container.innerHTML = '';
+      (pt.Labs || []).forEach(l=> {
         const box = document.createElement('div');
         const abnormal = l.status === 'abnormal';
-        box.className = `p-4 border rounded-md ${abnormal ? 'bg-red-50/40 border-red-200' : 'bg-white' }`;
-        box.innerHTML = `<div class="text-xs text-slate-500 font-bold">${l.name}</div>
-                         <div class="text-lg font-black ${abnormal ? 'text-red-700':'text-slate-800'}">${l.val} <span class="text-sm text-slate-400">${l.unit || ''}</span></div>
-                         <div class="text-xs text-slate-400 mt-2">Range: ${l.range || 'n/a'} | Trend: ${l.trend || 'n/a'}</div>`;
+        box.className = `p-4 border rounded ${abnormal ? 'bg-red-50/50' : 'bg-white'}`;
+        box.innerHTML = `
+          <div class="tiny muted">${l.name}</div>
+          <div class="text-lg font-extrabold ${abnormal? 'text-red-700':'text-slate-800'}">${l.val} ${l.unit || ''}</div>
+          <div class="tiny muted mt-2">Range: ${l.range || 'n/a'} • Trend: ${l.trend || 'n/a'}</div>
+        `;
         container.appendChild(box);
       });
     }
 
-    function renderMolecular(pt) {
-      const container = q('molecularList');
-      container.innerHTML = '';
-      const keys = ['EGFR','ALK','KRAS','PDL1','MSI','TMB','ER','PR','HER2'];
-      keys.forEach(m => {
-        if (pt[m]) {
+    // Molecular render
+    function renderMolecular(pt){
+      const container = $('molGrid'); container.innerHTML = '';
+      // list keys commonly used
+      const keys = ['EGFR','ALK','KRAS','PDL1','MSI','TMB','HER2','ER','PR','BRAF','PIK3CA'];
+      keys.forEach(k => {
+        if(pt[k] !== undefined && pt[k] !== null){
           const el = document.createElement('div');
-          el.className = 'p-2 border rounded-md bg-white';
-          el.innerHTML = `<div class="text-xs text-slate-400 font-bold">${m}</div><div class="text-sm font-semibold text-slate-800">${pt[m]}</div>`;
+          el.className = 'p-3 border rounded';
+          el.innerHTML = `<div class="tiny muted">${k}</div><div class="font-semibold mt-1">${pt[k]}</div>`;
           container.appendChild(el);
         }
       });
-      // add biology note
-      if (pt.Biology) {
+      if(pt.Biology){
         const note = document.createElement('div');
-        note.className = 'p-3 border rounded-md bg-slate-50 text-sm text-slate-700';
-        note.innerText = pt.Biology;
+        note.className = 'p-3 border rounded col-span-2 bg-slate-50 muted';
+        note.innerHTML = `<div class="tiny font-semibold">Biology</div><div class="mt-1">${pt.Biology}</div>`;
         container.appendChild(note);
       }
     }
 
-    function renderTimeline(pt) {
-      const list = q('timelineContainer');
-      list.innerHTML = '';
-      if (pt.Timeline && pt.Timeline.length) {
-        const sorted = [...pt.Timeline].sort((a,b) => new Date(a.date) - new Date(b.date));
-        sorted.forEach((t,i) => {
-          const item = document.createElement('div');
-          item.className = 'relative pl-10 pb-6';
-          item.innerHTML = `
-            <div class="timeline-dot absolute left-0 top-1"></div>
-            <div class="text-[10px] text-slate-400 font-bold uppercase">${t.date}</div>
-            <div class="text-sm font-bold text-slate-800 mt-1">${t.event} <span class="text-[10px] text-slate-400 ml-2">${t.status}</span></div>
-            <div class="text-xs text-slate-500 mt-1">${t.detail || ''}</div>
-          `;
-          item.onclick = () => openSidebarEvent(t);
-          list.appendChild(item);
-        });
-      } else {
-        list.innerHTML = '<div class="text-sm text-slate-500">No timeline available.</div>';
-      }
-    }
-
-    function renderBiomarkerChart(pt) {
-      const canvas = q('biomarkerChart');
-      if (!canvas) return;
-      try { if (biomarkerChart) biomarkerChart.destroy(); } catch(e){}
-      const plotData = (pt.Timeline || []).filter(t => t.cea !== undefined);
-      const labels = plotData.map(t => t.date);
-      const data = plotData.map(t => t.cea);
-      const ctx = canvas.getContext('2d');
-      biomarkerChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'CEA (ng/mL)', data, borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.08)', fill:true, tension:0.3 }] },
-        options: { responsive:true, maintainAspectRatio:false, plugins: { legend:{display:true} } }
+    // Timeline render
+    function renderTimeline(pt){
+      const list = $('timelineList'); list.innerHTML = '';
+      const timeline = (pt.Timeline || []).slice().sort((a,b)=> new Date(a.date) - new Date(b.date));
+      if(timeline.length === 0){ list.innerHTML = '<div class="muted tiny">No timeline available.</div>'; return; }
+      timeline.forEach((ev, idx) => {
+        const node = document.createElement('div');
+        node.className = 'relative pl-8';
+        node.innerHTML = `
+          <div class="absolute left-0 top-1 w-3 h-3 rounded-full border-2 bg-white"></div>
+          <div class="tiny muted">${ev.date}</div>
+          <div class="font-semibold mt-1">${ev.event} <span class="tiny muted ml-2">${ev.status}</span></div>
+          <div class="muted tiny mt-1">${ev.detail || ''}</div>
+        `;
+        node.onclick = () => {
+          alert(`${ev.event} — ${ev.date}\n\n${ev.report && ev.report.findings ? ev.report.findings : ''}`);
+        };
+        list.appendChild(node);
       });
     }
 
-    // open event details (simple modal-like right-side injection)
-    function openSidebarEvent(t) {
-      alert(`${t.event} (${t.date})\n\n${(t.report && t.report.findings) ? t.report.findings : ''}`);
+    // Chart for biomarkers (CEA or first biomarker found)
+    function renderChart(pt){
+      const ctx = $('trendChart').getContext('2d');
+      // find numeric biomarker in timeline (CEA most common)
+      const timeline = (pt.Timeline || []).slice().sort((a,b)=> new Date(a.date) - new Date(b.date));
+      const labels = timeline.map(t => t.date);
+      const data = timeline.map(t => (t.cea === undefined ? null : Number(t.cea)));
+      const datasetLabel = 'CEA (ng/mL)';
+      if(chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type:'line',
+        data: { labels, datasets: [{ label: datasetLabel, data, borderColor: 'rgba(79,70,229,1)', backgroundColor: 'rgba(79,70,229,0.08)', tension:0.3, fill:true }] },
+        options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true } } }
+      });
     }
 
-    function openInNewTab() {
-      if (!selectedPt) return;
-      const url = `${location.pathname}?patient=${encodeURIComponent(selectedPt.ID)}`;
+    // Copy link
+    function copyLink(){
+      if(!selectedPatient) return alert('No patient selected');
+      const url = `${location.origin}${location.pathname}?patient=${encodeURIComponent(selectedPatient.ID)}`;
+      navigator.clipboard.writeText(url).then(()=>alert('Link copied to clipboard'));
+    }
+
+    // Open in new tab
+    function openNewTab(){
+      if(!selectedPatient) return;
+      const url = `${location.origin}${location.pathname}?patient=${encodeURIComponent(selectedPatient.ID)}`;
       window.open(url, '_blank');
     }
 
-    function copyLinkToClipboard() {
-      if (!selectedPt) return;
-      const url = `${location.origin}${location.pathname}?patient=${encodeURIComponent(selectedPt.ID)}`;
-      navigator.clipboard.writeText(url).then(()=> alert('Link copied to clipboard'));
+    // Export PDF (simple area snapshot)
+    async function exportPDF(){
+      if(!selectedPatient) return alert('Select a patient first');
+      const container = document.createElement('div');
+      container.style.background = '#fff';
+      container.style.width = '1200px';
+      container.style.padding = '20px';
+      // clone patient card + overview for snapshot
+      const card = $('patientCard').cloneNode(true);
+      const overview = $('panelOverview').cloneNode(true);
+      // clean interactive controls
+      card.querySelectorAll('button,select').forEach(n=>n.remove());
+      overview.querySelectorAll('button').forEach(n=>n.remove());
+      container.appendChild(card);
+      container.appendChild(overview);
+      document.body.appendChild(container);
+      try{
+        const canvas = await html2canvas(container, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit:'pt', format:'a4' });
+        const margin = 40;
+        const pageWidth = pdf.internal.pageSize.getWidth() - margin*2;
+        const ratio = canvas.width/canvas.height;
+        const imgWidth = pageWidth;
+        const imgHeight = imgWidth / ratio;
+        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+        pdf.save(`${selectedPatient.ID}_summary.pdf`);
+      }catch(e){
+        console.error('PDF export failed', e);
+        alert('PDF export failed');
+      }finally{
+        document.body.removeChild(container);
+      }
     }
 
-    function getDuration(start, end) {
-      if (!start) return '';
-      const s = new Date(start + '-01');
-      const e = end === 'Current' ? new Date() : new Date((end || '') + '-01');
-      let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
-      if (months < 0) months = 0;
-      return `${months} months`;
+    // Format duration utility
+    function formatDuration(start,end){
+      try{
+        if(!start) return '—';
+        const s = new Date(start + '-01');
+        const e = (end && end.toLowerCase() !== 'current') ? new Date(end + '-01') : new Date();
+        let months = (e.getFullYear() - s.getFullYear())*12 + (e.getMonth() - s.getMonth());
+        if(months < 0) months = 0;
+        const yrs = Math.floor(months/12);
+        const remM = months % 12;
+        if(yrs>0) return `${yrs}y ${remM}m`;
+        return `${remM} months`;
+      } catch(e){ return '—'; }
     }
 
-    /***************
-     * Main: load and render
-     ***************/
-    async function init() {
-      await loadPatientsData();
-      renderPatientSelect();
-      // read URL param
-      const param = getQueryParam('patient');
-      const defaultId = param && findPatientById(param) ? param : (patients[0] ? patients[0].ID : null);
-      if (defaultId) q('patientSelect').value = defaultId;
-
-      // wire events
-      q('patientSelect').addEventListener('change', loadPatientFromSelect);
-      q('openNewTabBtn').addEventListener('click', openInNewTab);
-      q('openNewTabBtnSide').addEventListener('click', openInNewTab);
-      q('copyLinkBtn').addEventListener('click', copyLinkToClipboard);
-      q('copyLinkBtnSide').addEventListener('click', copyLinkToClipboard);
-      q('exportBtn').addEventListener('click', exportPatientSummaryPDF);
-      q('tab-overview').addEventListener('click', () => switchTab('overview'));
-      q('tab-timeline').addEventListener('click', () => switchTab('timeline'));
-
-      // load initial patient
-      loadPatientFromSelect();
-      renderRecentPatientsRow();
-    }
-
-    function switchTab(tab) {
-      const tabs = ['overview','timeline'];
-      tabs.forEach(t => {
-        const btn = q('tab-' + t);
-        const panel = q('panel-' + t);
-        if (t === tab) {
-          btn.setAttribute('aria-selected','true'); btn.classList.add('bg-indigo-600','text-white'); btn.classList.remove('border');
-          panel.removeAttribute('hidden');
-        } else {
-          btn.setAttribute('aria-selected','false'); btn.classList.remove('bg-indigo-600','text-white'); btn.classList.add('border');
-          panel.setAttribute('hidden','');
-        }
-      });
-    }
-
-    function loadPatientFromSelect() {
-      const sel = q('patientSelect');
-      const id = sel.value;
-      const pt = findPatientById(id);
-      if (!pt) { alert('Patient not found'); return; }
-      selectedPt = pt;
-      setQueryParam('patient', pt.ID, true);
-      saveRecentPatient(pt.ID);
-      populatePatientCard(pt);
+    // Main: handle patient selection change
+    function onPatientChange(){
+      const id = $('patientSelect').value;
+      const pt = findPatient(id);
+      if(!pt) return alert('Patient not found');
+      selectedPatient = pt;
+      setParam('patient', pt.ID, true);
+      saveRecent(pt.ID);
+      renderRecent(); // update pill highlight
+      populateCard(pt);
       renderKeyInsights(pt);
-      renderAISummary(pt);
       renderTreatments(pt);
       renderLabs(pt);
       renderMolecular(pt);
       renderTimeline(pt);
-      renderBiomarkerChart(pt);
-      renderRecentPatientsRow();
+      renderChart(pt);
+      // update ai summary & codes full
+      renderAISummary(pt);
+      $('codesFull').innerHTML = `<div class="font-semibold">${pt.ICD10 || '—'}</div><div class="tiny muted mt-2">${pt.SNOMED || 'SNOMED not configured'}</div>`;
     }
 
-    /***************
-     * PDF export (simple snapshot)
-     ***************/
-    async function exportPatientSummaryPDF() {
-      const wrapper = document.createElement('div');
-      wrapper.style.width = '1000px';
-      wrapper.style.padding = '24px';
-      wrapper.style.background = '#fff';
-      // snapshot patient header + overview
-      const header = q('patientCard').cloneNode(true);
-      const overview = q('panel-overview').cloneNode(true);
-      wrapper.appendChild(header);
-      wrapper.appendChild(overview);
-      document.body.appendChild(wrapper);
-      try {
-        const canvas = await html2canvas(wrapper, { scale: 2 });
-        const img = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
-        const margin = 40;
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const imgProps = pdf.getImageProperties(img);
-        const imgWidth = pageWidth - margin * 2;
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        pdf.addImage(img, 'PNG', margin, margin, imgWidth, imgHeight);
-        pdf.save(`${selectedPt.ID}_summary.pdf`);
-      } catch(e) {
-        console.error('PDF export', e);
-        alert('PDF export failed.');
-      } finally {
-        document.body.removeChild(wrapper);
+    function renderAISummary(pt){
+      const s = $('aiSummary');
+      const latest = (pt.Timeline||[]).slice(-1)[0];
+      const lines = [];
+      if(latest) lines.push(`<div><strong>Status</strong>: ${latest.status} — ${latest.date}</div>`);
+      const active = (pt.Treatments||[]).find(t=>t.end === 'Current' || t.end === 'current');
+      if(active) lines.push(`<div><strong>Therapy</strong>: Line ${active.line} — ${active.drug} (${active.resp})</div>`);
+      const abnLabs = (pt.Labs||[]).filter(l=>l.status==='abnormal');
+      if(abnLabs.length) lines.push(`<div><strong>Labs</strong>: ${abnLabs.map(l=>`${l.name} ${l.val}${l.unit?(' '+l.unit):''}`).join(', ')}</div>`);
+      s.innerHTML = lines.length ? lines.join('') : '<div class="muted">No AI summary available.</div>';
+    }
+
+    // Tab switching (Overview / Timeline)
+    function switchTo(tab){
+      if(tab === 'overview'){
+        $('panelOverview').classList.remove('hidden');
+        $('panelTimeline').classList.add('hidden');
+        $('btnOverview').classList.add('bg-indigo-600'); $('btnOverview').classList.remove('border');
+        $('btnTimeline').classList.remove('bg-indigo-600'); $('btnTimeline').classList.add('border');
+      } else {
+        $('panelOverview').classList.add('hidden');
+        $('panelTimeline').classList.remove('hidden');
+        $('btnTimeline').classList.add('bg-indigo-600'); $('btnTimeline').classList.remove('border');
+        $('btnOverview').classList.remove('bg-indigo-600'); $('btnOverview').classList.add('border');
       }
     }
 
+    // Event wiring
+    function wireEvents(){
+      $('patientSelect').addEventListener('change', onPatientChange);
+      $('openInNewTabHeader').addEventListener('click', openNewTab);
+      $('openInNewTabSmall').addEventListener('click', openNewTab);
+      $('openNewTabQuick').addEventListener('click', openNewTab);
+      $('copyLink').addEventListener('click', copyLink);
+      $('copyLinkSmall').addEventListener('click', copyLink);
+      $('exportBtn').addEventListener('click', exportPDF);
+      $('btnOverview').addEventListener('click', ()=>switchTo('overview'));
+      $('btnTimeline').addEventListener('click', ()=>switchTo('timeline'));
+    }
+
+    // Initialization
+    async function init(){
+      await loadPatients();
+      renderSelect();
+      wireEvents();
+      // load requested patient if param present
+      const param = getParam('patient');
+      const initial = param && findPatient(param) ? param : (patients[0] ? patients[0].ID : null);
+      if(initial){
+        $('patientSelect').value = initial;
+        onPatientChange();
+      }
+      renderRecent();
+    }
+
+    // Run
     window.addEventListener('load', init);
-    window.addEventListener('resize', ()=> { if (biomarkerChart) try{biomarkerChart.resize()}catch(e){} });
+    window.addEventListener('resize', ()=>{ if(chartInstance) chartInstance.resize(); });
+
   </script>
 </body>
 </html>
