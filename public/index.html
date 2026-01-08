@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clinical Dashboard | RISA Labs — Vercel</title>
 
-  <!-- Tailwind CDN for styling -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Icons + Chart.js -->
@@ -16,780 +16,500 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Visual theme & layout adjustments */
-    :root { --gap: 18px; --card-radius: 8px; --muted:#64748b; --brand:#4f46e5; }
-    html,body { height: 100%; margin: 0; font-family: 'Inter', sans-serif; background: #fcfcfd; color: #0f172a; }
-    .clinical-card { background: white; border: 1px solid #eef2f6; border-radius: var(--card-radius); }
-    .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; border: 1px solid transparent; display:inline-block;}
-    .bg-pd { background-color: #fff1f2; color: #9f1239; border-color: #fecdd3; }
-    .bg-pr { background-color: #f0fdf4; color: #166534; border-color: #dcfce7; }
-    .bg-sd { background-color: #eff6ff; color: #1e40af; border-color: #dbeafe; }
-    .bg-cr { background-color: #faf5ff; color: #6b21a8; border-color: #f3e8ff; }
-    .bg-baseline { background-color: #f8fafc; color: #475569; border-color: #e2e8f0; }
-
-    /* Main container sizing */
-    .app-root { max-width: 1200px; margin: 28px auto; padding: 8px 16px; }
-
-    /* Header */
-    header.site-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
-    .selector-area { display:flex; gap:12px; align-items:center; }
-    select#patientSelect { width: 320px; padding:8px 10px; border-radius:6px; border:1px solid #e6eefc; background:white; font-weight:600; }
-
-    /* patient tabs (beneath selector) */
-    .patient-tabs { display:flex; gap:8px; margin-top:10px; align-items:center; }
-    .patient-tab { padding:6px 10px; border-radius:999px; background:#f3f4ff; border:1px solid #e9eefc; font-weight:600; color:var(--brand); cursor:pointer; }
-    .patient-tab.active { background:var(--brand); color:white; box-shadow: 0 4px 14px rgba(79,70,229,0.08); }
-    .patient-tab .close { margin-left:8px; opacity:0.6; cursor:pointer; }
-
-    /* layout for main patient area + right column */
-    .main-grid { display:grid; grid-template-columns: 1fr 300px; gap:18px; align-items:start; }
-    .main-left { display:flex; flex-direction:column; gap:12px; }
-    .main-right { display:flex; flex-direction:column; gap:12px; }
-
-    /* key clinical box */
-    .key-changes { border-left:4px solid rgba(79,70,229,0.6); background: #eef2ff; padding:12px 16px; border-radius:6px; font-weight:600; color: #1f2937; }
-
-    /* patient header card */
-    .patient-card { padding:20px; display:flex; gap:16px; align-items:flex-start; justify-content:space-between; }
-    .patient-card-left { flex:1; }
-    .patient-card-right { width:270px; }
-
-    /* tabs */
-    .tabs { display:flex; gap:8px; margin-top:6px; }
-    .tab { padding:8px 12px; border-radius:6px; font-weight:700; background:white; border:1px solid #eaeef7; cursor:pointer; color:var(--muted); }
-    .tab.active { background:var(--brand); color:white; box-shadow: 0 4px 14px rgba(79,70,229,0.08); }
-
-    /* treatment card and labs */
-    .section { padding:16px; border-radius:6px; border:1px solid #eff4fb; background:white; }
-    .treatment-line { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border-radius:6px; border:1px solid #f1f5f9; background:#fff; }
-
-    /* AI panel */
-    .ai-panel { padding:16px; border-radius:6px; border:1px solid #e8eafc; background:#fbfbff; }
-
-    /* timeline right chart area */
-    #biomarkerChart { width:100% !important; height:300px !important; display:block; }
-
-    /* responsive */
-    @media (max-width: 1000px) {
-      .main-grid { grid-template-columns: 1fr; }
-      .patient-card-right { width: auto; }
-      select#patientSelect { width: 220px; }
-    }
-
-    /* accessibility */
-    :focus-visible { outline: 3px solid rgba(79,70,229,0.20); outline-offset: 2px; border-radius: 6px; }
-    [role="button"] { cursor: pointer; }
-
+    body { font-family: 'Inter', sans-serif; background-color: #fafbfd; color: #0f172a; }
+    .clinical-card { background: white; border: 1px solid #eef2ff; border-radius: 8px; }
+    .status-badge { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase;}
+    .bg-pd { background-color: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; }
+    .bg-pr { background-color: #f0fdf4; color: #166534; border: 1px solid #dcfce7; }
+    .bg-sd { background-color: #eff6ff; color: #1e40af; border: 1px solid #dbeafe; }
+    .bg-cr { background-color: #faf5ff; color: #6b21a8; border: 1px solid #f3e8ff; }
+    .bg-baseline { background-color: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: white; border: 2px solid #cbd5e1; }
+    .focus-ring { box-shadow: 0 0 0 4px rgba(79,70,229,0.08); border-radius: 6px; }
+    .compact-grid { gap: 1rem; }
+    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+    .recent-pill { padding: 6px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; font-weight:600; cursor:pointer; border:1px solid #e6eefc; }
+    .recent-pill.active { background:#4f46e5; color:white; border-color:#4f46e5; }
+    /* grid spacing adjustments to reduce gap */
+    .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 18px; align-items: start; }
+    @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
-<body>
-  <div class="app-root">
+<body class="p-6 lg:p-8 max-w-[1400px] mx-auto" id="root">
+  <a href="#mainContent" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-indigo-600 focus:text-white focus:p-4 focus:z-50 focus:rounded focus:font-bold">Skip to main content</a>
 
-    <!-- Header area -->
-    <header class="site-header" role="banner" aria-label="Top header">
+  <header class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4">
+      <div class="text-xs font-bold text-slate-400 uppercase tracking-[0.15em]">Clinical Review Interface</div>
+
+      <div class="flex items-center gap-3">
+        <label for="patientSelect" class="sr-only">Select patient</label>
+        <select id="patientSelect" class="p-2 text-sm font-semibold border border-slate-200 rounded focus:outline-none focus:ring-2 focus:ring-indigo-200" aria-label="Select patient"></select>
+        <button id="exportBtn" class="px-3 py-2 text-sm font-bold bg-indigo-600 text-white rounded shadow hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-300">Export PDF</button>
+      </div>
+    </div>
+
+    <div id="openNewTabWrapper" class="flex items-center gap-4">
+      <!-- Replace environment text with "Open in new tab" button -->
+      <button id="openNewTabBtn" class="px-3 py-2 text-sm font-bold border border-slate-200 rounded hover:bg-slate-50 focus:ring-2 focus:ring-indigo-200">Open in new tab</button>
+    </div>
+  </header>
+
+  <main id="mainContent" role="main" class="mb-8">
+    <!-- Key clinical changes (below patient details per request, but initially hidden until patient loaded) -->
+    <div id="keyInsights" class="clinical-card p-4 mb-6 hidden" aria-live="polite"></div>
+
+    <!-- Main content split: left content + right codes panel (tighter) -->
+    <div class="main-grid">
+      <!-- LEFT: patient card + overview/timeline -->
       <div>
-        <div style="font-size:12px;color:#6b7280;font-weight:700;letter-spacing:0.12em;margin-bottom:6px;">CLINICAL REVIEW INTERFACE</div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div class="selector-area">
-            <label for="patientSelect" class="sr-only">Select patient</label>
-            <select id="patientSelect" onchange="loadPatient()" aria-label="Select patient"></select>
-            <button id="exportBtn" onclick="exportPatientSummaryPDF()" class="px-3 py-2 text-sm font-bold bg-indigo-600 text-white rounded">Export PDF</button>
+        <!-- Patient summary header -->
+        <section id="patientCard" class="clinical-card p-6 mb-4">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Patient</div>
+              <div class="text-lg font-black text-indigo-900" id="patientName">—</div>
+              <div class="text-xs text-slate-500 mt-1" id="patientMeta">—</div>
+              <div class="text-sm font-semibold text-indigo-700 mt-2" id="patientDx">—</div>
+            </div>
+
+            <!-- Right compact panel was codes/quick actions earlier but now attached visually -->
+            <div class="w-36">
+              <div id="codesBox" class="p-3 border rounded-md text-sm text-slate-700"></div>
+              <div class="mt-3 p-2 border rounded-md bg-slate-50 text-center">
+                <button id="copyLinkBtn" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-100">Copy link</button>
+                <button id="shareBtn" class="ml-2 px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-100">Share</button>
+              </div>
+            </div>
           </div>
-          <div style="font-size:12px;color:#9ca3af;">Proof-of-concept — Read-only synthetic data</div>
-        </div>
 
-        <!-- patient tabs (local tabs within single page) -->
-        <div id="patientTabs" class="patient-tabs" aria-label="Open patient tabs"></div>
+          <!-- Patient tabs (recent patients pills) directly under selector (visual list) -->
+          <div class="mt-4 flex items-center gap-2" id="recentPatientsRow" aria-label="Recently opened patients"></div>
+
+          <!-- Short bullet history (summary), kept small here -->
+          <div id="patientShortHistory" class="text-sm text-slate-600 mt-4"></div>
+        </section>
+
+        <!-- Key clinical insights should be right below details and above tabs (we dynamically show this div) -->
+        <!-- Already added #keyInsights above and will be populated after patient load -->
+
+        <!-- Tabs: only Overview and Timeline -->
+        <div class="clinical-card p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <button id="tab-overview" role="tab" aria-selected="true" class="px-3 py-1 text-sm font-semibold bg-indigo-600 text-white rounded">Overview</button>
+            <button id="tab-timeline" role="tab" aria-selected="false" class="px-3 py-1 text-sm font-semibold border border-slate-200 rounded">Timeline</button>
+          </div>
+
+          <div id="panel-overview" role="tabpanel" class="space-y-6">
+            <section>
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Treatment History (By Line)</h4>
+              <div id="treatmentLines" class="space-y-4"></div>
+            </section>
+
+            <section>
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Labs & Safety Monitor</h4>
+              <div id="labsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            </section>
+
+            <section>
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Molecular Profile</h4>
+              <div id="molecularList" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+            </section>
+          </div>
+
+          <div id="panel-timeline" role="tabpanel" hidden>
+            <section>
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Longitudinal Disease Course</h4>
+              <div class="grid grid-cols-1 md:grid-cols-10 gap-8">
+                <div id="timelineContainer" class="md:col-span-4 space-y-6 relative" tabindex="0" aria-label="Timeline list"></div>
+                <div class="md:col-span-6 border-l border-slate-50 pl-4">
+                  <canvas id="biomarkerChart" style="height:300px;width:100%;" aria-label="Biomarker trend chart"></canvas>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
 
-      <!-- right header area: replaced 'Environment' with Open in new tab -->
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button id="openNewTabBtn" onclick="openCurrentInNewTab()" class="px-3 py-2 text-sm border border-slate-200 rounded bg-white font-bold">Open in new tab</button>
-        </div>
-        <div style="font-size:12px;color:#94a3b8;font-weight:700;">&nbsp;</div>
-      </div>
-    </header>
+      <!-- RIGHT: Codes / AI-summary / Quick actions — visually attached, narrower than before -->
+      <aside>
+        <div id="rightPanel" class="clinical-card p-4 space-y-4">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Codes</div>
+            <div id="codesFull" class="text-sm text-slate-700"></div>
+          </div>
 
-    <!-- Key clinical changes (moved below header, above patient card to conserve vertical space) -->
-    <div id="keyChanges" class="key-changes" aria-live="polite" role="note" style="margin-bottom:12px;">
-      <!-- populated by JS -->
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">AI-Assisted Clinical Summary</div>
+            <div id="aiSummary" class="text-sm text-slate-700"></div>
+          </div>
+
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Quick Actions</div>
+            <div class="flex gap-2">
+              <button id="openNewTabBtnSide" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-50">Open in new tab</button>
+              <button id="copyLinkBtnSide" class="px-2 py-1 text-xs font-semibold border border-slate-200 rounded hover:bg-slate-50">Copy link</button>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
-
-    <!-- main layout -->
-    <div class="main-grid" role="main">
-      <div class="main-left">
-        <!-- patient summary card -->
-        <section id="patientCard" class="clinical-card patient-card">
-          <div class="patient-card-left">
-            <div style="font-size:12px;color:#94a3b8;font-weight:700;">PATIENT</div>
-            <div id="patientName" style="font-size:18px;font-weight:800;color:#312e81;margin-top:6px;"></div>
-            <div id="patientDemographics" style="font-size:13px;color:#475569;margin-top:6px;font-weight:700;"></div>
-
-            <div id="patientDiagnosis" style="margin-top:12px;font-weight:700;color:#4c1d95;"></div>
-
-            <div id="patientNotes" style="margin-top:12px;color:#475569;font-size:14px;"></div>
-
-            <!-- tabs under patient details -->
-            <div class="tabs" style="margin-top:12px;">
-              <button id="tab-overview" class="tab active" onclick="switchTab('overview')">Overview</button>
-              <button id="tab-timeline" class="tab" onclick="switchTab('timeline')">Timeline</button>
-            </div>
-          </div>
-
-          <div class="patient-card-right">
-            <div class="clinical-card p-4" style="padding:12px;">
-              <div style="font-size:10px;color:#94a3b8;font-weight:800;">CODES</div>
-              <div id="icd10-display" style="font-weight:800;margin-top:8px;">ICD-10: —</div>
-              <div id="snomed-display" style="font-size:11px;color:#94a3b8;margin-top:6px;">SNOMED: —</div>
-            </div>
-
-            <div class="clinical-card p-3" style="padding:12px;margin-top:10px;">
-              <div style="font-size:10px;color:#94a3b8;font-weight:800;">QUICK ACTIONS</div>
-              <div style="display:flex;gap:8px;margin-top:8px;">
-                <button onclick="copyPatientLink()" class="px-2 py-1 text-sm border rounded">Copy link</button>
-                <button onclick="openShareModal()" class="px-2 py-1 text-sm border rounded">Share</button>
-                <button onclick="openCurrentInNewTab()" class="px-2 py-1 text-sm border rounded">Open in new tab</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Top-level panels (Overview and Timeline) -->
-        <section id="panel-overview" class="clinical-card section" aria-labelledby="overviewHeading">
-          <!-- Treatment history -->
-          <div style="display:flex;gap:18px;">
-            <div style="flex:1;">
-              <h3 style="font-weight:800;color:#374151;margin-bottom:10px;">TREATMENT HISTORY (BY LINE)</h3>
-              <div id="treatmentLines" style="display:flex;flex-direction:column;gap:8px;"></div>
-
-              <h3 style="font-weight:800;color:#374151;margin-top:16px;margin-bottom:8px;">LABS & SAFETY MONITOR</h3>
-              <div id="labsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;"></div>
-            </div>
-
-            <aside style="width:320px;">
-              <div id="aiSummaryArea" class="ai-panel clinical-card">
-                <h4 style="font-weight:800;color:#4f46e5;margin-bottom:8px;">AI-ASSISTED CLINICAL SUMMARY (FOR REVIEW ONLY)</h4>
-                <ul id="aiSummaryPoints" style="margin:0;padding-left:16px;color:#374151;font-weight:600;"></ul>
-
-                <div id="aiNextSteps" style="margin-top:12px;padding-top:8px;border-top:1px dashed #eef2f6;color:#4c1d95;font-weight:700;"></div>
-              </div>
-
-              <div id="molecularBox" class="clinical-card section" style="margin-top:12px;">
-                <h4 style="font-size:12px;font-weight:800;color:#94a3b8;">MOLECULAR PROFILE</h4>
-                <div id="molecularList" style="margin-top:8px;"></div>
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        <section id="panel-timeline" class="clinical-card section" hidden>
-          <h3 style="font-weight:800;color:#374151;margin-bottom:10px;">Longitudinal Disease Course</h3>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
-            <div id="timelineContainer" style="min-height:260px;padding-left:8px;overflow:auto;"></div>
-            <div style="border-left:1px solid #f1f5f9;padding-left:12px;">
-              <canvas id="biomarkerChart" aria-label="Biomarker trend chart"></canvas>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- right column -->
-      <div class="main-right">
-        <div id="sidebarQuick" class="clinical-card section">
-          <!-- quick placeholder for other actions -->
-          <div style="font-size:10px;color:#94a3b8;font-weight:800;">NOTES</div>
-          <div style="margin-top:8px;color:#475569;">Data is synthetic. Use for UI/demo only.</div>
-        </div>
-
-        <div id="labSidebarPreview" class="clinical-card section">
-          <!-- small preview area -->
-          <div style="font-size:12px;font-weight:800;color:#94a3b8;margin-bottom:8px;">LATEST LABS</div>
-          <div id="sidebarLabsSmall"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- sidebars for event and lab details are unchanged (kept minimal markup to keep file self-contained) -->
-    <div id="sidebarBackdrop" onclick="closeSidebar()" class="hidden"></div>
-    <aside id="eventSidebar" class="hidden"></aside>
-
-  </div> <!-- end app-root -->
+  </main>
 
   <script>
-    // -----------------------
-    // Helpers & app state
-    // -----------------------
-    const PATIENTS = [
-      // Full dataset: PT-101 ... PT-110 (copied from your sample). Keep this array as single source of truth for demo.
-      {
-        ID: "PT-101", Name: "Eleanor Vance", Dx: "NSCLC (Adeno)", Stage: "IVA", Age: 62, Sex: "F", Line: 2, PS: "ECOG 1",
-        History: ["CEA normalized from 12.5 to 4.2 following L2 transition.", "Primary mass reduced 50% on 2024-12-08 CT."],
-        EGFR: "Exon 19 del", ALK: "Negative", KRAS: "Negative", PDL1: "75%", MSI: "MSS", TMB: "8",
-        Biology: "Informational: EGFR exon 19 deletion is associated with potential sensitivity to 3rd-generation EGFR TKIs.",
-        Treatments: [
-          { line: 1, drug: "Carbo + Pemetrexed", start: "2023-03", end: "2024-05", resp: "SD", stop: "Progression",
-            extended: { rationale: "Standard 1L systemic therapy.", dosing: "Carbo AUC5 + Pem q3w x4", toxicity: "G2 anemia", outcome: "SD x14 months" } },
-          { line: 2, drug: "Osimertinib 80mg", start: "2024-07", end: "Current", resp: "PR", stop: "Ongoing",
-            extended: { rationale: "Targeted for EGFR exon19", dosing: "80mg daily", toxicity: "G1 skin", outcome: "PR confirmed Dec 2024"} }
-        ],
-        Timeline: [
-          { date: "2023-01-15", event: "Initial Presentation", status: "Baseline", cea: 1.8, detail: "Persistent cough and hemoptysis.", report: { findings: "3-week cough", impression: "Suspicious", plan: "CT & Bronchoscopy" } },
-          { date: "2023-03-12", event: "Diagnosis", status: "Baseline", cea: 2.5, detail: "T2aN1M0. Adeno.", report: { findings: "3.2cm mass RUL", impression: "Stage IIIA", plan: "Chemo + NGS" } },
-          { date: "2023-09-20", event: "Interim Scan", status: "SD", cea: 3.1, detail: "Stable disease on Chemo.", report: { findings: "3.1cm", impression: "SD", plan: "Continue" } },
-          { date: "2024-05-10", event: "Progression", status: "PD", cea: 12.5, detail: "New contralateral nodules.", report: { findings: "New nodules", impression: "PD", plan: "Re-biopsy" } },
-          { date: "2024-07-01", event: "Therapy Switch", status: "Baseline", cea: 10.8, detail: "Initiated Osimertinib.", report: { findings: "NGS: Exon19", impression: "Reflex to TKI", plan: "Start Osimertinib" } },
-          { date: "2024-12-08", event: "Response Scan", status: "PR", cea: 4.2, detail: "Primary mass reduced to 2.1cm.", report: { findings: "Volume reduced >50%", impression: "PR", plan: "Continue TKI" } }
-        ],
-        Labs: [
-          { name: "AST", val: "58", unit: "U/L", range: "8 - 48", history: [22,35,45,52,58], trend: "up", status: "abnormal" },
-          { name: "ALT", val: "72", unit: "U/L", range: "7 - 55", history: [28,42,55,68,72], trend: "up", status: "abnormal" },
-          { name: "Creatinine", val: "1.0", unit: "mg/dL", range: "0.7 - 1.3", history: [0.9,1.0,0.9,1.0,1.0], trend: "stable", status: "normal" }
-        ]
-      },
-      {
-        ID: "PT-102", Name: "Arthur Morgan", Dx: "NSCLC (Squamous)", Stage: "IVB", Age: 64, Sex: "M", Line: 1, PS: "ECOG 2",
-        History: ["Stable clinical state sustained for 14 months.", "Gradual decline in renal markers identified."],
-        EGFR: "Negative", ALK: "Negative", KRAS: "G12C", PDL1: "90%", MSI: "MSS",
-        Biology: "High PD-L1 (90%) — candidate for PD-1 therapy.",
-        Treatments: [
-          { line: 1, drug: "Pembrolizumab q3w", start: "2023-01", end: "Current", resp: "SD", stop: "Ongoing",
-            extended: { rationale: "PD-L1 >50% monotherapy", dosing: "200mg q3w", toxicity: "G1 hypothyroid", outcome: "Durable SD" } }
-        ],
-        Timeline: [
-          { date: "2022-11-18", event: "Diagnosis", status: "Baseline", cea: 8.0, detail: "Stage IIIA. Surgery deferred.", report: { findings: "4cm mass", impression: "N2 disease", plan: "Refer to Oncology" } },
-          { date: "2023-01-05", event: "Metastatic Event", status: "PD", cea: 11.5, detail: "Bone & adrenal mets.", report: { findings: "PET positive", impression: "Upstaged to IVB", plan: "RT + IO" } },
-          { date: "2023-06-12", event: "Interim Check", status: "SD", cea: 11.0, detail: "Pain resolved.", report: { findings: "Adrenal stable", impression: "Clinical benefit", plan: "Monitor" } }
-        ],
-        Labs: [
-          { name: "Creatinine", val: "1.2", unit: "mg/dL", range: "0.7 - 1.3", history: [0.9,1.0,1.1,1.1,1.2], trend: "up", status: "normal" },
-          { name: "Hb", val: "9.6", unit: "g/dL", range: "13.5 - 17.5", history: [12.0,11.2,10.5,10.0,9.6], trend: "down", status: "abnormal" },
-          { name: "CEA", val: "12.8", unit: "ng/mL", range: "< 3.0", history: [8.0,11.5,10.2,11.0,12.8], trend: "stable", status: "abnormal" }
-        ]
-      },
-      {
-        ID: "PT-103", Name: "Hazel Grace", Dx: "NSCLC (Adeno)", Stage: "IVB", Age: 41, Sex: "F", Line: 2, PS: "ECOG 0",
-        History: ["Identified CNS progression Dec 2024.", "Lungs remain radiologically stable."],
-        ALK: "Positive", EGFR: "Negative", KRAS: "Negative", PDL1: "10%",
-        Biology: "ALK rearrangement — consider CNS-penetrant ALK TKIs.",
-        Treatments: [
-          { line: 1, drug: "Crizotinib", start: "2021-08", end: "2024-02", resp: "PR", stop: "CNS progression", extended: { rationale: "ALK+ 1st gen", dosing:"250mg BID", toxicity:"visual disturbances" } },
-          { line: 2, drug: "Alectinib 600mg BID", start: "2024-03", end: "Current", resp: "PD", stop: "Ongoing", extended: { rationale:"CNS penetrant", dosing:"600mg BID", toxicity:"myalgia" } }
-        ],
-        Timeline: [
-          { date: "2021-08-04", event: "Diagnosis", status: "Baseline", cea: 1.2, detail: "Early stage IA adeno.", report: { findings: "1.2cm nodule", impression: "Stage IA", plan: "Surgery" } },
-          { date: "2024-03-01", event: "Recurrence", status: "PD", cea: 3.5, detail: "Distal lung/brain spread.", report: { findings: "MRI brain lesions", impression: "Systemic relapse", plan: "Start Alectinib" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "6.1", unit: "ng/mL", range: "< 3.0", history: [1.2,1.1,3.5,2.1,6.1], trend: "up", status: "abnormal" },
-          { name: "WBC", val: "5.2", unit: "10^3/uL", range: "4.5 - 11.0", history: [4.8,5.0,5.1,5.0,5.2], trend: "stable", status: "normal" }
-        ]
-      },
-      {
-        ID: "PT-104", Name: "Sarah Connor", Dx: "Breast (HER2+)", Stage: "IVB", Age: 48, Sex: "F", Line: 2, PS: "ECOG 1",
-        History: ["Hepatic response (PR) confirmed Nov 2024.", "Acute AST/ALT rise after last cycle."],
-        HER2: "Positive (3+)", MSI: "MSS", PDL1: "5%",
-        Biology: "HER2 overexpression — candidate for HER2-directed ADCs.",
-        Treatments: [
-          { line: 1, drug: "THP Regimen", start: "2022-04", end: "2024-04", resp: "SD", stop: "Progression", extended: { rationale:"Anti-HER2 + taxane", dosing:"Docetaxel + HP", toxicity:"G2 neuropathy" } },
-          { line: 2, drug: "T-DXd (Enhertu)", start: "2024-05", end: "Current", resp: "PR", stop: "Ongoing", extended: { rationale:"ADC post anti-HER2", dosing:"5.4 mg/kg q3w", toxicity:"AST/ALT rise" } }
-        ],
-        Timeline: [
-          { date: "2022-04-15", event: "Diagnosis", status: "Baseline", cea: 5.5, detail: "Metastatic HER2+ breast.", report: { findings: "Liver mets", impression: "Stage IV", plan: "Start THP" } },
-          { date: "2024-11-20", event: "Response", status: "PR", cea: 2.1, detail: "PET: decreased metabolic activity", report: { findings: "Liver response", impression: "PR", plan: "Monitor LFTs" } }
-        ],
-        Labs: [
-          { name: "AST", val: "110", unit: "U/L", range: "8 - 48", history: [25,28,45,60,110], trend: "up", status: "abnormal" },
-          { name: "ALT", val: "125", unit: "U/L", range: "7 - 55", history: [30,32,48,70,125], trend: "up", status: "abnormal" }
-        ]
-      },
-      {
-        ID: "PT-105", Name: "Sarah Smith", Dx: "Breast (TNBC)", Stage: "IV", Age: 38, Sex: "F", Line: 2, PS: "ECOG 1",
-        History: ["Treatment failure on 2L Capecitabine Dec 2024.", "Rapid lung progression detected."],
-        MSI: "MSS", PDL1: "2%", TMB: "6", PIK3CA: "Mutant",
-        Biology: "Triple-negative — high recurrence risk, consider ADC or clinical trials.",
-        Treatments: [
-          { line: 1, drug: "AC-T Chemo", start: "2023-01", end: "2024-07", resp: "CR", stop: "Completion" },
-          { line: 2, drug: "Capecitabine", start: "2024-08", end: "Current", resp: "PD", stop: "Ongoing" }
-        ],
-        Timeline: [
-          { date: "2023-01-20", event: "Diagnosis", status: "Baseline", cea: 1.0, detail: "Stage IA post-op.", report: { findings: "Lumpectomy", impression: "Adjuvant chemo", plan: "AC-T" } },
-          { date: "2024-07-15", event: "Recurrence", status: "PD", cea: 4.5, detail: "Lung & liver spread.", report: { findings: "Multiple metastases", impression: "Metastatic recurrence", plan: "Start Capecitabine" } }
-        ],
-        Labs: [
-          { name: "Hb", val: "10.5", unit: "g/dL", range: "12.0 - 15.5", history: [13.2,12.8,11.5,11.0,10.5], trend: "down", status: "abnormal" },
-          { name: "CA 27-29", val: "88", unit: "U/mL", range: "< 38", history: [15,18,45,60,88], trend: "up", status: "abnormal" }
-        ]
-      },
-      {
-        ID: "PT-106", Name: "Walter White", Dx: "Colorectal (KRAS+)", Stage: "IV", Age: 55, Sex: "M", Line: 1, PS: "ECOG 1",
-        History: ["Maintenance stability for 18 months.", "Pending current quarter CT imaging results."],
-        KRAS: "G12V", MSI: "MSS", PDL1: "0%",
-        Biology: "KRAS mutant — anti-EGFR resistance expected.",
-        Treatments: [
-          { line: 1, drug: "FOLFOX + Bev", start: "2023-06", end: "Current", resp: "SD", stop: "Ongoing" }
-        ],
-        Timeline: [
-          { date: "2023-05-10", event: "Diagnosis", status: "Baseline", cea: 12.0, detail: "Stage IIIB sigmoid CRC.", report: { findings: "Obstructing mass", impression: "Surgery", plan: "Adjuvant FOLFOX" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "15.4", unit: "ng/mL", range: "< 3.0", history: [12,18.2,8.5,15.0,15.4], trend: "stable", status: "abnormal" }
-        ]
-      },
-      {
-        ID: "PT-107", Name: "Jesse Pinkman", Dx: "Colorectal (MSI-H)", Stage: "NED", Age: 32, Sex: "M", Line: 1, PS: "ECOG 0",
-        History: ["Complete radiological resolution Jun 2024.", "Sustained NED as of Jan 2025."],
-        MSI: "MSI-H", TMB: "45", KRAS: "WT",
-        Biology: "MSI-High: excellent IO response historically.",
-        Treatments: [
-          { line: 1, drug: "Pembrolizumab", start: "2023-12", end: "Current", resp: "CR", stop: "Ongoing" }
-        ],
-        Timeline: [
-          { date: "2023-11-05", event: "Diagnosis", status: "Baseline", cea: 12.0, detail: "Peritoneal spread.", report: { findings: "Peritoneal disease", impression: "mCRC", plan: "Start IO" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "1.2", unit: "ng/mL", range: "< 3.0", history: [12,4.5,1.8,1.5,1.2], trend: "down", status: "normal" }
-        ]
-      },
-      {
-        ID: "PT-108", Name: "Skyler White", Dx: "NSCLC (Stage I)", Stage: "IA", Age: 42, Sex: "F", Line: 0, PS: "ECOG 1",
-        History: ["Post-op curative resection June 2024.", "Surveillance baseline established."],
-        EGFR: "Negative", ALK: "Negative", KRAS: "Negative",
-        Biology: "Early-stage disease with favorable prognosis after resection.",
-        Treatments: [
-          { line: 0, drug: "RML Lobectomy", start: "2024-06", end: "2024-06", resp: "CR", stop: "Completed" }
-        ],
-        Timeline: [
-          { date: "2024-06-25", event: "Surgery", status: "CR", cea: 0.8, detail: "Lobectomy complete.", report: { findings: "R0 resection", impression: "Cured (surgical)", plan: "Surveillance" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "0.8", unit: "ng/mL", range: "< 3.0", history: [0.9,0.9,0.8,0.8,0.8], trend: "stable", status: "normal" }
-        ]
-      },
-      {
-        ID: "PT-109", Name: "Gustavo Fring", Dx: "Colorectal (Adeno)", Stage: "IVB", Age: 60, Sex: "M", Line: 2, PS: "ECOG 2",
-        History: ["CEA spike Sep 2024 → Jan 2025; new bone lesions."],
-        BRAF: "V600E", KRAS: "WT", MSI: "MSS",
-        Biology: "BRAF V600E — aggressive disease behaviour.",
-        Treatments: [
-          { line: 1, drug: "FOLFOX", start: "2023-02", end: "2024-09", resp: "PD", stop: "Progression" },
-          { line: 2, drug: "Encorafenib + Cetuximab", start: "2024-10", end: "Current", resp: "PD", stop: "Ongoing" }
-        ],
-        Timeline: [
-          { date: "2023-02-14", event: "Diagnosis", status: "Baseline", cea: 5.0, detail: "BRAF V600E", report: { findings: "Primary colon mass", impression: "Surgery + adjuvant", plan: "Follow" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "245", unit: "ng/mL", range: "< 3.0", history: [5,25,40,110,245], trend: "up", status: "abnormal" }
-        ]
-      },
-      {
-        ID: "PT-110", Name: "Hank Schrader", Dx: "Breast (Male ER+)", Stage: "IV", Age: 54, Sex: "M", Line: 1, PS: "ECOG 1",
-        History: ["Stable bone lesions on Tamoxifen.", "Hormone receptor high (ER 95%)."],
-        ER: "95%", PR: "80%", HER2: "Negative", MSI: "MSS",
-        Biology: "Hormone-responsive male breast cancer.",
-        Treatments: [
-          { line: 1, drug: "Tamoxifen 20mg", start: "2024-03", end: "Current", resp: "SD", stop: "Ongoing" }
-        ],
-        Timeline: [
-          { date: "2024-02-10", event: "Diagnosis", status: "Baseline", cea: 2.2, detail: "Left mastectomy.", report: { findings: "IDC, node +", impression: "Hormone therapy", plan: "Start Tamoxifen" } }
-        ],
-        Labs: [
-          { name: "CEA", val: "3.5", unit: "ng/mL", range: "< 3.0", history: [2.2,2.1,3.2,3.4,3.5], trend: "stable", status: "normal" }
-        ]
-      }
-    ];
-
-    // app state
-    let selectedPt = PATIENTS[0];
+    /***************
+     * App state
+     ***************/
+    let patients = [];
+    let selectedPt = null;
     let charts = [];
-    let sidebarChartInstance = null;
-    let openTabs = []; // local tabs in this browser session (IDs)
+    let biomarkerChart = null;
 
-    // Utilities
-    function findPatientById(id) { return PATIENTS.find(p => p.ID === id) || null; }
-    function statusClass(status) {
-      if (!status) return 'bg-baseline';
-      const s = status.toString().toLowerCase();
-      const map = { 'pd':'bg-pd','progression':'bg-pd','pr':'bg-pr','partial response':'bg-pr','sd':'bg-sd','stable disease':'bg-sd','cr':'bg-cr','complete response':'bg-cr','baseline':'bg-baseline' };
-      return map[s] || 'bg-baseline';
+    /***************
+     * Utilities
+     ***************/
+    function q(id){ return document.getElementById(id); }
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
     }
-    function parseRange(rangeStr) {
-      if (!rangeStr) return null;
-      const clean = rangeStr.replace(/[<>]/g,'').trim();
-      if (clean.includes('-')) {
-        const parts = clean.split('-').map(s => parseFloat(s.trim()));
-        return { min: parts[0], max: parts[1] };
-      }
-      if (rangeStr.includes('<')) return { min:0, max:parseFloat(clean) };
-      return null;
-    }
-    function getDuration(start, end) {
-      const s = new Date(start+'-01'); const e = (end === "Current" ? new Date() : new Date(end+'-01'));
-      let months = (e.getFullYear()-s.getFullYear())*12 + e.getMonth()-s.getMonth();
-      months = Math.max(0, months);
-      if (months < 12) return `${months} months`;
-      return `${Math.floor(months/12)}y ${months%12}m`;
+    function setQueryParam(name, value, replace=false) {
+      const url = new URL(window.location.href);
+      url.searchParams.set(name, value);
+      if (replace) history.replaceState({}, '', url.toString());
+      else history.pushState({}, '', url.toString());
     }
 
-    // -----------------------
-    // ICD / SNOMED (unchanged logic)
-    // -----------------------
-    async function fetchICD10(dxString) {
-      const displayEl = document.getElementById('icd10-display');
-      if (!displayEl) return;
-      displayEl.innerHTML = '<span style="color:#94a3b8;font-weight:700">Looking up ICD-10…</span>';
-      let searchTerm = dxString.split('(')[0].trim();
-      const map = { 'NSCLC':'Malignant neoplasm of lung', 'Breast':'Malignant neoplasm of breast', 'Colorectal':'Malignant neoplasm of colon' };
-      if (map[searchTerm]) searchTerm = map[searchTerm];
+    /***************
+     * Data fetch
+     ***************/
+    async function loadPatientsData() {
       try {
-        const resp = await fetch(`https://clinicaltables.nlm.nih.gov/api/icd10cm/v3/search?sf=code,name&terms=${encodeURIComponent(searchTerm)}&maxList=1`);
-        const data = await resp.json();
-        if (data && data[3] && data[3].length) {
-          const code = data[3][0][0]; const desc = data[3][0][1];
-          displayEl.innerHTML = `<div style="display:flex;align-items:center;gap:8px;"><span style="background:#eef2ff;color:#1e40af;padding:4px 6px;border-radius:6px;font-weight:800;">ICD-10</span><div><div style="font-weight:800">${code}</div><div style="font-size:12px;color:#94a3b8">${desc}</div></div></div>`;
-        } else {
-          displayEl.innerHTML = '<span style="color:#94a3b8;font-weight:700">Code not found</span>';
-        }
-      } catch (err) {
-        console.warn('ICD lookup failed', err);
-        displayEl.innerHTML = '<span style="color:#f97316;font-weight:700">Lookup failed</span>';
+        const resp = await fetch('./data/patients.json');
+        if (!resp.ok) throw new Error('Failed to load patients.json');
+        patients = await resp.json();
+      } catch (e) {
+        console.error(e);
+        patients = [];
       }
     }
 
-    const SNOMED_CONFIG = { SNOMED_API_URL: '', SNOMED_API_KEY: '' };
-    async function fetchSNOMED(term) {
-      const displayEl = document.getElementById('snomed-display');
-      if (!displayEl) return;
-      displayEl.innerHTML = '<span style="color:#94a3b8">SNOMED lookup not configured</span>';
-      // keep minimal: real deployments must configure API endpoint & key
-    }
-
-    // -----------------------
-    // Rendering helpers
-    // -----------------------
-    function clearCharts() { charts.forEach(c=>{try{c.destroy()}catch(e){} }); charts=[]; if(sidebarChartInstance){try{sidebarChartInstance.destroy()}catch(e){}} sidebarChartInstance=null; }
-
-    function renderPatientSelector() {
-      const sel = document.getElementById('patientSelect');
+    /***************
+     * Rendering helpers
+     ***************/
+    function renderPatientSelect() {
+      const sel = q('patientSelect');
       sel.innerHTML = '';
-      PATIENTS.forEach(p => {
-        const opt = document.createElement('option'); opt.value=p.ID; opt.innerText = `${p.ID} — ${p.Name}`; sel.appendChild(opt);
+      patients.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.ID;
+        opt.textContent = `${p.ID} — ${p.Name}`;
+        sel.appendChild(opt);
       });
-      // choose selected value based on selectedPt
-      sel.value = selectedPt.ID;
     }
 
-    function renderPatientTabsUI() {
-      const container = document.getElementById('patientTabs');
-      container.innerHTML = '';
-      // first tab: quick add all recently viewed (persisted in session via openTabs)
-      openTabs.forEach(id => {
-        const p = findPatientById(id);
-        if (!p) return;
-        const el = document.createElement('div');
-        el.className = 'patient-tab ' + (id === selectedPt.ID ? 'active' : '');
-        el.innerHTML = `<span onclick="switchPatientFromTab('${id}')">${p.ID} — ${p.Name.split(' ')[0]}</span> <span class="close" onclick="closeTab(event,'${id}')">&times;</span>`;
-        container.appendChild(el);
+    function saveRecentPatient(id) {
+      if (!id) return;
+      const key = 'recentPatients';
+      const raw = localStorage.getItem(key);
+      let arr = raw ? JSON.parse(raw) : [];
+      arr = arr.filter(x => x !== id);
+      arr.unshift(id);
+      if (arr.length > 8) arr = arr.slice(0,8);
+      localStorage.setItem(key, JSON.stringify(arr));
+      renderRecentPatientsRow();
+    }
+
+    function renderRecentPatientsRow() {
+      const wrap = q('recentPatientsRow');
+      wrap.innerHTML = '';
+      const raw = localStorage.getItem('recentPatients');
+      let arr = raw ? JSON.parse(raw) : [];
+      // If array empty, show first patient as a convenience
+      if ((!arr || arr.length === 0) && patients && patients.length) arr = [patients[0].ID];
+      arr.forEach(id => {
+        const btn = document.createElement('button');
+        btn.className = 'recent-pill';
+        if (selectedPt && selectedPt.ID === id) btn.classList.add('active');
+        btn.innerText = id;
+        btn.onclick = () => {
+          // load patient in current tab
+          q('patientSelect').value = id;
+          loadPatientFromSelect();
+        };
+        wrap.appendChild(btn);
       });
-      // small CTA: open current in tab if not present
-      const add = document.createElement('div');
-      add.className = 'patient-tab';
-      add.style.background = '#fff';
-      add.style.border = '1px dashed #e6ecff';
-      add.style.color = '#4f46e5';
-      add.innerText = '+ Add to tabs';
-      add.onclick = () => { if(!openTabs.includes(selectedPt.ID)) { openTabs.unshift(selectedPt.ID); if(openTabs.length>6) openTabs.pop(); saveOpenTabs(); renderPatientTabsUI(); } };
-      container.appendChild(add);
     }
 
-    function saveOpenTabs() { sessionStorage.setItem('openPatientTabs', JSON.stringify(openTabs || [])); }
-    function loadOpenTabs() { try { const raw = sessionStorage.getItem('openPatientTabs'); openTabs = raw ? JSON.parse(raw) : []; } catch(e){ openTabs = []; } }
-
-    function switchPatientFromTab(id) { const p = findPatientById(id); if (!p) return; selectedPt = p; renderDashboard(); renderPatientTabsUI(); }
-
-    // core render of header / patient card / key changes
-    function renderHeader() {
-      document.getElementById('patientName').innerHTML = `${selectedPt.Name} <span style="font-size:12px;color:#94a3b8;font-weight:700;margin-left:8px">(${selectedPt.ID})</span>`;
-      document.getElementById('patientDemographics').innerText = `${selectedPt.Age}Y • ${selectedPt.Sex} • ${selectedPt.PS}`;
-      document.getElementById('patientDiagnosis').innerText = selectedPt.Dx;
-      // notes
-      const notesEl = document.getElementById('patientNotes');
-      notesEl.innerHTML = (selectedPt.History || []).map(n => `<li style="margin-bottom:6px;">${n}</li>`).join('');
-      // key changes summary (above patient card)
-      const keyEl = document.getElementById('keyChanges');
-      const keyHtml = (selectedPt.History || []).slice(0,3).map(n => `<div style="margin-bottom:6px;">• ${n}</div>`).join('');
-      keyEl.innerHTML = `<strong style="display:block;color:var(--brand);font-weight:800;margin-bottom:6px;">KEY CLINICAL CHANGES</strong>${keyHtml}`;
-
-      fetchICD10(selectedPt.Dx);
-      fetchSNOMED(selectedPt.Dx);
+    function findPatientById(id) {
+      return patients.find(p => p.ID === id) || null;
     }
 
-    // Treatments, labs, ai summary, molecular list
-    function renderTreatments() {
-      const container = document.getElementById('treatmentLines');
+    function populatePatientCard(pt) {
+      q('patientName').textContent = `${pt.Name} (${pt.ID})`;
+      q('patientMeta').textContent = `${pt.Age}Y • ${pt.Sex} • ${pt.PS || ''}`;
+      q('patientDx').textContent = `${pt.Dx} • Stage ${pt.Stage || '—'}`;
+      // short history bullets
+      const short = (pt.History || []).slice(0,3).map(h => `<li>${h}</li>`).join('');
+      q('patientShortHistory').innerHTML = short ? `<ul class="list-disc pl-5 text-slate-600">${short}</ul>` : '';
+      // codes
+      const icdStr = pt.ICD10 || '—';
+      q('codesBox').innerHTML = `<div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">ICD</div><div class="text-sm font-semibold">${icdStr}</div>`;
+      q('codesFull').innerHTML = `<div class="text-sm font-semibold">${icdStr}</div><div class="text-xs text-slate-400 mt-2">SNOMED lookup not available (client build)</div>`;
+    }
+
+    function renderKeyInsights(pt) {
+      const el = q('keyInsights');
+      // generate short insights similar to previous AI section
+      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length - 1] : null;
+      const insights = [];
+      if (latestEvent) insights.push(`Current disease status: ${latestEvent.status} (latest: ${latestEvent.date} — ${latestEvent.event}).`);
+      const activeTx = (pt.Treatments || []).find(t => t.end === "Current");
+      if (activeTx) insights.push(`On active therapy: Line ${activeTx.line} — ${activeTx.drug} (response: ${activeTx.resp}).`);
+      const abnormalLabs = (pt.Labs || []).filter(l => l.status === 'abnormal');
+      if (abnormalLabs.length) insights.push(`Abnormal labs: ${abnormalLabs.map(l => l.name + ' (' + l.val + ')').join(', ')}.`);
+      // display in card
+      el.innerHTML = `
+        <div class="text-[10px] font-bold text-indigo-700 uppercase tracking-widest mb-2">Key Clinical Insights</div>
+        <ul class="list-disc pl-5 text-sm text-slate-700">${insights.map(i => `<li>${i}</li>`).join('')}</ul>
+      `;
+      el.classList.remove('hidden');
+    }
+
+    function renderAISummary(pt) {
+      const el = q('aiSummary');
+      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length - 1] : null;
+      const parts = [];
+      if (latestEvent) parts.push(`<div><strong>Status</strong>: ${latestEvent.status} (${latestEvent.date})</div>`);
+      const activeTx = (pt.Treatments || []).find(t => t.end === "Current");
+      if (activeTx) parts.push(`<div><strong>Therapy</strong>: ${activeTx.drug} (Line ${activeTx.line})</div>`);
+      const abnormalLabs = (pt.Labs || []).filter(l => l.status === 'abnormal');
+      if (abnormalLabs.length) parts.push(`<div><strong>Labs</strong>: ${abnormalLabs.map(l => l.name + ' ' + l.val).join(', ')}</div>`);
+      el.innerHTML = parts.join('');
+    }
+
+    function renderTreatments(pt) {
+      const container = q('treatmentLines');
       container.innerHTML = '';
-      (selectedPt.Treatments || []).forEach((t, idx) => {
+      (pt.Treatments || []).forEach(t => {
         const card = document.createElement('div');
-        card.className = 'treatment-line';
+        card.className = 'p-4 border rounded-md bg-white';
         card.innerHTML = `
-          <div style="display:flex;gap:12px;align-items:center;">
-            <div style="width:54px;height:54px;border-radius:10px;background:${t.end==='Current'?'#ecfdf5':'#fff'};display:flex;align-items:center;justify-content:center;font-weight:900;color:${t.end==='Current'?'#064e3b':'#374151'}">${t.line}</div>
+          <div class="flex items-start justify-between">
             <div>
-              <div style="font-weight:800;color:#111827">${t.drug} ${t.end === 'Current' ? '<span style="background:#ecfdf5;color:#166534;padding:4px 8px;border-radius:6px;font-size:12px;font-weight:800;">Active</span>' : ''}</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:6px;">${t.start} — ${t.end} | ${getDuration(t.start,t.end)}</div>
+              <div class="text-[10px] text-slate-400 font-bold uppercase">Line ${t.line}</div>
+              <div class="text-sm font-black text-slate-800">${t.drug}</div>
+              <div class="text-xs text-slate-500 mt-1">${t.start} — ${t.end} • ${getDuration(t.start, t.end)}</div>
             </div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px;color:#94a3b8;font-weight:800">RESPONSE</div>
-            <div style="font-weight:800;color:#111827;margin-top:6px;">${t.resp}</div>
+            <div class="text-right">
+              <div class="text-[10px] text-slate-400 font-bold uppercase">Response</div>
+              <div class="text-sm font-semibold">${t.resp}</div>
+              <div class="text-[10px] text-slate-400 mt-1">Outcome</div>
+              <div class="text-sm font-semibold">${t.stop}</div>
+            </div>
           </div>
         `;
         container.appendChild(card);
       });
     }
 
-    function renderLabs() {
-      const container = document.getElementById('labsGrid');
+    function renderLabs(pt) {
+      const container = q('labsGrid');
       container.innerHTML = '';
-      const categories = {
-        'Liver Function': ['AST','ALT','ALP','Bilirubin','Albumin'],
-        'Renal & Metabolic': ['Creatinine','Sodium','Potassium']
-      };
-      Object.entries(categories).forEach(([cat, keywords]) => {
-        const matched = (selectedPt.Labs || []).filter(l => keywords.includes(l.name));
-        if(!matched.length) return;
-        const group = document.createElement('div');
-        group.style.padding='10px';
-        group.style.border='1px solid #f3f6fa';
-        group.style.borderRadius='8px';
-        group.innerHTML = `<div style="font-size:12px;color:#94a3b8;font-weight:800;margin-bottom:8px">${cat}</div>` + matched.map((l, i)=>`
-          <div style="margin-bottom:8px;">
-            <div style="font-size:13px;font-weight:800;color:${l.status==='abnormal'?'#b91c1c':'#111827'}">${l.name} — ${l.val} ${l.unit || ''}</div>
-            <div style="font-size:12px;color:#94a3b8;margin-top:4px">Range: ${l.range || 'n/a'} | Trend: ${l.trend || 'n/a'}</div>
-          </div>
-        `).join('');
-        container.appendChild(group);
+      (pt.Labs || []).forEach(l => {
+        const box = document.createElement('div');
+        const abnormal = l.status === 'abnormal';
+        box.className = `p-4 border rounded-md ${abnormal ? 'bg-red-50/40 border-red-200' : 'bg-white' }`;
+        box.innerHTML = `<div class="text-xs text-slate-500 font-bold">${l.name}</div>
+                         <div class="text-lg font-black ${abnormal ? 'text-red-700':'text-slate-800'}">${l.val} <span class="text-sm text-slate-400">${l.unit || ''}</span></div>
+                         <div class="text-xs text-slate-400 mt-2">Range: ${l.range || 'n/a'} | Trend: ${l.trend || 'n/a'}</div>`;
+        container.appendChild(box);
       });
-      // right column small preview
-      const small = document.getElementById('sidebarLabsSmall');
-      small.innerHTML = (selectedPt.Labs || []).slice(0,3).map(l => `<div style="margin-bottom:6px;font-weight:700">${l.name}: ${l.val} ${l.unit || ''}</div>`).join('');
     }
 
-    function generateAISummary(pt) {
-      const summary = [];
-      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length-1] : null;
-      if (latestEvent) summary.push(`Current disease status: ${latestEvent.status} (latest: ${latestEvent.date} — ${latestEvent.event}).`);
-      const activeTx = (pt.Treatments||[]).find(t => t.end === 'Current');
-      if (activeTx) summary.push(`On active therapy: Line ${activeTx.line} — ${activeTx.drug} (documented response: ${activeTx.resp}).`);
-      const abnormalLabs = (pt.Labs||[]).filter(l => l.status === 'abnormal');
-      if (abnormalLabs.length) summary.push(`Abnormal labs: ${abnormalLabs.map(l => `${l.name} (${l.val})`).join(', ')} — consider trend review.`);
-      if (pt.EGFR && pt.EGFR !== 'Negative') summary.push(`Molecular: ${pt.EGFR} detected — relevant to EGFR-targeted therapy.`);
-      if (pt.MSI && pt.MSI.toUpperCase()==='MSI-H') summary.push(`MSI-High — consider immunotherapy options.`);
-      return summary;
-    }
-
-    function generateNextSteps(pt) {
-      const steps = [];
-      const latestEvent = pt.Timeline && pt.Timeline.length ? pt.Timeline[pt.Timeline.length-1] : null;
-      if (latestEvent && latestEvent.status === 'PD') steps.push("Reassess progression pattern; consider restaging/imaging.");
-      if ((pt.Labs||[]).some(l => l.status==='abnormal')) steps.push("Trend & evaluate abnormal labs for toxicity or disease effect.");
-      if (!steps.length) steps.push("No immediate actions identified; maintain current plan and monitoring.");
-      return steps;
-    }
-
-    function renderAISummary() {
-      const points = generateAISummary(selectedPt);
-      const next = generateNextSteps(selectedPt);
-      document.getElementById('aiSummaryPoints').innerHTML = points.map(p => `<li style="margin-bottom:8px">${p}</li>`).join('');
-      document.getElementById('aiNextSteps').innerHTML = `<div style="font-weight:800;margin-bottom:6px">Clinical considerations (next steps)</div>` + next.map(n => `<div style="margin-bottom:6px">• ${n}</div>`).join('');
-    }
-
-    function renderMolecular() {
-      const el = document.getElementById('molecularList');
-      el.innerHTML = '';
-      ['EGFR','ALK','KRAS','PDL1','MSI','TMB','ER','PR','HER2'].forEach(m=>{
-        if(selectedPt[m]) el.innerHTML += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f6fa;"><div style="font-weight:700;color:#94a3b8">${m}</div><div style="font-weight:800;color:${selectedPt[m]!=='Negative'?'#4f46e5':'#6b7280'}">${selectedPt[m]}</div></div>`;
-      });
-      el.innerHTML += `<div style="margin-top:8px;font-size:12px;color:#6b7280">${selectedPt.Biology || ''}</div>`;
-    }
-
-    // timeline rendering
-    function renderTimeline() {
-      const list = document.getElementById('timelineContainer');
-      list.innerHTML = `<div style="position:relative;padding-left:10px;"><div style="position:absolute;left:7px;top:0;bottom:0;width:2px;background:#eef2ff;"></div></div>`;
-      const arr = (selectedPt.Timeline||[]).slice().sort((a,b)=> new Date(a.date)-new Date(b.date));
-      arr.forEach((t,i)=>{
-        const item = document.createElement('div');
-        item.style.padding='12px 8px';
-        item.style.marginBottom='12px';
-        item.style.position='relative';
-        item.style.borderLeft='0';
-        item.className = 'timeline-item';
-        item.innerHTML = `
-          <div style="position:absolute;left:0;top:8px;width:14px;height:14px;border-radius:50%;background:${i===arr.length-1?'#4f46e5':'#fff'};border:2px solid #cbd5e1"></div>
-          <div style="margin-left:28px;">
-            <div style="font-size:11px;color:#94a3b8;font-weight:800">${t.date} <span style="background:#eef2ff;color:#1e40af;padding:4px 6px;border-radius:6px;margin-left:8px;font-weight:800">${t.status}</span></div>
-            <div style="font-weight:800;color:#111827;margin-top:6px">${t.event}</div>
-            <div style="font-size:13px;color:#6b7280;margin-top:6px">${t.detail || ''}</div>
-          </div>
-        `;
-        list.appendChild(item);
-      });
-      renderBiomarkerChart();
-    }
-
-    function renderBiomarkerChart() {
-      const canvas = document.getElementById('biomarkerChart');
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      try { ctx.clearRect(0,0,canvas.width,canvas.height); } catch(e){}
-      const plotData = (selectedPt.Timeline||[]).filter(t => t.cea !== undefined);
-      const labels = plotData.map(p => p.date);
-      const data = plotData.map(p => p.cea);
-      try {
-        if (charts.length) { charts.forEach(c=>{try{c.destroy()}catch(e){}}); charts=[]; }
-        const gradient = ctx.createLinearGradient(0,0,0,300); gradient.addColorStop(0,'rgba(79,70,229,0.14)'); gradient.addColorStop(1,'rgba(79,70,229,0.0)');
-        const chart = new Chart(ctx, {
-          type:'line',
-          data:{ labels, datasets:[{ label:'CEA (ng/mL)', data, borderColor:'#4f46e5', backgroundColor:gradient, fill:true, tension:0.3 }]},
-          options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:true } }, scales:{ y:{ beginAtZero:true } } }
-        });
-        charts.push(chart);
-      } catch(e) { console.error('Chart error', e); }
-    }
-
-    // event & lab sidebar placeholder
-    function openModal(data) { alert(`${data.event} (${data.date}) — details view`); }
-    function closeSidebar(){}
-
-    // -----------------------
-    // Tab switching
-    // -----------------------
-    function switchTab(tab) {
-      ['overview','timeline'].forEach(t => {
-        const panel = document.getElementById(`panel-${t}`);
-        const btn = document.getElementById(`tab-${t}`);
-        if (t===tab) {
-          if (panel) panel.removeAttribute('hidden');
-          if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected','true'); }
-        } else {
-          if (panel) panel.setAttribute('hidden','');
-          if (btn) { btn.classList.remove('active'); btn.setAttribute('aria-selected','false'); }
+    function renderMolecular(pt) {
+      const container = q('molecularList');
+      container.innerHTML = '';
+      const keys = ['EGFR','ALK','KRAS','PDL1','MSI','TMB','ER','PR','HER2'];
+      keys.forEach(m => {
+        if (pt[m]) {
+          const el = document.createElement('div');
+          el.className = 'p-2 border rounded-md bg-white';
+          el.innerHTML = `<div class="text-xs text-slate-400 font-bold">${m}</div><div class="text-sm font-semibold text-slate-800">${pt[m]}</div>`;
+          container.appendChild(el);
         }
       });
-      // ensure charts re-render where necessary
-      if (tab === 'timeline') { setTimeout(()=>renderTimeline(), 60); }
+      // add biology note
+      if (pt.Biology) {
+        const note = document.createElement('div');
+        note.className = 'p-3 border rounded-md bg-slate-50 text-sm text-slate-700';
+        note.innerText = pt.Biology;
+        container.appendChild(note);
+      }
     }
 
-    // -----------------------
-    // Open in new tab & copy link
-    // -----------------------
-    function copyPatientLink() {
-      const link = `${location.origin}${location.pathname}?patient=${selectedPt.ID}`;
-      navigator.clipboard.writeText(link).then(()=> alert('Patient link copied to clipboard')).catch(()=> alert('Copy failed'));
+    function renderTimeline(pt) {
+      const list = q('timelineContainer');
+      list.innerHTML = '';
+      if (pt.Timeline && pt.Timeline.length) {
+        const sorted = [...pt.Timeline].sort((a,b) => new Date(a.date) - new Date(b.date));
+        sorted.forEach((t,i) => {
+          const item = document.createElement('div');
+          item.className = 'relative pl-10 pb-6';
+          item.innerHTML = `
+            <div class="timeline-dot absolute left-0 top-1"></div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase">${t.date}</div>
+            <div class="text-sm font-bold text-slate-800 mt-1">${t.event} <span class="text-[10px] text-slate-400 ml-2">${t.status}</span></div>
+            <div class="text-xs text-slate-500 mt-1">${t.detail || ''}</div>
+          `;
+          item.onclick = () => openSidebarEvent(t);
+          list.appendChild(item);
+        });
+      } else {
+        list.innerHTML = '<div class="text-sm text-slate-500">No timeline available.</div>';
+      }
     }
-    function openCurrentInNewTab() {
-      const url = `${location.origin}${location.pathname}?patient=${selectedPt.ID}`;
+
+    function renderBiomarkerChart(pt) {
+      const canvas = q('biomarkerChart');
+      if (!canvas) return;
+      try { if (biomarkerChart) biomarkerChart.destroy(); } catch(e){}
+      const plotData = (pt.Timeline || []).filter(t => t.cea !== undefined);
+      const labels = plotData.map(t => t.date);
+      const data = plotData.map(t => t.cea);
+      const ctx = canvas.getContext('2d');
+      biomarkerChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'CEA (ng/mL)', data, borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.08)', fill:true, tension:0.3 }] },
+        options: { responsive:true, maintainAspectRatio:false, plugins: { legend:{display:true} } }
+      });
+    }
+
+    // open event details (simple modal-like right-side injection)
+    function openSidebarEvent(t) {
+      alert(`${t.event} (${t.date})\n\n${(t.report && t.report.findings) ? t.report.findings : ''}`);
+    }
+
+    function openInNewTab() {
+      if (!selectedPt) return;
+      const url = `${location.pathname}?patient=${encodeURIComponent(selectedPt.ID)}`;
       window.open(url, '_blank');
     }
-    function openShareModal() { alert('Share placeholder — integrate with your endpoint.'); }
 
-    // Export PDF (basic)
+    function copyLinkToClipboard() {
+      if (!selectedPt) return;
+      const url = `${location.origin}${location.pathname}?patient=${encodeURIComponent(selectedPt.ID)}`;
+      navigator.clipboard.writeText(url).then(()=> alert('Link copied to clipboard'));
+    }
+
+    function getDuration(start, end) {
+      if (!start) return '';
+      const s = new Date(start + '-01');
+      const e = end === 'Current' ? new Date() : new Date((end || '') + '-01');
+      let months = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth());
+      if (months < 0) months = 0;
+      return `${months} months`;
+    }
+
+    /***************
+     * Main: load and render
+     ***************/
+    async function init() {
+      await loadPatientsData();
+      renderPatientSelect();
+      // read URL param
+      const param = getQueryParam('patient');
+      const defaultId = param && findPatientById(param) ? param : (patients[0] ? patients[0].ID : null);
+      if (defaultId) q('patientSelect').value = defaultId;
+
+      // wire events
+      q('patientSelect').addEventListener('change', loadPatientFromSelect);
+      q('openNewTabBtn').addEventListener('click', openInNewTab);
+      q('openNewTabBtnSide').addEventListener('click', openInNewTab);
+      q('copyLinkBtn').addEventListener('click', copyLinkToClipboard);
+      q('copyLinkBtnSide').addEventListener('click', copyLinkToClipboard);
+      q('exportBtn').addEventListener('click', exportPatientSummaryPDF);
+      q('tab-overview').addEventListener('click', () => switchTab('overview'));
+      q('tab-timeline').addEventListener('click', () => switchTab('timeline'));
+
+      // load initial patient
+      loadPatientFromSelect();
+      renderRecentPatientsRow();
+    }
+
+    function switchTab(tab) {
+      const tabs = ['overview','timeline'];
+      tabs.forEach(t => {
+        const btn = q('tab-' + t);
+        const panel = q('panel-' + t);
+        if (t === tab) {
+          btn.setAttribute('aria-selected','true'); btn.classList.add('bg-indigo-600','text-white'); btn.classList.remove('border');
+          panel.removeAttribute('hidden');
+        } else {
+          btn.setAttribute('aria-selected','false'); btn.classList.remove('bg-indigo-600','text-white'); btn.classList.add('border');
+          panel.setAttribute('hidden','');
+        }
+      });
+    }
+
+    function loadPatientFromSelect() {
+      const sel = q('patientSelect');
+      const id = sel.value;
+      const pt = findPatientById(id);
+      if (!pt) { alert('Patient not found'); return; }
+      selectedPt = pt;
+      setQueryParam('patient', pt.ID, true);
+      saveRecentPatient(pt.ID);
+      populatePatientCard(pt);
+      renderKeyInsights(pt);
+      renderAISummary(pt);
+      renderTreatments(pt);
+      renderLabs(pt);
+      renderMolecular(pt);
+      renderTimeline(pt);
+      renderBiomarkerChart(pt);
+      renderRecentPatientsRow();
+    }
+
+    /***************
+     * PDF export (simple snapshot)
+     ***************/
     async function exportPatientSummaryPDF() {
-      const wrapper = document.createElement('div'); wrapper.style.width='1000px'; wrapper.style.background='#fff'; wrapper.style.padding='24px';
-      wrapper.appendChild(document.getElementById('keyChanges').cloneNode(true));
-      wrapper.appendChild(document.getElementById('patientCard').cloneNode(true));
-      wrapper.appendChild(document.getElementById('panel-overview').cloneNode(true));
+      const wrapper = document.createElement('div');
+      wrapper.style.width = '1000px';
+      wrapper.style.padding = '24px';
+      wrapper.style.background = '#fff';
+      // snapshot patient header + overview
+      const header = q('patientCard').cloneNode(true);
+      const overview = q('panel-overview').cloneNode(true);
+      wrapper.appendChild(header);
+      wrapper.appendChild(overview);
       document.body.appendChild(wrapper);
       try {
-        const canvas = await html2canvas(wrapper, { scale: 2, useCORS: true });
-        const imgData = canvas.toDataURL('image/png');
+        const canvas = await html2canvas(wrapper, { scale: 2 });
+        const img = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation:'portrait', unit:'pt', format:'a4' });
-        const margin = 40; const pageWidth = pdf.internal.pageSize.getWidth();
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgWidth = pageWidth - margin*2;
+        const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+        const margin = 40;
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgProps = pdf.getImageProperties(img);
+        const imgWidth = pageWidth - margin * 2;
         const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-        pdf.addImage(imgData,'PNG',margin,margin,imgWidth,imgHeight);
+        pdf.addImage(img, 'PNG', margin, margin, imgWidth, imgHeight);
         pdf.save(`${selectedPt.ID}_summary.pdf`);
-      } catch (err) {
-        console.error(err); alert('PDF export failed'); 
+      } catch(e) {
+        console.error('PDF export', e);
+        alert('PDF export failed.');
       } finally {
         document.body.removeChild(wrapper);
       }
     }
 
-    // -----------------------
-    // Render orchestration
-    // -----------------------
-    function renderDashboard() {
-      clearCharts();
-      renderPatientSelector();
-      renderHeader();
-      renderTreatments();
-      renderLabs();
-      renderAISummary();
-      renderMolecular();
-      renderTimeline(); // populates timeline + chart
-      renderPatientTabsUI();
-      try { lucide.createIcons(); } catch(e){}
-    }
-
-    // -----------------------
-    // URL param and init
-    // -----------------------
-    function readUrlPatient() {
-      const qp = new URLSearchParams(location.search);
-      const id = qp.get('patient');
-      if (id) {
-        const p = findPatientById(id);
-        if (p) return p;
-      }
-      return null;
-    }
-
-    function init() {
-      loadOpenTabs();
-      const urlPt = readUrlPatient();
-      if (urlPt) selectedPt = urlPt;
-      else selectedPt = PATIENTS[0];
-      // ensure selected is in openTabs
-      if (!openTabs.includes(selectedPt.ID)) { openTabs.unshift(selectedPt.ID); if(openTabs.length>6) openTabs.pop(); saveOpenTabs(); }
-      renderDashboard();
-
-      // resize handling
-      window.addEventListener('resize', () => { charts.forEach(c=>{try{c.resize()}catch(e){} }); if(sidebarChartInstance) try{sidebarChartInstance.resize()}catch(e){}; });
-    }
-
-    // basic tab management in patient tabs UI
-    function closeTab(evt, id) {
-      evt.stopPropagation();
-      openTabs = openTabs.filter(x => x !== id);
-      if (selectedPt.ID === id && openTabs.length) {
-        selectedPt = findPatientById(openTabs[0]) || PATIENTS[0];
-      }
-      saveOpenTabs();
-      renderDashboard();
-    }
-
-    // load from selector
-    function loadPatient() {
-      const selector = document.getElementById('patientSelect');
-      const found = PATIENTS.find(p => p.ID === selector.value);
-      if (found) {
-        selectedPt = found;
-        // ensure in open tabs list
-        if (!openTabs.includes(found.ID)) { openTabs.unshift(found.ID); if(openTabs.length>6) openTabs.pop(); saveOpenTabs(); }
-      }
-      renderDashboard();
-    }
-
-    // initial boot
-    window.onload = init;
+    window.addEventListener('load', init);
+    window.addEventListener('resize', ()=> { if (biomarkerChart) try{biomarkerChart.resize()}catch(e){} });
   </script>
 </body>
 </html>
