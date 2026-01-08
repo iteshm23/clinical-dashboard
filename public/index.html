@@ -900,162 +900,123 @@
         toggleSidebar('labSidebar', false); 
     }
 
-    /**
-     * ====================================================================================
-     * PDF EXPORT ENGINE (Custom Full-Report Builder)
-     * ====================================================================================
-     */
     /* ==========================================================================
-   ADVANCED PDF EXPORT ENGINE (Multi-Page, Full Capture)
+   ADVANCED PDF EXPORT ENGINE (Multi-Page & Full Content)
    ========================================================================== */
 document.getElementById('exportBtn').addEventListener('click', async () => {
     const btn = document.getElementById('exportBtn');
     const originalText = btn.innerHTML;
     
-    // 1. UI Feedback
     btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating Full Report...`;
     btn.disabled = true;
 
     try {
-        // -----------------------------------------------------------------------
-        // STEP 1: PREPARE CHART IMAGES
-        // We must convert live Chart.js canvases to images, otherwise they often 
-        // render as blank spaces in html2canvas.
-        // -----------------------------------------------------------------------
+        // 1. Capture Chart Data URLs before cloning
         const biomarkerCanvas = document.getElementById('biomarkerChart');
         const biomarkerImgData = biomarkerCanvas.toDataURL('image/png');
         
-        // -----------------------------------------------------------------------
-        // STEP 2: BUILD THE VIRTUAL REPORT (Off-Screen)
-        // We reconstruct the entire dashboard linearly so it fits on A4 paper.
-        // -----------------------------------------------------------------------
+        // 2. Create the Hidden Virtual Report Container
         const container = document.createElement('div');
         container.id = 'pdf-generator-container';
-        // Force specific width to ensure consistent font sizing/layout in PDF
+        // Force a specific width (1100px) that translates well to A4 dimensions
         container.style.cssText = "position: absolute; left: -9999px; top: 0; width: 1100px; background: white; z-index: -100; font-family: 'Inter', sans-serif; color: #0f172a;";
         document.body.appendChild(container);
 
-        // -- Clone Data Sections --
-        // We clone nodes to avoid breaking the live UI
+        // 3. Clone and assemble ALL dashboard sections
         const headerHtml = document.getElementById('topSummary').innerHTML;
         const triageHtml = document.getElementById('triageBadge').innerHTML;
-        const aiSummaryHtml = document.getElementById('ai-findings-panel').innerHTML;
+        const aiFindingsHtml = document.getElementById('aiSummaryPoints').innerHTML;
         const aiPlanHtml = document.getElementById('aiStepsList').innerHTML;
-        
-        // Panels: We strip the 'hidden' classes to force them visible
         const treatmentHtml = document.getElementById('treatmentLines').innerHTML;
         const labsHtml = document.getElementById('labsGrid').innerHTML;
         const molecularHtml = document.getElementById('molecularList').innerHTML;
         const molecularBio = document.getElementById('molecularBiology').innerText;
         const timelineList = document.getElementById('timelineContainer').innerHTML;
 
-        // -----------------------------------------------------------------------
-        // STEP 3: ASSEMBLE THE HTML STRUCTURE
-        // -----------------------------------------------------------------------
+        // 4. Construct the Full HTML Template
         container.innerHTML = `
             <div class="p-12">
-                <div class="flex justify-between items-center border-b-2 border-slate-900 pb-6 mb-8">
+                <div class="flex justify-between items-center border-b-4 border-indigo-600 pb-6 mb-8">
                     <div>
-                        <h1 class="text-3xl font-black text-slate-900">OncoReview <span class="text-indigo-600">TAPM</span></h1>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Comprehensive Clinical Abstract</p>
+                        <h1 class="text-4xl font-black text-slate-900">OncoReview <span class="text-indigo-600">TAPM</span></h1>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">Full Clinical Report</p>
                     </div>
                     <div class="scale-125 origin-right">${triageHtml}</div>
                 </div>
 
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8">
-                    <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Patient Demographics & Context</h3>
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 mb-8">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Patient Demographics</h3>
                     ${headerHtml}
                 </div>
 
-                <div class="mb-10 border border-indigo-100 rounded-xl overflow-hidden">
-                    <div class="bg-indigo-50/50 p-3 border-b border-indigo-100 flex items-center gap-2">
-                        <span class="text-xs font-black uppercase text-indigo-800">AI Clinical Perspective</span>
-                    </div>
-                    <div class="grid grid-cols-2 divide-x divide-indigo-50">
-                        <div class="p-5">${aiSummaryHtml}</div>
-                        <div class="p-5 bg-slate-50/30">
-                            <h4 class="text-[10px] font-black uppercase text-slate-400 mb-2">Suggested Plan</h4>
-                            <ul class="space-y-2 text-sm">${aiPlanHtml}</ul>
+                <h2 class="text-2xl font-black text-slate-900 mb-6 border-b-2 pb-2">1. Clinical Overview</h2>
+                <div class="grid grid-cols-12 gap-8 mb-12">
+                    <div class="col-span-8 space-y-8">
+                        <div class="border-2 rounded-2xl p-6">
+                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Treatment Trajectory</h3>
+                            ${treatmentHtml}
+                        </div>
+                        <div class="border-2 rounded-2xl p-6">
+                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Safety & Monitoring</h3>
+                            ${labsHtml}
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-8">
-                    <h2 class="text-xl font-black text-slate-900 mb-4 border-b pb-2 flex items-center gap-2">
-                        <span>1. Clinical Overview</span>
-                    </h2>
-                    <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-8 space-y-6">
-                            <div class="border rounded-xl p-4">
-                                <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Treatment Trajectory</h3>
-                                <div class="space-y-4">${treatmentHtml}</div>
-                            </div>
-                            <div class="border rounded-xl p-4">
-                                <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Safety & Monitoring</h3>
-                                ${labsHtml}
-                            </div>
-                        </div>
-                        <div class="col-span-4">
-                            <div class="border rounded-xl p-4 h-full bg-slate-50/30">
-                                <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Molecular Profile</h3>
-                                <div class="space-y-2">${molecularHtml}</div>
-                                <div class="mt-4 p-3 bg-white border rounded text-[10px] italic text-slate-500">
-                                    ${molecularBio}
-                                </div>
-                            </div>
+                    <div class="col-span-4">
+                        <div class="border-2 rounded-2xl p-6 bg-slate-50/50">
+                            <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Molecular Profile</h3>
+                            ${molecularHtml}
+                            <p class="mt-4 text-xs italic text-slate-600">${molecularBio}</p>
                         </div>
                     </div>
                 </div>
 
-                <div style="height: 50px;"></div>
+                <div style="height: 60px;"></div>
 
-                <div>
-                    <h2 class="text-xl font-black text-slate-900 mb-6 border-b pb-2">2. Longitudinal History</h2>
-                    <div class="grid grid-cols-12 gap-8">
-                        <div class="col-span-5">
-                            <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Clinical Events Log</h3>
-                            <div class="border-l-2 border-slate-200 pl-4 space-y-4">
-                                ${timelineList}
-                            </div>
+                <h2 class="text-2xl font-black text-slate-900 mb-6 border-b-2 pb-2">2. Longitudinal History</h2>
+                <div class="grid grid-cols-12 gap-8">
+                    <div class="col-span-5">
+                        <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Clinical Events</h3>
+                        <div class="border-l-4 border-slate-200 pl-6 space-y-6">
+                            ${timelineList}
                         </div>
-                        <div class="col-span-7">
-                            <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Tumor Marker Kinetics (CEA)</h3>
-                            <div class="border rounded-xl p-4 bg-white">
-                                <img src="${biomarkerImgData}" style="width: 100%; height: auto; display: block;" />
-                            </div>
+                    </div>
+                    <div class="col-span-7">
+                        <h3 class="text-sm font-bold uppercase text-slate-500 mb-4">Tumor Kinetics (CEA)</h3>
+                        <div class="border-2 rounded-2xl p-6 bg-white shadow-sm">
+                            <img src="${biomarkerImgData}" style="width: 100%; height: auto; display: block;" />
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-12 pt-6 border-t border-slate-200 text-center">
-                    <p class="text-[10px] text-slate-400">Generated by OncoReview TAPM System • ${new Date().toLocaleString()}</p>
+                <div class="mt-20 pt-8 border-t border-slate-200 text-center">
+                    <p class="text-xs text-slate-400 font-bold">Generated by OncoReview TAPM System • ${new Date().toLocaleString()}</p>
                 </div>
             </div>
         `;
 
-        // -----------------------------------------------------------------------
-        // STEP 4: RENDER TO PDF
-        // -----------------------------------------------------------------------
-        const canvas = await html2canvas(container, { scale: 2, useCORS: true });
-        const imgData = canvas.toDataURL('image/png');
+        // 5. Use html2canvas to capture the full length of the container
+        const canvas = await html2canvas(container, { 
+            scale: 2, 
+            useCORS: true,
+            windowWidth: 1100 
+        });
         
+        const imgData = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-        
         const imgProps = pdf.getImageProperties(imgData);
         const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
         
         let heightLeft = imgHeight;
         let position = 0;
 
-        // Add first page
+        // 6. Slice the long image into multiple A4 pages
         pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
         heightLeft -= pdfHeight;
 
-        // Add subsequent pages if content overflows
         while (heightLeft >= 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
@@ -1066,10 +1027,9 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
         pdf.save(`${selectedPt.ID}_Full_Clinical_Report.pdf`);
 
     } catch (err) {
-        console.error("PDF Export Failed:", err);
-        alert("PDF Generation failed. Please check the console for details.");
+        console.error("PDF Error:", err);
+        alert("Report generation failed. Please check the console.");
     } finally {
-        // Cleanup
         document.getElementById('pdf-generator-container')?.remove();
         btn.innerHTML = originalText;
         btn.disabled = false;
