@@ -1,0 +1,1077 @@
+[
+  {
+    "ID": "PT-101",
+    "Name": "Eleanor Vance",
+    "Dx": "NSCLC (Adeno)",
+    "Stage": "IVA",
+    "Age": 62,
+    "Sex": "F",
+    "Line": 2,
+    "PS": "ECOG 1",
+    "History": [
+      "CEA normalized from 12.5 to 4.2 following L2 transition.",
+      "Primary mass reduced 50% on 2024-12-08 CT."
+    ],
+    "EGFR": "Exon 19 del",
+    "ALK": "Negative",
+    "KRAS": "Negative",
+    "PDL1": "75%",
+    "MSI": "MSS",
+    "TMB": "8",
+    "Biology": "Informational: EGFR exon 19 deletion is associated with potential sensitivity to 3rd-generation EGFR TKIs.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "Carbo + Pemetrexed",
+        "start": "2023-03",
+        "end": "2024-05",
+        "resp": "SD",
+        "stop": "Progression",
+        "extended": {
+          "rationale": "Standard 1L systemic therapy initiated pending NGS results. Histology consistent with non-squamous disease.",
+          "dosing": "Carboplatin AUC 5 + Pemetrexed 500mg/m2 q3w x 4 cycles -> Maint Pemetrexed.",
+          "toxicity": "Course complicated by Grade 2 anemia requiring support. G1 fatigue persistent. No dose reductions.",
+          "outcome": "Achieved SD for 14 months. Progression marked by development of contralateral lung nodules while on maintenance."
+        }
+      },
+      {
+        "line": 2,
+        "drug": "Osimertinib 80mg",
+        "start": "2024-07",
+        "end": "Current",
+        "resp": "PR",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Transitioned to targeted therapy following identification of EGFR Exon 19 deletion on re-biopsy.",
+          "dosing": "Osimertinib 80mg PO Daily.",
+          "toxicity": "Grade 1 dry skin and paronychia, managed with topical steroids. Grade 2 diarrhea (intermittent).",
+          "outcome": "Deep Partial Response (PR) confirmed on Dec 2024 scans. Primary tumor volume reduced >50%."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2023-01-15",
+        "event": "Initial Presentation",
+        "status": "Baseline",
+        "cea": 1.8,
+        "detail": "Persistent cough and hemoptysis.",
+        "report": {
+          "findings": "Patient presented with 3-week history of non-productive cough and trace hemoptysis. ECOG 0. Auscultation reveals diminished breath sounds in RUL.",
+          "impression": "Suspicion of pulmonary malignancy vs tuberculosis. CXR confirms opacity.",
+          "plan": "Referral to Pulmonology for CT Chest and bronchoscopy."
+        }
+      },
+      {
+        "date": "2023-03-12",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 2.5,
+        "detail": "Initial T2aN1M0. Adeno confirmed.",
+        "report": {
+          "findings": "CT Chest: 3.2cm spiculated mass RUL. 1.1cm Hilar lymph node. No distant mets. Biopsy: Adenocarcinoma, TTF-1 positive.",
+          "impression": "Stage IIIA (T2a N1 M0) NSCLC. Unresectable due to hilar involvement.",
+          "plan": "Initiate systemic chemotherapy (Carboplatin/Pemetrexed). Send NGS panel."
+        }
+      },
+      {
+        "date": "2023-09-20",
+        "event": "Interim Scan",
+        "status": "SD",
+        "cea": 3.1,
+        "detail": "Stable disease on Chemotherapy.",
+        "report": {
+          "findings": "Primary mass stable at 3.1cm (Prev 3.2cm). Hilar node stable. No new pulmonary nodules. Hepatic parenchyma clear.",
+          "impression": "Stable Disease (SD) per RECIST 1.1.",
+          "plan": "Continue maintenance Pemetrexed. Monitor renal function."
+        }
+      },
+      {
+        "date": "2024-05-10",
+        "event": "Progression",
+        "status": "PD",
+        "cea": 12.5,
+        "detail": "New contralateral lung nodules.",
+        "report": {
+          "findings": "Interval development of 3 new solid nodules in Left Lower Lobe (largest 9mm). Primary RUL mass increased to 4.2cm. Mild pleural effusion.",
+          "impression": "Radiological Progression (PD). Conversion to Stage IVA.",
+          "plan": "Discontinue Chemo. Re-biopsy for resistance mechanisms. Liquid biopsy sent."
+        }
+      },
+      {
+        "date": "2024-07-01",
+        "event": "Therapy Switch",
+        "status": "Baseline",
+        "cea": 10.8,
+        "detail": "Initiated Osimertinib.",
+        "report": {
+          "findings": "NGS confirms EGFR Exon 19 Deletion (Sensitizing). T790M Negative. PD-L1 75%.",
+          "impression": "Targetable driver mutation identified. Candidate for 3rd gen TKI.",
+          "plan": "Start Osimertinib 80mg QD. Monitor for QTc prolongation and diarrhea."
+        }
+      },
+      {
+        "date": "2024-12-08",
+        "event": "Response Scan",
+        "status": "PR",
+        "cea": 4.2,
+        "detail": "Primary mass reduced 4.2cm -> 2.1cm.",
+        "report": {
+          "findings": "Significant interval reduction in RUL mass (4.2cm -> 2.1cm). Contralateral nodules resolved or calcified. Effusion resolved.",
+          "impression": "Partial Response (PR). Excellent tolerance to TKI.",
+          "plan": "Continue Osimertinib. Next scan in 3 months."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "AST", "val": "58", "unit": "U/L", "range": "8 - 48", "history": [22, 35, 45, 52, 58], "trend": "up", "status": "abnormal" },
+      { "name": "ALT", "val": "72", "unit": "U/L", "range": "7 - 55", "history": [28, 42, 55, 68, 72], "trend": "up", "status": "abnormal" },
+      { "name": "Creatinine", "val": "1.0", "unit": "mg/dL", "range": "0.7 - 1.3", "history": [0.9, 1.0, 0.9, 1.0, 1.0], "trend": "stable", "status": "normal" }
+    ]
+  },
+  {
+    "ID": "PT-102",
+    "Name": "Arthur Morgan",
+    "Dx": "NSCLC (Squamous)",
+    "Stage": "IVB",
+    "Age": 64,
+    "Sex": "M",
+    "Line": 1,
+    "PS": "ECOG 2",
+    "History": ["Stable clinical state sustained for 14 months.", "Gradual decline in renal markers identified."],
+    "EGFR": "Negative",
+    "ALK": "Negative",
+    "KRAS": "G12C",
+    "PDL1": "90%",
+    "MSI": "MSS",
+    "Biology": "Informational: High PD-L1 (90%) is a biological indicator associated with Pembrolizumab response.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "Pembrolizumab q3w",
+        "start": "2023-01",
+        "end": "Current",
+        "resp": "SD",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "First-line monotherapy indicated for PD-L1 TPS > 50% (Patient 90%) in absence of driver mutations.",
+          "dosing": "Pembrolizumab 200mg IV q3w.",
+          "toxicity": "Grade 1 hypothyroidism (TSH elevated), started Levothyroxine. No pneumonitis or colitis.",
+          "outcome": "Durable Stable Disease (SD). Bone metastases sclerotic. Adrenal lesion stable."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2022-11-18",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 8.0,
+        "detail": "Stage IIIA. Surgery deferred.",
+        "report": {
+          "findings": "4cm RUL mass abutting mediastinum. N2 disease confirmed via EBUS. Squamous histology.",
+          "impression": "Locally advanced NSCLC. Poor surgical candidate due to COPD.",
+          "plan": "Refer to Medical Oncology. Molecular testing pending."
+        }
+      },
+      {
+        "date": "2023-01-05",
+        "event": "Metastatic Event",
+        "status": "PD",
+        "cea": 11.5,
+        "detail": "Bone/Adrenal spread.",
+        "report": {
+          "findings": "PET Scan: New FDG-avid lesion L3 vertebra (SUV 8.2) and Right Adrenal (3cm).",
+          "impression": "Upstaging to IVB. Symptomatic back pain consistent with L3 met.",
+          "plan": "Palliative RT to L3. Initiate Pembrolizumab (PD-L1 90%)."
+        }
+      },
+      {
+        "date": "2023-06-12",
+        "event": "Interim Check",
+        "status": "SD",
+        "cea": 11.0,
+        "detail": "Pain resolved.",
+        "report": {
+          "findings": "Patient reports resolution of back pain post-RT. ECOG improving to 1. Adrenal met stable.",
+          "impression": "Clinical benefit achieved.",
+          "plan": "Continue Pembrolizumab. TSH monitoring."
+        }
+      },
+      {
+        "date": "2024-02-20",
+        "event": "Annual Review",
+        "status": "SD",
+        "cea": 11.8,
+        "detail": "Long-term stability.",
+        "report": {
+          "findings": "Primary lung mass stable at 3.8cm (cavitary changes). No new bone lesions. Renal function borderline (Cr 1.1).",
+          "impression": "Durable SD. Renal decline likely comorbidity related.",
+          "plan": "Refer to Nephrology."
+        }
+      },
+      {
+        "date": "2024-12-18",
+        "event": "Recent Review",
+        "status": "SD",
+        "cea": 12.8,
+        "detail": "Stable thoracic burden.",
+        "report": {
+          "findings": "Thoracic disease unchanged. Adrenal lesion stable at 2.8cm. L3 sclerosis (healing). No new active lesions.",
+          "impression": "Sustained Stable Disease (SD).",
+          "plan": "Continue Pembrolizumab. Monitor Creatinine (1.2)."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "Creatinine", "val": "1.2", "unit": "mg/dL", "range": "0.7 - 1.3", "history": [0.9, 1.0, 1.1, 1.1, 1.2], "trend": "up", "status": "normal" },
+      { "name": "Hb", "val": "9.6", "unit": "g/dL", "range": "13.5 - 17.5", "history": [12.0, 11.2, 10.5, 10.0, 9.6], "trend": "down", "status": "abnormal" },
+      { "name": "CEA", "val": "12.8", "unit": "ng/mL", "range": "< 3.0", "history": [8.0, 11.5, 10.2, 11.0, 12.8], "trend": "stable", "status": "abnormal" }
+    ]
+  },
+  {
+    "ID": "PT-103",
+    "Name": "Hazel Grace",
+    "Dx": "NSCLC (Adeno)",
+    "Stage": "IVB",
+    "Age": 41,
+    "Sex": "F",
+    "Line": 2,
+    "PS": "ECOG 0",
+    "History": ["Identified CNS progression Dec 2024.", "Lungs remain radiologically stable."],
+    "ALK": "Positive",
+    "EGFR": "Negative",
+    "KRAS": "Negative",
+    "PDL1": "10%",
+    "Biology": "Informational: ALK rearrangement is a biological target for CNS-penetrant TKIs like Alectinib.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "Crizotinib",
+        "start": "2021-08",
+        "end": "2024-02",
+        "resp": "PR",
+        "stop": "CNS Progression",
+        "extended": {
+          "rationale": "First-generation ALK inhibitor initiated at diagnosis of metastatic disease.",
+          "dosing": "Crizotinib 250mg BID.",
+          "toxicity": "Visual disturbances (trails of light) noted initially, resolved. G1 Edema.",
+          "outcome": "Good systemic control for 2.5 years. Failure isolated to CNS (brain mets) due to poor BBB penetration."
+        }
+      },
+      {
+        "line": 2,
+        "drug": "Alectinib 600mg BID",
+        "start": "2024-03",
+        "end": "Current",
+        "resp": "PD",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Second-generation ALK TKI chosen for superior CNS penetration following brain relapse.",
+          "dosing": "Alectinib 600mg BID with food.",
+          "toxicity": "Well tolerated. Mild myalgia (G1) and constipation.",
+          "outcome": "Initially cleared CNS disease. Recent breakthrough (Jan 2025) with new cerebellar lesion despite therapy."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2021-08-04",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 1.2,
+        "detail": "Early stage IA adeno.",
+        "report": {
+          "findings": "Incidental 1.2cm nodule RLL. Resected. ALK+ confirmed on IHC and FISH.",
+          "impression": "Stage IA Adenocarcinoma. Margins negative.",
+          "plan": "Surveillance. No adjuvant therapy indicated."
+        }
+      },
+      {
+        "date": "2022-08-04",
+        "event": "Surveillance",
+        "status": "CR",
+        "cea": 1.1,
+        "detail": "One year NED.",
+        "report": {
+          "findings": "CT Chest/Abd: No evidence of disease. Patient asymptomatic.",
+          "impression": "Disease-free interval > 12 months.",
+          "plan": "Continue annual surveillance."
+        }
+      },
+      {
+        "date": "2024-03-01",
+        "event": "Recurrence",
+        "status": "PD",
+        "cea": 3.5,
+        "detail": "Distal lung/brain spread.",
+        "report": {
+          "findings": "MRI Brain: 2 parietal lesions (1.1cm, 0.9cm) with edema. CT Chest: Multiple miliary nodules.",
+          "impression": "Systemic and CNS relapse.",
+          "plan": "Start Alectinib (CNS penetrant). Defer WBRT."
+        }
+      },
+      {
+        "date": "2024-06-15",
+        "event": "Response",
+        "status": "PR",
+        "cea": 2.1,
+        "detail": "CNS lesions regressed.",
+        "report": {
+          "findings": "MRI Brain: Parietal lesions reduced to <4mm calcifications. Lung nodules stable/smaller.",
+          "impression": "Excellent intracranial response to Alectinib.",
+          "plan": "Continue current TKI dosage."
+        }
+      },
+      {
+        "date": "2025-01-10",
+        "event": "Progression",
+        "status": "PD",
+        "cea": 6.1,
+        "detail": "New 0.8cm brain lesion.",
+        "report": {
+          "findings": "MRI Brain: New 8mm cerebellar lesion. Previous parietal lesions calcified. Extracranial disease stable.",
+          "impression": "Isolated CNS Progression (Oligoprogression).",
+          "plan": "Refer for Stereotactic Radiosurgery (SRS). Continue Alectinib."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "6.1", "unit": "ng/mL", "range": "< 3.0", "history": [1.2, 1.1, 3.5, 2.1, 6.1], "trend": "up", "status": "abnormal" },
+      { "name": "WBC", "val": "5.2", "unit": "10^3/uL", "range": "4.5 - 11.0", "history": [4.8, 5.0, 5.1, 5.0, 5.2], "trend": "stable", "status": "normal" },
+      { "name": "ALT", "val": "28", "unit": "U/L", "range": "7 - 55", "history": [22, 25, 30, 26, 28], "trend": "stable", "status": "normal" }
+    ]
+  },
+  {
+    "ID": "PT-104",
+    "Name": "Sarah Connor",
+    "Dx": "Breast (HER2+)",
+    "Stage": "IVB",
+    "Age": 48,
+    "Sex": "F",
+    "Line": 2,
+    "PS": "ECOG 1",
+    "History": ["Hepatic response (PR) confirmed Nov 2024.", "Acute AST/ALT rise after last cycle."],
+    "HER2": "Positive (3+)",
+    "MSI": "MSS",
+    "PDL1": "5%",
+    "Biology": "Informational: HER2 overexpression is associated with sensitivity to HER2-directed antibody-drug conjugates.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "THP Regimen",
+        "start": "2022-04",
+        "end": "2024-04",
+        "resp": "SD",
+        "stop": "Progression",
+        "extended": {
+          "rationale": "Standard 1L dual-blockade (Trastuzumab + Pertuzumab) with Taxane for de novo metastatic HER2+ disease.",
+          "dosing": "Docetaxel x 6 cycles -> HP Maintenance q3w.",
+          "toxicity": "G2 Neuropathy on Taxane (resolved). LVEF maintained >55% on maintenance.",
+          "outcome": "Progression in liver after 24 months of control."
+        }
+      },
+      {
+        "line": 2,
+        "drug": "T-DXd (Enhertu)",
+        "start": "2024-05",
+        "end": "Current",
+        "resp": "PR",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Next-generation ADC indicated for HER2+ metastatic breast cancer post-anti-HER2 therapy.",
+          "dosing": "Trastuzumab Deruxtecan 5.4 mg/kg q3w.",
+          "toxicity": "G2 Nausea (managed with Olanzapine). Recent AST/ALT elevation (Grade 2) under investigation.",
+          "outcome": "Robust Partial Response. Metabolic resolution of liver metastases."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2022-04-15",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 5.5,
+        "detail": "Metastatic HER2+ breast.",
+        "report": {
+          "findings": "Palpable breast mass. CT: Multiple liver mets (Seg IV, V) and L2/L4 bone mets.",
+          "impression": "De novo Stage IV HER2+ Breast Cancer.",
+          "plan": "Start Taxane + Trastuzumab + Pertuzumab (CLEOPATRA regimen)."
+        }
+      },
+      {
+        "date": "2022-10-01",
+        "event": "Check-in",
+        "status": "SD",
+        "cea": 4.8,
+        "detail": "Maintenance Phase.",
+        "report": {
+          "findings": "Chemotherapy (Docetaxel) completed. Liver lesions stable. Alopecia resolving.",
+          "impression": "Transitioning to HP maintenance.",
+          "plan": "Echo q3 months to monitor LVEF."
+        }
+      },
+      {
+        "date": "2024-04-20",
+        "event": "Progression",
+        "status": "PD",
+        "cea": 8.5,
+        "detail": "Increased liver burden.",
+        "report": {
+          "findings": "CT Abdomen: Liver lesions increased in size (2cm -> 3.5cm). New satellite lesions.",
+          "impression": "Hepatic progression. Cardiac function normal (LVEF 60%).",
+          "plan": "Switch to T-DXd (Enhertu)."
+        }
+      },
+      {
+        "date": "2024-08-10",
+        "event": "Interim Scan",
+        "status": "PR",
+        "cea": 4.1,
+        "detail": "Good initial response.",
+        "report": {
+          "findings": "Liver lesions reduced by 30%. Patient reports nausea G2.",
+          "impression": "Early Partial Response.",
+          "plan": "Add anti-emetics. Continue current dose."
+        }
+      },
+      {
+        "date": "2024-11-20",
+        "event": "Response",
+        "status": "PR",
+        "cea": 2.1,
+        "detail": "Decreased FDG in liver.",
+        "report": {
+          "findings": "PET Scan: Complete metabolic resolution of liver lesions. Bone mets sclerotic.",
+          "impression": "Deep Partial Response (PR).",
+          "plan": "Continue T-DXd. Monitor LFTs closely."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "AST", "val": "110", "unit": "U/L", "range": "8 - 48", "history": [25, 28, 45, 60, 110], "trend": "up", "status": "abnormal" },
+      { "name": "ALT", "val": "125", "unit": "U/L", "range": "7 - 55", "history": [30, 32, 48, 70, 125], "trend": "up", "status": "abnormal" },
+      { "name": "CEA", "val": "2.1", "unit": "ng/mL", "range": "< 3.0", "history": [5.5, 4.2, 8.5, 4.0, 2.1], "trend": "down", "status": "normal" }
+    ]
+  },
+  {
+    "ID": "PT-105",
+    "Name": "Sarah Smith",
+    "Dx": "Breast (TNBC)",
+    "Stage": "IV",
+    "Age": 38,
+    "Sex": "F",
+    "Line": 2,
+    "PS": "ECOG 1",
+    "History": ["Treatment failure on 2L Capecitabine Dec 2024.", "Rapid lung progression detected."],
+    "MSI": "MSS",
+    "PDL1": "2%",
+    "TMB": "6",
+    "PIK3CA": "Mutant",
+    "Biology": "Informational: Triple Negative phenotype is associated with high recurrence risk and cytotoxic sensitivity.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "AC-T Chemo",
+        "start": "2023-01",
+        "end": "2024-07",
+        "resp": "CR",
+        "stop": "Completion",
+        "extended": {
+          "rationale": "Adjuvant curative-intent chemotherapy for Stage I TNBC.",
+          "dosing": "Dose Dense AC x 4 -> Paclitaxel x 4.",
+          "toxicity": "Completed as planned. G2 Alopecia, G1 Neuropathy.",
+          "outcome": "Clinical CR at completion. Relapsed within 6 months of finishing."
+        }
+      },
+      {
+        "line": 2,
+        "drug": "Capecitabine",
+        "start": "2024-08",
+        "end": "Current",
+        "resp": "PD",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Palliative systemic therapy for metastatic recurrence.",
+          "dosing": "Capecitabine 1000mg/m2 BID 14 days on / 7 off.",
+          "toxicity": "Hand-Foot Syndrome Grade 2 requiring dose interruption.",
+          "outcome": "Primary Refractory. Progression in lungs and liver after only 3 cycles."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2023-01-20",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 1.0,
+        "detail": "Stage IA post-op.",
+        "report": {
+          "findings": "Lumpectomy bed clean. Nodes 0/14. ER/PR/HER2 Negative.",
+          "impression": "Stage IA TNBC.",
+          "plan": "Adjuvant AC-T chemotherapy completed."
+        }
+      },
+      {
+        "date": "2023-09-15",
+        "event": "Surveillance",
+        "status": "CR",
+        "cea": 1.2,
+        "detail": "Post-chemo check.",
+        "report": {
+          "findings": "Mammogram: negative. Physical exam normal.",
+          "impression": "NED.",
+          "plan": "Return to clinic in 6 months."
+        }
+      },
+      {
+        "date": "2024-07-15",
+        "event": "Recurrence",
+        "status": "PD",
+        "cea": 4.5,
+        "detail": "Lung and liver spread.",
+        "report": {
+          "findings": "CT Chest/Abd: Multiple cannonball lung mets. Liver capsular implants. Biopsy confirms TNBC recurrence.",
+          "impression": "Metastatic Recurrence. DFI < 12 months (Platinum resistant?).",
+          "plan": "Start Capecitabine. Send ctDNA."
+        }
+      },
+      {
+        "date": "2024-09-30",
+        "event": "Toxicity Check",
+        "status": "SD",
+        "cea": 5.8,
+        "detail": "Hand-Foot Syndrome.",
+        "report": {
+          "findings": "Grade 2 Palmar-Plantar Erythrodysesthesia. Painful walking.",
+          "impression": "Drug toxicity.",
+          "plan": "Dose reduce Capecitabine by 25%. Topical urea cream."
+        }
+      },
+      {
+        "date": "2024-12-01",
+        "event": "Progression",
+        "status": "PD",
+        "cea": 8.5,
+        "detail": "New lung nodules.",
+        "report": {
+          "findings": ">20% increase in sum of diameters of lung lesions. New moderate pleural effusion.",
+          "impression": "Progression on Capecitabine. PIK3CA mutation detected in liquid biopsy.",
+          "plan": "Evaluate for clinical trial or Sacituzumab Govitecan."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "Hb", "val": "10.5", "unit": "g/dL", "range": "12.0 - 15.5", "history": [13.2, 12.8, 11.5, 11.0, 10.5], "trend": "down", "status": "abnormal" },
+      { "name": "CA 27-29", "val": "88", "unit": "U/mL", "range": "< 38", "history": [15, 18, 45, 60, 88], "trend": "up", "status": "abnormal" },
+      { "name": "Albumin", "val": "Missing", "unit": "g/dL", "range": "3.5 - 5.0", "history": [], "trend": "none", "status": "missing" }
+    ]
+  },
+  {
+    "ID": "PT-106",
+    "Name": "Walter White",
+    "Dx": "Colorectal (KRAS+)",
+    "Stage": "IV",
+    "Age": 55,
+    "Sex": "M",
+    "Line": 1,
+    "PS": "ECOG 1",
+    "History": ["Maintenance stability for 18 months.", "Pending current quarter CT imaging results."],
+    "KRAS": "G12V",
+    "MSI": "MSS",
+    "PDL1": "0%",
+    "BRAF": "Negative",
+    "Biology": "Informational: KRAS mutations are associated with intrinsic resistance to anti-EGFR therapies.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "FOLFOX + Bev",
+        "start": "2023-06",
+        "end": "Current",
+        "resp": "SD",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Standard 1L doublet + VEGF inhibitor for RAS-mutant mCRC.",
+          "dosing": "mFOLFOX6 + Bevacizumab 5mg/kg q2w. Oxaliplatin dropped after cycle 8.",
+          "toxicity": "Oxaliplatin-induced neuropathy (Grade 2) persisting in fingertips. HTN controlled on meds.",
+          "outcome": "Stable Disease. Currently on 5-FU/Bevacizumab maintenance phase."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2023-05-10",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 12.0,
+        "detail": "Stage IIIB Sigmoid CRC.",
+        "report": {
+          "findings": "Obstructing sigmoid mass. Urgent Hemicolectomy. 4/15 lymph nodes positive.",
+          "impression": "Stage IIIB Adenocarcinoma.",
+          "plan": "Adjuvant FOLFOX planned."
+        }
+      },
+      {
+        "date": "2023-06-01",
+        "event": "Metastasis",
+        "status": "PD",
+        "cea": 18.2,
+        "detail": "Liver met identified.",
+        "report": {
+          "findings": "Baseline staging CT reveals 2 hypodense lesions in liver Seg VI/VII, confirmed MRI.",
+          "impression": "Synchronous Metastatic Disease (Stage IV). KRAS G12V detected.",
+          "plan": "Convert to Palliative FOLFOX + Bevacizumab."
+        }
+      },
+      {
+        "date": "2023-11-20",
+        "event": "Maintenance",
+        "status": "SD",
+        "cea": 9.5,
+        "detail": "Oxaliplatin hold.",
+        "report": {
+          "findings": "Peripheral neuropathy G2 (buttoning shirts difficult). Liver lesions stable/calcified.",
+          "impression": "Treatment limiting toxicity.",
+          "plan": "Drop Oxaliplatin. Continue 5-FU/Leucovorin/Avastin."
+        }
+      },
+      {
+        "date": "2024-06-20",
+        "event": "Stable",
+        "status": "SD",
+        "cea": 15.0,
+        "detail": "No change.",
+        "report": {
+          "findings": "Disease stable. CEA slowly creeping but imaging stable.",
+          "impression": "Maintenance effective.",
+          "plan": "Continue current regimen."
+        }
+      },
+      {
+        "date": "2025-01-02",
+        "event": "Review",
+        "status": "SD",
+        "cea": 15.4,
+        "detail": "Scans overdue/pending.",
+        "report": {
+          "findings": "Physical exam unremarkable. Neuropathy G2 (fingertips). CEA stable at 15.4.",
+          "impression": "Clinically stable. Neuropathy worsening.",
+          "plan": "Hold Oxaliplatin. Continue 5-FU/Bev maintenance. Chase CT scan results."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "15.4", "unit": "ng/mL", "range": "< 3.0", "history": [12, 18.2, 8.5, 15.0, 15.4], "trend": "stable", "status": "abnormal" },
+      { "name": "Plt", "val": "180", "unit": "10^3/uL", "range": "150 - 450", "history": [210, 200, 195, 185, 180], "trend": "down", "status": "normal" },
+      { "name": "AST", "val": "32", "unit": "U/L", "range": "8 - 48", "history": [30, 28, 31, 30, 32], "trend": "stable", "status": "normal" }
+    ]
+  },
+  {
+    "ID": "PT-107",
+    "Name": "Jesse Pinkman",
+    "Dx": "Colorectal (MSI-H)",
+    "Stage": "NED",
+    "Age": 32,
+    "Sex": "M",
+    "Line": 1,
+    "PS": "ECOG 0",
+    "History": ["Complete radiological resolution Jun 2024.", "Sustained NED status as of Jan 2025."],
+    "MSI": "MSI-H",
+    "TMB": "45",
+    "KRAS": "Wild Type",
+    "Biology": "Informational: MSI-High and high TMB are biological drivers associated with exceptional IO response.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "Pembrolizumab",
+        "start": "2023-12",
+        "end": "Current",
+        "resp": "CR",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Frontline immunotherapy (Keynote-177) for MSI-High mCRC.",
+          "dosing": "Pembrolizumab 200mg IV q3w.",
+          "toxicity": "Excellent tolerance. No immune-mediated adverse events (Grade 0).",
+          "outcome": "Complete Radiological Response confirmed June 2024. Sustained NED."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2023-11-05",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 12.0,
+        "detail": "Stage IV peritoneal spread.",
+        "report": {
+          "findings": "Young onset. Extensive peritoneal carcinomatosis. Primary Right Colon. IHC: MLH1/PMS2 Absent.",
+          "impression": "dMMR/MSI-High Metastatic CRC.",
+          "plan": "Start Pembrolizumab (Keynote-177 protocol)."
+        }
+      },
+      {
+        "date": "2024-02-14",
+        "event": "Initial Response",
+        "status": "PR",
+        "cea": 4.5,
+        "detail": "Symptom relief.",
+        "report": {
+          "findings": "Abdominal pain resolved. CT: Significant regression of peritoneal omental cake.",
+          "impression": "Partial Response.",
+          "plan": "Continue therapy. Monitor for colitis."
+        }
+      },
+      {
+        "date": "2024-06-20",
+        "event": "Interval Scan",
+        "status": "CR",
+        "cea": 1.8,
+        "detail": "Resolution of disease.",
+        "report": {
+          "findings": "CT Chest/Abd/Pelvis: Complete resolution of peritoneal implants. Normalization of bowel wall thickening.",
+          "impression": "Complete Radiological Response (CR).",
+          "plan": "Continue Pembrolizumab for 2 years total."
+        }
+      },
+      {
+        "date": "2024-12-10",
+        "event": "Surveillance",
+        "status": "CR",
+        "cea": 1.4,
+        "detail": "Year 1 milestone.",
+        "report": {
+          "findings": "No new complaints. Imaging remains clear.",
+          "impression": "Sustained NED.",
+          "plan": "Continue."
+        }
+      },
+      {
+        "date": "2025-01-09",
+        "event": "Latest Scan",
+        "status": "CR",
+        "cea": 1.2,
+        "detail": "NED sustained.",
+        "report": {
+          "findings": "PET/CT: No hypermetabolic activity. CEA 1.2.",
+          "impression": "Sustained Complete Response (NED).",
+          "plan": "Surveillance. Discuss treatment break."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "1.2", "unit": "ng/mL", "range": "< 3.0", "history": [12, 4.5, 1.8, 1.5, 1.2], "trend": "down", "status": "normal" },
+      { "name": "WBC", "val": "7.2", "unit": "10^3/uL", "range": "4.5 - 11.0", "history": [6.8, 6.5, 7.0, 7.1, 7.2], "trend": "stable", "status": "normal" },
+      { "name": "Cr", "val": "0.8", "unit": "mg/dL", "range": "0.7 - 1.3", "history": [0.8, 0.8, 0.9, 0.8, 0.8], "trend": "stable", "status": "normal" }
+    ]
+  },
+  {
+    "ID": "PT-108",
+    "Name": "Skyler White",
+    "Dx": "NSCLC (Stage I)",
+    "Stage": "IA",
+    "Age": 42,
+    "Sex": "F",
+    "Line": 0,
+    "PS": "ECOG 1",
+    "History": ["Post-op curative resection June 2024.", "Surveillance baseline established."],
+    "EGFR": "Negative",
+    "ALK": "Negative",
+    "KRAS": "Negative",
+    "Biology": "Informational: Early stage disease (T1) without drivers has a favorable surgical prognosis.",
+    "Treatments": [
+      {
+        "line": 0,
+        "drug": "RML Lobectomy",
+        "start": "2024-06",
+        "end": "2024-06",
+        "resp": "CR",
+        "stop": "Completion",
+        "extended": {
+          "rationale": "Definitive surgical management for Stage IA NSCLC.",
+          "dosing": "VATS Right Middle Lobectomy.",
+          "toxicity": "Post-operative atelectasis (resolved). Chronic mild intercostal neuralgia.",
+          "outcome": "R0 Resection (Negative Margins). No adjuvant therapy required."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2024-05-20",
+        "event": "Screening",
+        "status": "Baseline",
+        "cea": 0.9,
+        "detail": "Suspicious nodule.",
+        "report": {
+          "findings": "LDCT Screening: 1.8cm RML nodule. PET avid. Brain MRI negative.",
+          "impression": "Clinical Stage IA NSCLC.",
+          "plan": "VATS RML Lobectomy."
+        }
+      },
+      {
+        "date": "2024-06-10",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 0.9,
+        "detail": "Biopsy confirmation.",
+        "report": {
+          "findings": "TTF-1 Positive Adenocarcinoma.",
+          "impression": "Confirmed malignancy.",
+          "plan": "Proceed to surgery."
+        }
+      },
+      {
+        "date": "2024-06-25",
+        "event": "Surgery",
+        "status": "CR",
+        "cea": 0.8,
+        "detail": "Lobectomy complete.",
+        "report": {
+          "findings": "RML Lobectomy + Node dissection. Margins negative. Path: Adenocarcinoma, minimally invasive.",
+          "impression": "Surgical Cure.",
+          "plan": "Post-op recovery."
+        }
+      },
+      {
+        "date": "2024-11-05",
+        "event": "Post-op CT",
+        "status": "CR",
+        "cea": 0.8,
+        "detail": "Clean surgical bed.",
+        "report": {
+          "findings": "Post-surgical changes RML. No nodules. No lymphadenopathy.",
+          "impression": "No Evidence of Disease (NED).",
+          "plan": "Next surveillance CT in 6 months."
+        }
+      },
+      {
+        "date": "2024-12-15",
+        "event": "Follow-up",
+        "status": "SD",
+        "cea": 0.8,
+        "detail": "Recovering well.",
+        "report": {
+          "findings": "Breath sounds clear. Incision healed. Mild post-op fatigue.",
+          "impression": "Recovery uncomplicated.",
+          "plan": "Continue pulm rehab exercises."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "0.8", "unit": "ng/mL", "range": "< 3.0", "history": [0.9, 0.9, 0.8, 0.8, 0.8], "trend": "stable", "status": "normal" },
+      { "name": "Hb", "val": "12.0", "unit": "g/dL", "range": "12.0 - 15.5", "history": [13.5, 12.8, 12.2, 12.1, 12.0], "trend": "stable", "status": "normal" },
+      { "name": "WBC", "val": "Missing", "unit": "10^3/uL", "range": "4.5 - 11.0", "history": [], "trend": "none", "status": "missing" }
+    ]
+  },
+  {
+    "ID": "PT-109",
+    "Name": "Gustavo Fring",
+    "Dx": "Colorectal (Adeno)",
+    "Stage": "IVB",
+    "Age": 60,
+    "Sex": "M",
+    "Line": 2,
+    "PS": "ECOG 2",
+    "History": ["Critical CEA spike from 40 to 245 since Sep 2024.", "New bone lesions identified on 2025-01-04 imaging."],
+    "BRAF": "V600E",
+    "KRAS": "WT",
+    "MSI": "MSS",
+    "PDL1": "15%",
+    "Biology": "Informational: BRAF V600E mutations are associated with aggressive disease and rapid progression.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "FOLFOX",
+        "start": "2023-02",
+        "end": "2024-09",
+        "resp": "PD",
+        "stop": "Progression",
+        "extended": {
+          "rationale": "Adjuvant therapy turned palliative upon recurrence.",
+          "dosing": "mFOLFOX6 q2w.",
+          "toxicity": "Grade 3 Neutropenia requiring G-CSF. G2 Fatigue.",
+          "outcome": "Disease progression in liver and lungs."
+        }
+      },
+      {
+        "line": 2,
+        "drug": "Encorafenib + Cetux",
+        "start": "2024-10",
+        "end": "Current",
+        "resp": "PD",
+        "stop": "Radiological Failure",
+        "extended": {
+          "rationale": "BEACON regimen: Standard 2L for BRAF V600E mutant mCRC.",
+          "dosing": "Encorafenib 300mg QD + Cetuximab 500mg/m2 q2w.",
+          "toxicity": "Acneiform rash Grade 3 (Cetuximab effect). Arthralgia.",
+          "outcome": "Rapid failure. Explosive CEA rise and new bone metastases."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2023-02-14",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 5.0,
+        "detail": "Stage IIIB. High CEA.",
+        "report": {
+          "findings": "Colonoscopy: Obstructing mass. BRAF V600E confirmed.",
+          "impression": "BRAF-mutant Colon Cancer.",
+          "plan": "Surgery followed by adjuvant chemo."
+        }
+      },
+      {
+        "date": "2023-11-10",
+        "event": "Relapse",
+        "status": "PD",
+        "cea": 25.0,
+        "detail": "Peritoneal spread.",
+        "report": {
+          "findings": "Recurrence in peritoneum. Started FOLFOX.",
+          "impression": "Metastatic Relapse.",
+          "plan": "Palliative Chemotherapy."
+        }
+      },
+      {
+        "date": "2024-09-15",
+        "event": "1L Failure",
+        "status": "PD",
+        "cea": 40.0,
+        "detail": "Lung/Liver progression.",
+        "report": {
+          "findings": "CT: Multiple liver metastases and bilateral lung nodules. CEA rose 5 -> 40.",
+          "impression": "Metastatic Recurrence. 1L Failure.",
+          "plan": "Switch to Targeted Doublet (Encorafenib/Cetuximab)."
+        }
+      },
+      {
+        "date": "2024-11-20",
+        "event": "Mixed Resp",
+        "status": "SD",
+        "cea": 110.0,
+        "detail": "No regression.",
+        "report": {
+          "findings": "Primary refractory disease. CEA doubling time < 4 weeks. Rash G3.",
+          "impression": "Early Signs of Resistance.",
+          "plan": "Continue but monitor closely."
+        }
+      },
+      {
+        "date": "2025-01-04",
+        "event": "2L Failure",
+        "status": "PD",
+        "cea": 245.0,
+        "detail": "CEA spiked to 245. Bone mets.",
+        "report": {
+          "findings": "Bone Scan: Diffuse uptake in lumbar spine/pelvis. CEA 245. Cr 1.4.",
+          "impression": "Rapid clinical decline. 2L Failure.",
+          "plan": "Hospice referral / Best Supportive Care discussion."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "245", "unit": "ng/mL", "range": "< 3.0", "history": [5, 25, 40, 110, 245], "trend": "up", "status": "abnormal" },
+      { "name": "Creatinine", "val": "1.4", "unit": "mg/dL", "range": "0.7 - 1.3", "history": [0.8, 0.9, 1.1, 1.3, 1.4], "trend": "up", "status": "abnormal" },
+      { "name": "Hb", "val": "9.2", "unit": "g/dL", "range": "13.5 - 17.5", "history": [12, 11, 10.5, 9.8, 9.2], "trend": "down", "status": "abnormal" }
+    ]
+  },
+  {
+    "ID": "PT-110",
+    "Name": "Hank Schrader",
+    "Dx": "Breast (Male ER+)",
+    "Stage": "IV",
+    "Age": 54,
+    "Sex": "M",
+    "Line": 1,
+    "PS": "ECOG 1",
+    "History": ["Stable bone lesions on Tamoxifen.", "Hormone receptor status high (ER 95%)."],
+    "ER": "95%",
+    "PR": "80%",
+    "HER2": "Negative",
+    "MSI": "MSS",
+    "Biology": "Informational: High ER/PR expression in male breast cancer is associated with hormone-therapy response.",
+    "Treatments": [
+      {
+        "line": 1,
+        "drug": "Tamoxifen 20mg",
+        "start": "2024-03",
+        "end": "Current",
+        "resp": "SD",
+        "stop": "Ongoing",
+        "extended": {
+          "rationale": "Standard hormonal therapy for ER+ Male Breast Cancer.",
+          "dosing": "Tamoxifen 20mg PO Daily.",
+          "toxicity": "Hot flashes (Grade 1). Weight gain (3kg).",
+          "outcome": "Stable Disease. Bone lesions controlled with concurrent RT."
+        }
+      }
+    ],
+    "Timeline": [
+      {
+        "date": "2024-02-10",
+        "event": "Diagnosis",
+        "status": "Baseline",
+        "cea": 2.2,
+        "detail": "Stage IIB post-op.",
+        "report": {
+          "findings": "Left Mastectomy. 2.5cm IDC. 1/14 nodes.",
+          "impression": "Male Breast Cancer. Luminal A.",
+          "plan": "Start Tamoxifen."
+        }
+      },
+      {
+        "date": "2024-06-15",
+        "event": "Routine Check",
+        "status": "SD",
+        "cea": 2.3,
+        "detail": "Asymptomatic.",
+        "report": {
+          "findings": "Well healed scar. No nodes palpable.",
+          "impression": "Doing well.",
+          "plan": "Continue Tamoxifen."
+        }
+      },
+      {
+        "date": "2024-10-15",
+        "event": "Metastasis",
+        "status": "PD",
+        "cea": 3.2,
+        "detail": "PET: Rib involvement.",
+        "report": {
+          "findings": "Patient reported rib pain. Bone scan: Solitary uptake Left 5th rib. No visceral disease.",
+          "impression": "Oligometastatic Bone Disease.",
+          "plan": "Palliative RT (8Gy/1fx). Continue Tamoxifen."
+        }
+      },
+      {
+        "date": "2024-12-01",
+        "event": "Palliation",
+        "status": "SD",
+        "cea": 3.4,
+        "detail": "Radiation complete.",
+        "report": {
+          "findings": "RT course completed. Pain improving.",
+          "impression": "Post-RT check.",
+          "plan": "Monitor."
+        }
+      },
+      {
+        "date": "2025-01-03",
+        "event": "Follow-up",
+        "status": "SD",
+        "cea": 3.5,
+        "detail": "Bone lesion stable.",
+        "report": {
+          "findings": "Pain resolved (0/10). No new complaints. PSA 1.2 (Normal).",
+          "impression": "Clinically stable.",
+          "plan": "Continue current management."
+        }
+      }
+    ],
+    "Labs": [
+      { "name": "CEA", "val": "3.5", "unit": "ng/mL", "range": "< 3.0", "history": [2.2, 2.1, 3.2, 3.4, 3.5], "trend": "stable", "status": "normal" },
+      { "name": "Hb", "val": "12.8", "unit": "g/dL", "range": "13.5 - 17.5", "history": [14.0, 13.8, 13.5, 13.0, 12.8], "trend": "stable", "status": "normal" },
+      { "name": "PSA", "val": "1.2", "unit": "ng/mL", "range": "< 4.0", "history": [1.1, 1.1, 1.2, 1.2, 1.2], "trend": "stable", "status": "normal" }
+    ]
+  }
+]
